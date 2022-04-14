@@ -23,9 +23,7 @@ class NetCDFvariableattributes(NetCDFattributes):
     def __init__(self, object, basics, dictionary={}):
         dictionary = {**dictionary , **self._associated_files(object)}
         dictionary = self.vanish_dictionary(dictionary)
-        new_dictionary  = {}
-        new_dictionary[object.name] = dictionary
-        self.output = self.write_dictionary_to_netcdf(basics, new_dictionary)
+        self.output = self.write_dictionary_to_netcdf(basics, dictionary)
 
     def _associated_files(self, input):
         
@@ -58,7 +56,7 @@ class NetCDFglobalattributes(NetCDFattributes):
         return {'ci_creation_date' : dt.now().strftime('%Y-%m-%dT%H:%M:%SZ')}
 
     def _ci_institute_id(self, input):
-        return {'ci_institute_id' : 'GERICS'}
+        return {'ci_institute_id' : input.institution_id}
     
     def _ci_name(self, input):
         return {'ci_name' : input.name}
