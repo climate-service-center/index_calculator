@@ -1,0 +1,62 @@
+{
+	"CMIP5"  :
+		 {
+			"data_path"  : "/mnt/lustre01/pool/data/CMIP5/cmip5",
+			"components" : "variable, table, model, experiment, ensemble_member, temporal_subset",
+			"format"     : "{}_{}_{}_{}_{}_{}.nc"
+		 },
+	"CMIP6"  :
+		 {
+			"data_path"  : "/mnt/lustre01/pool/data/CMIP6/data", 
+			"components" : "variable_id, table_id, source_id, experiment_id, member_id, grid_label, time_range",
+			"format"     : "{}_{}_{}_{}_{}_{}_{}.nc"
+		 },
+	"CORDEX" :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/sims/cordex/euro-cordex/esgf/EUR11/day/var", 
+			"components" : "variable_id, CORDEX_domain, driving_model_id, experiment_id, member, model_id, rcm_version_id, table, time_range",
+			"format"     : "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc"
+		 },
+	"EOBS"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/obs/eobs/v20.0e/day/var", 
+			"components" : "variable, resolution, observ_version",
+			"format"     : "{}_ens_mean_{}_reg_{}.nc"
+		 },
+	"ERA5"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/reana/era5/daily", 
+			"components" : "variable, reana_version, frequency, startdate, enddate",
+			"format"     : "{}_{}_{}_{}-{}.nc"
+		 },
+	"climdexCMIP5"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/sims/cmip5/esgf/day/climdex", 
+			"components" : "CIName, table, model, experiment, ensemble_member, CIInstitution, CIFrequency, TimeRange",
+			"format"     : "{}_{}_{}_{}_{}_{}_{}_{}.nc"
+		 },
+	"climdexCMIP6"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/sims/cmip6/esgf/day/climdex",
+			"components" : "CIName, table_id, source_id, experiment_id, member_id, grid_label, CIInstitution, CIFrequency, TimeRange", 
+			"format"       : "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc"
+		 },
+	"climdexCORDEX"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/sims/cordex/euro-cordex/esgf/EUR11/day/climdex", 
+			"components" : "CIName, CORDEX_domain, driving_model_id, experiment_id, member, model_id, rcm_version_id, table, CIInstitution, CIFrequency, TimeRange",
+			"format"     : "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc"
+		 },
+	"climdexEOBS"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/obs/eobs/v20.0e/original_01/day/climdex", 
+			"components" : "CIName, resolution, observ_version, CIInstitution, CIFrequency",
+			"format"     : "{}_ens_mean_{}_reg_{}_{}_{}.nc"
+		 },
+	"climdexERA5"	 :
+		 {
+			"data_path"  : "/mnt/lustre02/work/ch0636/eddy/pool/reana/era5/day/climdex", 
+			"components" : "CIName, reana_version, frequency, CIInstitution, CIFrequency, startdate, enddate",
+			"format"     : "{}_{}_{}_{}_{}_{}-{}.nc"
+		 }
+}
