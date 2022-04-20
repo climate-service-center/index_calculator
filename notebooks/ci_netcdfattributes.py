@@ -13,7 +13,7 @@ class NetCDFattributes(object):
                 new_dictionary[key] = value
         return new_dictionary
 
-    def write_dictionary_to_netcdf(self, object, dictionary, renames={}, deletes={}):
+    def write_dictionary_to_netcdf(self, object, dictionary):
         for k, v in dictionary.items():
             object.attrs[k] = v
         return object
@@ -55,11 +55,14 @@ class NetCDFglobalattributes(NetCDFattributes):
     def _ci_creation_date(self, input):
         return {'ci_creation_date' : dt.now().strftime('%Y-%m-%dT%H:%M:%SZ')}
 
+    def _ci_institution(self, input):
+        return {'ci_institution' : input.institution}
+
     def _ci_institute_id(self, input):
         return {'ci_institute_id' : input.institution_id}
     
     def _ci_name(self, input):
-        return {'ci_name' : input.name}
+        return {'ci_name' : input.CIname}
 
     def _ci_package_reference(self, input):
         return {'ci_package_reference' : 'xcalc_v0.1.0'}
