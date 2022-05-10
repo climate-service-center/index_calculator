@@ -1,7 +1,7 @@
 import warnings
 
 from ._ci_netcdfattrs import NetCDFglobalattrs, NetCDFvariableattrs
-from ._tables import ijson, xjson
+from ._tables import ijson, istjson, xjson
 from ._utils import object_attrs_to_self
 
 
@@ -17,14 +17,17 @@ class PostProcessing:
 
         if project is None:
             raise ValueError("Please select a project name. 'project=...'")
-        if institution is None:
-            raise ValueError(
-                "Please select an institution short name. 'institution=...'"
-            )
         if institution_id is None:
             raise ValueError(
-                "Please select an institution long name, 'insutution_id=...'"
+                "Please select an institution long name. 'institution_id=...'."
             )
+        if institution is None:
+            if institution_id in istjson.keys():
+                institution = istjson[institution_id]["institution_long_name"]
+            else:
+                raise ValueError(
+                    "Please select an institution name, 'institution=...'."
+                )
 
         self.project = project
         self.institution = institution
