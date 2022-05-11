@@ -44,6 +44,14 @@ class NetCDFglobalattrs(NetCDFattrs):
         }
         dictionary = {
             **dictionary,
+            **self._ci_institution(object),
+        }
+        dictionary = {
+            **dictionary,
+            **self._ci_contact(object),
+        }
+        dictionary = {
+            **dictionary,
             **self._ci_name(object),
         }
         dictionary = {
@@ -84,6 +92,9 @@ class NetCDFglobalattrs(NetCDFattrs):
 
     def _ci_institute_id(self, input):
         return {"ci_institute_id": input.institution_id}
+
+    def _ci_contact(self, input):
+        return {"ci_contact": input.contact}
 
     def _ci_name(self, input):
         return {"ci_name": input.CIname}

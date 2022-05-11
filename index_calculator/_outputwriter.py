@@ -7,13 +7,23 @@ from ._utils import object_attrs_to_self
 class OutputWriter:
     def __init__(
         self,
+        outname=None,
         postproc_obj=None,
         **kwargs,
     ):
-        if postproc_obj is not None:
-            object_attrs_to_self(postproc_obj, self)
+
+        if postproc_obj is None:
+            raise ValueError(
+                "Please select an index_calculator.PostProcessing object."
+                "'proc_obj=...'"
+            )
+        object_attrs_to_self(postproc_obj, self)
+        print(self.project)
 
     def outname(self):
+        def test_ocomp(ocomp):
+            return ocomp.replace("/", "")
+
         drs = {}
         cproj = "climdex" + self.project
         try:
@@ -25,9 +35,9 @@ class OutputWriter:
         ocomps = []
         for comp in drs["output_comps"]:
             if hasattr(self.proc, comp):
-                ocomps.append(getattr(self.proc, comp))
+                ocomps.append(test_ocomp(getattr(self.proc, comp)))
             elif hasattr(self.ds, comp):
-                ocomps.append(getattr(self.ds, comp))
+                ocomps.append(test_ocomp(getattr(self.ds, comp)))
             else:
                 ocomps.append("NA")
                 warnings.warn(f"{comp} not found!")
@@ -56,9 +66,13 @@ class OutputWriter:
         )
         print(f"File written: {self.outputname}")
 
-    def write_to_netcdf(self, output=True):
+    def write_to_netcdf(self, output=True, project=None):
         write = False
         if output is True:
+            if self.project is None:
+                self.project = project
+            if self.project is None:
+                raise ValueError("No project is selected. 'project=...'.")
             self.outputname = self.outname()
             if self.outputname:
                 write = True

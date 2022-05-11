@@ -4,21 +4,26 @@ import xarray as xr
 
 from ._consts import _tfreq
 from ._indices import ClimateIndices as ci
-from ._utils import object_attrs_to_self
+from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class Processing:
-    def __init__(self, index=None, preproc_obj=None, **kwargs):
+    def __init__(
+        self,
+        index=None,
+        preproc_obj=None,
+        **kwargs,
+    ):
 
-        if index is None:
-            raise ValueError("Please select an index to compute. 'index=...'")
         if preproc_obj is None:
             raise ValueError(
                 "Please select an index_calculator.PreProcessing object."
                 "'preproc_obj='...'"
             )
         object_attrs_to_self(preproc_obj, self)
-        self.CIname = index
+
+        self.CIname = check_existance({"index": index}, self)
+        kwargs_to_self(kwargs, self)
         self.proc = self.processing()
 
     def processing(self):

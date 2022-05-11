@@ -1,58 +1,46 @@
 {
-	"global_att" :
-		{
-			"ci_additional_reference_period" : "<>",
-        		"ci_creation_date" : "<date of creation>",
-			"ci_contact" : "gerics-cordex@hereon.de",
-        		"ci_institution" : "Helmholtz-Zentrum hereon GmbH, Climate Service Center Germany",
-        		"ci_institute_id" : "<Institute name>",
-        		"ci_name" : "<name of the climate index>",
-        		"ci_package_name" : "<used climdex version>",
-			"ci_package_reference" : "<used CDO/CDI version>",
-       			"ci_product" : "rcm_derived, there are gcm derived indices too",
-        		"ci_reference_period" : "<only for percentile indices>",
-        		"ci_frequency" : "<choosen slice mode>" ,
-			"ci_timerange_index" : "<time range of the index data>",
-			"ci_timerange_source" : "<time range of the input data>"
-        	},
-	"variable_att" :
-		{
-			"associated_files" : "<list of input files>",
-        		"cell_methods" : "<combined cell_methods>"
-		},
-	"CMIP5" :
-		{
-			"global_att" :
-				     {
-					"ci_product" : "gcm_derived"
-				     }
-		},
-	"CMIP6" :
-		{
-			"global_att" :
-				     {
-					"ci_product" : "gcm_derived"
-				     }
-		},
-	"CORDEX" :
-		{
-			"global_att" :
-				     {
-					"ci_product" : "rcm_derived"
-				     }
-		},
-	"EOBS" :
-		{
-			"global_att" :
-				     {
-					"ci_product" : "observational_derived"
-				     }
-		},
-	"ERA5" :
-		{
-			"global_att" :
-				     {
-					"ci_product" : "reanalysis_derived"
-				     }
-		}
+  "global_att": {
+    "ci_additional_reference_period": "<>",
+    "ci_creation_date": "<date of creation>",
+    "ci_contact": "<Institution mail contact>",
+    "ci_institution": "<Institution long name>",
+    "ci_institute_id": "<Institute name>",
+    "ci_name": "<name of the climate index>",
+    "ci_package_name": "<used climdex version>",
+    "ci_package_reference": "<used CDO/CDI version>",
+    "ci_product": "rcm_derived, there are gcm derived indices too",
+    "ci_reference_period": "<only for percentile indices>",
+    "ci_frequency": "<choosen slice mode>",
+    "ci_timerange_index": "<time range of the index data>",
+    "ci_timerange_source": "<time range of the input data>"
+  },
+  "variable_att": {
+    "associated_files": "<list of input files>",
+    "cell_methods": "<combined cell_methods>"
+  },
+  "CMIP5": {
+    "global_att": {
+      "ci_product": "gcm_derived"
+    }
+  },
+  "CMIP6": {
+    "global_att": {
+      "ci_product": "gcm_derived"
+    }
+  },
+  "CORDEX": {
+    "global_att": {
+      "ci_product": "rcm_derived"
+    }
+  },
+  "EOBS": {
+    "global_att": {
+      "ci_product": "observational_derived"
+    }
+  },
+  "ERA5": {
+    "global_att": {
+      "ci_product": "reanalysis_derived"
+    }
+  }
 }

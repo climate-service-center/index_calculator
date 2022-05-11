@@ -1,6 +1,7 @@
 import pyhomogenize as pyh
 
 from ._consts import _bounds, _fmt
+from ._utils import kwargs_to_self
 
 
 class PreProcessing:
@@ -25,6 +26,7 @@ class PreProcessing:
         self.time_range = time_range
         self.crop_time_axis = crop_time_axis
         self.check_time_axis = check_time_axis
+        kwargs_to_self(kwargs, self)
         self.preproc = self.preprocessing()
 
     def preprocessing(self):

@@ -1,46 +1,50 @@
+import copy
 import warnings
 
 from ._ci_netcdfattrs import NetCDFglobalattrs, NetCDFvariableattrs
-from ._tables import ijson, istjson, xjson
-from ._utils import object_attrs_to_self
+from ._tables import ijson, xjson
+from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class PostProcessing:
     def __init__(
         self,
-        project=None,
-        institution=None,
-        institution_id=None,
+        project="N/A",
+        institution_id="N/A",
+        institution="N/A",
+        contact="N/A",
         proc_obj=None,
         **kwargs,
     ):
-
-        if project is None:
-            raise ValueError("Please select a project name. 'project=...'")
-        if institution_id is None:
+        if proc_obj is None:
             raise ValueError(
-                "Please select an institution long name. 'institution_id=...'."
+                "Select an index_calculator.Processing object. 'proc_obj=...'"
             )
-        if institution is None:
-            if institution_id in istjson.keys():
-                institution = istjson[institution_id]["institution_long_name"]
-            else:
-                raise ValueError(
-                    "Please select an institution name, 'institution=...'."
-                )
+        object_attrs_to_self(proc_obj, self)
 
-        self.project = project
-        self.institution = institution
-        self.institution_id = institution_id
+        self.project = check_existance({"project": project}, self)
+        self.institution_id = check_existance(
+            {"institution_id": institution_id},
+            self,
+        )
+        self.institution = check_existance(
+            {"institution": institution},
+            self,
+        )
+        self.contact = check_existance({"contact": contact}, self)
+        self.period = check_existance({"period": False}, self)
+        self.base_period_time_range = check_existance(
+            {"base_period_time_range": False}, self
+        )
 
-        self.period = None
-        self.base_period_time_range = None
-
-        if proc_obj is not None:
-            object_attrs_to_self(proc_obj, self)
+        kwargs_to_self(kwargs, self)
         self.postproc = self.postprocessing()
 
     def postprocessing(self):
+
+        _ijson = copy.deepcopy(ijson)
+        _xjson = copy.deepcopy(xjson)
+
         def adjust_attributes(dictionary, value):
             output = {}
             for key in dictionary.keys():
@@ -51,22 +55,23 @@ class PostProcessing:
             return output
 
         json = {}
-        json[self.CIname] = ijson[self.CIname]
-        json[self.CIname].update(xjson["variable_att"])
-        json["global_att"] = xjson["global_att"]
+        json[self.CIname] = _ijson[self.CIname]
+        json[self.CIname].update(_xjson["variable_att"])
+        json["global_att"] = _xjson["global_att"]
         try:
-            json["global_att"].update(xjson[self.project]["global_att"])
-        except ValueError:
+            json["global_att"].update(_xjson[self.project]["global_att"])
+        except KeyError:
             warnings.warn(f"Project {self.project} not known.")
-        self.json = adjust_attributes(json, None)
-
+        json = adjust_attributes(json, None)
         output = NetCDFvariableattrs(
-            self, self.proc[self.CIname], self.json[self.CIname]
+            self,
+            self.proc[self.CIname],
+            json[self.CIname],
         ).output
         output = NetCDFglobalattrs(
             self,
             self.proc,
-            self.json["global_att"],
+            json["global_att"],
         ).output
 
         return output

@@ -12,8 +12,8 @@ class IndexCalculator:
 
     def compute(self, write=False):
         preproc_obj = preprocessing(**self.kwargs)
-        proc_obj = processing(preproc_obj=preproc_obj, **self.kwargs)
-        postproc_obj = postprocessing(proc_obj=proc_obj, **self.kwargs)
+        proc_obj = processing(preproc_obj=preproc_obj)
+        postproc_obj = postprocessing(proc_obj=proc_obj)
         if write is True:
             outputwriter(postproc_obj=postproc_obj).write_to_netcdf()
         return postproc_obj.postproc
