@@ -18,7 +18,6 @@ class OutputWriter:
                 "'proc_obj=...'"
             )
         object_attrs_to_self(postproc_obj, self)
-        print(self.project)
 
     def outname(self):
         def test_ocomp(ocomp):

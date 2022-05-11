@@ -7,7 +7,8 @@ from ._processing import Processing as processing
 
 
 class IndexCalculator:
-    def __init__(self, **kwargs):
+    def __init__(self, output=True, **kwargs):
+        self.output = output
         self.kwargs = kwargs
 
     def compute(self, write=False):
@@ -15,5 +16,7 @@ class IndexCalculator:
         proc_obj = processing(preproc_obj=preproc_obj)
         postproc_obj = postprocessing(proc_obj=proc_obj)
         if write is True:
-            outputwriter(postproc_obj=postproc_obj).write_to_netcdf()
+            outputwriter(
+                postproc_obj=postproc_obj,
+            ).write_to_netcdf(self.output)
         return postproc_obj.postproc
