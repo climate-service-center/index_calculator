@@ -19,4 +19,4 @@ class IndexCalculator:
             outputwriter(
                 postproc_obj=postproc_obj,
             ).write_to_netcdf(self.output)
-        return postproc_obj.postproc
+        return postproc_obj
