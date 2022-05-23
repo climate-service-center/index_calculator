@@ -29,7 +29,7 @@
     "format": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc"
   },
   "climdexCORDEX": {
-    "components": "ci_name, CORDEX_domain, driving_model_id, driving_experiment_name, driving_model_ensemble_member, source, rcm_version_id, frequency, ci_institute_id, ci_frequency, ci_timerange_index",
+    "components": "ci_name, CORDEX_domain, driving_model_id, driving_experiment_name, driving_model_ensemble_member, model_id, rcm_version_id, frequency, ci_institute_id, ci_frequency, ci_timerange_index",
     "format": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc"
   },
   "climdexEOBS": {
