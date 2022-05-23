@@ -1,0 +1,23 @@
+{
+  "TG": "tas",
+  "RR": "pr",
+  "SDII": "pr",
+  "RR1": "pr",
+  "R10mm": "pr",
+  "R20mm": "pr",
+  "R25mm": "pr",
+  "CDD": "pr",
+  "CWD": "pr",
+  "RX1day": "pr",
+  "RX5day": "pr",
+  "TR": "tasmin",
+  "FD": "tasmin",
+  "ID": "tasmax",
+  "TX": "tasmax",
+  "TXn": "tasmax",
+  "Txx": "tasmax",
+  "TN": "tasmin",
+  "TNn": "tasmin",
+  "SU": "tasmax",
+  "CSU": "tasmax"
+}

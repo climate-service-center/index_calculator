@@ -9,6 +9,7 @@ from ._postprocessing import PostProcessing as postprocessing  # noqa
 from ._preprocessing import PreProcessing as preprocessing  # noqa
 from ._processing import Processing as processing  # noqa
 from ._tables import ijson  # noqa
+from ._tables import inpjson  # noqa
 from ._tables import istjson  # noqa
 from ._tables import pjson  # noqa
 from ._tables import xjson  # noqa
