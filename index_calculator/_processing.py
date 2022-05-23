@@ -1,4 +1,4 @@
-import numpy as np
+import cftime
 import pyhomogenize as pyh
 import xarray as xr
 
@@ -44,10 +44,26 @@ class Processing:
         data_vars["time"] = array["time"]
         del data_vars["time_bnds"]
         idx_ds = xr.Dataset(data_vars=data_vars, attrs=self.preproc.attrs)
-        idx_ds = idx_ds.assign_coords(
-            {"time": np.asarray(idx_ds.time, "datetime64[ns]")}
+        new_time = cftime.date2num(
+            idx_ds.time,
+            self.ds.time.encoding["units"],
+            calendar=self.ds.time.encoding["calendar"],
         )
+        idx_ds = idx_ds.assign_coords({"time": new_time})
         idx_ds = idx_ds.cf.add_bounds("time")
         idx_ds = idx_ds.reset_coords("time_bounds")
         idx_ds["time_bounds"] = idx_ds.time_bounds.transpose()
+
+        new_time = cftime.num2date(
+            idx_ds.time,
+            self.ds.time.encoding["units"],
+            calendar=self.ds.time.encoding["calendar"],
+        )
+        new_time_bnds = cftime.num2date(
+            idx_ds.time_bounds,
+            self.ds.time.encoding["units"],
+            calendar=self.ds.time.encoding["calendar"],
+        )
+        idx_ds = idx_ds.assign_coords({"time": new_time})
+        idx_ds.time_bounds.values = new_time_bnds
         return idx_ds.rename({"time_bounds": "time_bnds"})
