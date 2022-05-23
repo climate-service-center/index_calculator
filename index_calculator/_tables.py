@@ -8,7 +8,7 @@ def read_from_json(jsfile):
         return json.load(f)
 
 
-ijson = read_from_json("../tables/indices.json")
-xjson = read_from_json("../tables/xcalc.json")
-pjson = read_from_json("../tables/projects.json")
-istjson = read_from_json("../tables/institutions.json")
+ijson = read_from_json("tables/indices.json")
+xjson = read_from_json("tables/xcalc.json")
+pjson = read_from_json("tables/projects.json")
+istjson = read_from_json("tables/institutions.json")
