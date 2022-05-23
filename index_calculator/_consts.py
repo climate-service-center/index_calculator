@@ -1,7 +1,7 @@
 _freq = {"year": "YS", "sem": "QS-DEC", "mon": "MS", "day": "D"}
 
 _tfreq = {
-    "year": ["YS", "Y"],
+    "year": ["AS", "A"],
     "sem": ["QS-DEC", "Q-FEB"],
     "mon": ["MS", "M"],
     "day": "D",
