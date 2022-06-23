@@ -8,13 +8,15 @@ from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class Processing:
+    """Class for proecssing."""
+
     def __init__(
         self,
         index=None,
         preproc_obj=None,
         **kwargs,
     ):
-
+        """Write parameters to self."""
         if preproc_obj is None:
             raise ValueError(
                 "Please select an index_calculator.PreProcessing object."
@@ -27,6 +29,7 @@ class Processing:
         self.proc = self.processing()
 
     def processing(self):
+        """Calculate climate index."""
         array = getattr(ci(), self.CIname)(self.preproc, self.freq)
         basics = pyh.basics()
         date_range = basics.date_range(
