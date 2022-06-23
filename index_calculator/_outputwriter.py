@@ -5,13 +5,18 @@ from ._utils import object_attrs_to_self
 
 
 class OutputWriter:
+    """Class for writing xarray.Dataset to disk.
+
+    Set default project-specific ouput name.
+    """
+
     def __init__(
         self,
         outname=None,
         postproc_obj=None,
         **kwargs,
     ):
-
+        """Write parameters to self."""
         if postproc_obj is None:
             raise ValueError(
                 "Please select an index_calculator.PostProcessing object."
@@ -20,6 +25,8 @@ class OutputWriter:
         object_attrs_to_self(postproc_obj, self)
 
     def outname(self):
+        """Set project-specific ouput file name."""
+
         def test_ocomp(ocomp):
             return ocomp.replace("/", "")
 
@@ -43,6 +50,7 @@ class OutputWriter:
         return drs["output_fmt"].format(*ocomps)
 
     def to_netcdf(self):
+        """Write xarray.Dataset to netCDF file on disk."""
         MISSVAL = 1e20
         encoding = {
             self.CIname: {"_FillValue": MISSVAL, "missing_value": MISSVAL},
@@ -66,6 +74,10 @@ class OutputWriter:
         print(f"File written: {self.outputname}")
 
     def write_to_netcdf(self, output=True, project=None):
+        """Write xarray.Dataset to disk.
+
+        Set default project-specific ouput name.
+        """
         write = False
         if output is True:
             if self.project is None:
