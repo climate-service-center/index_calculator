@@ -2,12 +2,14 @@ import warnings
 
 
 def object_attrs_to_self(obj, slf):
+    """Copy object attributes to new object."""
     for attr in dir(obj):
         if attr[0].isalpha():
             setattr(slf, attr, getattr(obj, attr))
 
 
 def kwargs_to_self(kwargs, slf):
+    """Write kwargs to new object."""
     for key, value in kwargs.items():
         if not hasattr(slf, key):
             setattr(slf, key, value)
@@ -16,6 +18,7 @@ def kwargs_to_self(kwargs, slf):
 
 
 def check_existance(attr_dict, slf):
+    """Check existance of values."""
     for key, value in attr_dict.items():
         test = False
         if value is None:
