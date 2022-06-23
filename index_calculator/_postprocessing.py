@@ -7,6 +7,8 @@ from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class PostProcessing:
+    """Class for post-precessing."""
+
     def __init__(
         self,
         project="N/A",
@@ -16,6 +18,7 @@ class PostProcessing:
         proc_obj=None,
         **kwargs,
     ):
+        """Write parameters to self."""
         if proc_obj is None:
             raise ValueError(
                 "Select an index_calculator.Processing object. 'proc_obj=...'"
@@ -48,7 +51,7 @@ class PostProcessing:
         self.postproc = self.postprocessing()
 
     def postprocessing(self):
-
+        """Write key-value pairs to netCDF attributes."""
         _ijson = copy.deepcopy(ijson)
         _xjson = copy.deepcopy(xjson)
 
@@ -74,11 +77,11 @@ class PostProcessing:
             self,
             self.proc[self.CIname],
             json[self.CIname],
-        ).output
+        )
         output = NetCDFglobalattrs(
             self,
             self.proc,
             json["global_att"],
-        ).output
+        )
 
         return output
