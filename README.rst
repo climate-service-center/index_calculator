@@ -2,18 +2,18 @@
 index_calculator
 ================
 
-.. image:: https://github.com/ludwiglierhammer/xweights/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/ludwiglierhammer/xweights/actions/workflows/ci.yml
+.. image:: https://github.com/ludwiglierhammer/index_calculator/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/ludwiglierhammer/index_calculator/actions/workflows/ci.yml
 
-.. image:: https://codecov.io/gh/ludwiglierhammer/xweights/branch/main/graph/badge.svg
-    :target: https://codecov.io/gh/ludwiglierhammer/xweights
+.. image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/ludwiglierhammer/index_calculator
 
-.. image:: https://readthedocs.org/projects/xweights/badge/?version=latest
-    :target: https://xweights.readthedocs.io/en/latest/?version=latest
+.. image:: https://readthedocs.org/projects/index_calculator/badge/?version=latest
+    :target: https://index-calculator.readthedocs.io/en/latest/?version=latest
     :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/ludwiglierhammer/xweights/shield.svg
-    :target: https://pyup.io/repos/github/ludwiglierhammer/xweights/
+.. image:: https://pyup.io/repos/github/ludwiglierhammer/index_calculator/shield.svg
+    :target: https://pyup.io/repos/github/ludwiglierhammer/index_calculator/
     :alt: Updates
 
 Python index_calculator is an xclim wrapper to calculate climate indices from CMORized netCDF files.
