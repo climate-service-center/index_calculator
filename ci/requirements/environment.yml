@@ -1,0 +1,11 @@
+name: xcalc-tests
+channels:
+    - conda-forge
+    - nodefaults
+dependencies:
+    - dask
+    - xarray
+    - xclim
+    - pytest
+    - pytest-cov
+    - pytest-env
