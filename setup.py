@@ -10,11 +10,23 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = []
+with open("xweights/__init__.py") as init_file:
+    lines = init_file.read().strip().replace(" ", "").split("\n")
+    for line in lines:
+        if "__version__" in line:
+            __version__ = line.split("=")[-1]
+            break
 
-test_requirements = [
-    "pytest>=3",
-]
+
+def _read_txt(txt_file):
+    return open(txt_file).read().strip().split("\n")
+
+
+requirements = _read_txt("ci/requirements/requirements.txt")
+
+setup_requirements = _read_txt("ci/requirements/requirements_dev.txt")
+
+test_requirements = []
 
 setup(
     author="Ludwig Lierhammer",
@@ -44,6 +56,7 @@ setup(
     keywords="index_calculator",
     name="index_calculator",
     packages=find_packages(include=["index_calculator", "index_calculator.*"]),
+    setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/ludwiglierhammer/index_calculator",
