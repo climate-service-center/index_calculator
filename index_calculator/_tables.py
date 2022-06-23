@@ -4,6 +4,18 @@ import pkg_resources
 
 
 def read_from_json(jsfile):
+    """Read json file from disk.
+
+    Parameters
+    ----------
+    jsfile: str
+        Json file on disk.
+
+    Returns
+    -------
+    dict
+       Python dictionary.
+    """
     with pkg_resources.resource_stream("index_calculator", jsfile) as f:
         return json.load(f)
 
