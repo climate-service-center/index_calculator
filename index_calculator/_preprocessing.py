@@ -5,6 +5,8 @@ from ._utils import kwargs_to_self
 
 
 class PreProcessing:
+    """Class for pre-processing."""
+
     def __init__(
         self,
         ds=None,
@@ -15,7 +17,7 @@ class PreProcessing:
         check_time_axis=True,
         **kwargs,
     ):
-
+        """Write parameters to self."""
         if ds is None:
             raise ValueError("Please select an input xarray dataset. 'ds=...'")
         self.ds = ds
@@ -30,6 +32,8 @@ class PreProcessing:
         self.preproc = self.preprocessing()
 
     def preprocessing(self):
+        """Select and check time range."""
+
         def get_time_range_as_str(time, fmt):
             basics = pyh.basics()
             ts = basics.date_to_str(time[0], fmt)
