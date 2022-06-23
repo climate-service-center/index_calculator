@@ -10,7 +10,7 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-with open("xweights/__init__.py") as init_file:
+with open("index_calculator/__init__.py") as init_file:
     lines = init_file.read().strip().replace(" ", "").split("\n")
     for line in lines:
         if "__version__" in line:
