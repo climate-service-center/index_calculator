@@ -2,25 +2,21 @@
 index_calculator
 ================
 
+.. image:: https://github.com/ludwiglierhammer/xweights/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/ludwiglierhammer/xweights/actions/workflows/ci.yml
 
-.. image:: https://img.shields.io/pypi/v/index_calculator.svg
-        :target: https://pypi.python.org/pypi/index_calculator
+.. image:: https://codecov.io/gh/ludwiglierhammer/xweights/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/ludwiglierhammer/xweights
 
-.. image:: https://img.shields.io/travis/ludwiglierhammer/index_calculator.svg
-        :target: https://travis-ci.com/ludwiglierhammer/index_calculator
+.. image:: https://readthedocs.org/projects/xweights/badge/?version=latest
+    :target: https://xweights.readthedocs.io/en/latest/?version=latest
+    :alt: Documentation Status
 
-.. image:: https://readthedocs.org/projects/index-calculator/badge/?version=latest
-        :target: https://index-calculator.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
+.. image:: https://pyup.io/repos/github/ludwiglierhammer/xweights/shield.svg
+    :target: https://pyup.io/repos/github/ludwiglierhammer/xweights/
+    :alt: Updates
 
-
-.. image:: https://pyup.io/repos/github/ludwiglierhammer/index_calculator/shield.svg
-     :target: https://pyup.io/repos/github/ludwiglierhammer/index_calculator/
-     :alt: Updates
-
-
-
-Python index-calculator is an xclim wrapper to caluclate climate indices from CMORized netCDF files.
+Python index_calculator is an xclim wrapper to calculate climate indices from CMORized netCDF files.
 
 
 * Free software: MIT license
@@ -30,7 +26,49 @@ Python index-calculator is an xclim wrapper to caluclate climate indices from CM
 Features
 --------
 
-* TODO
+* Calculate climate indices via xclim.
+* Write standardized netCDF attributes.
+* Write on disk with a project-specific output file name.
+
+Installation
+------------
+
+You can install the package directly from github using pip:
+
+.. code-block:: console
+
+     pip install git+https://github.com/ludwiglierhammer/index_calculator
+
+If you want to contribute, I recommend cloning the repository and installing the package in development mode, e.g.
+
+.. code-block:: console
+
+    git clone https://github.com/ludwiglierhammer/index_calculator.git
+    cd index_calculator
+    pip install -e .
+
+This will install the package but you can still edit it and you don't need the package in your :code:`PYTHONPATH`
+
+
+Requirements
+------------
+
+* python3.6 or higher
+
+* numpy
+
+* pandas
+
+* xarray
+
+* xclim
+
+
+Contact
+-------
+In cases of any problems, needs or wishes do not hesitate to contact:
+
+ludwig.lierhammer@hereon.de
 
 Credits
 -------
