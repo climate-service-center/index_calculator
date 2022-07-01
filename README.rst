@@ -8,13 +8,16 @@ index_calculator
 .. image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/ludwiglierhammer/index_calculator
 
+.. image:: https://img.shields.io/pypi/v/index_calculator.svg
+    :target: https://pypi.python.org/pypi/index_calculator
+
 .. image:: https://readthedocs.org/projects/index_calculator/badge/?version=latest
     :target: https://index-calculator.readthedocs.io/en/latest/?version=latest
     :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/ludwiglierhammer/index_calculator/shield.svg
-    :target: https://pyup.io/repos/github/ludwiglierhammer/index_calculator/
-    :alt: Updates
+.. image:: https://results.pre-commit.ci/badge/github/ludwiglierhammer/index_calculator/main.svg
+   :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/main
+   :alt: pre-commit.ci status
 
 Python index_calculator is an xclim wrapper to calculate climate indices from CMORized netCDF files.
 
@@ -43,7 +46,7 @@ If you want to contribute, I recommend cloning the repository and installing the
 
 .. code-block:: console
 
-    git clone https://github.com/ludwiglierhammer/index_calculator.git
+    git clone index_calculator
     cd index_calculator
     pip install -e .
 

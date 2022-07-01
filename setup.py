@@ -15,6 +15,7 @@ with open("index_calculator/__init__.py") as init_file:
     for line in lines:
         if "__version__" in line:
             __version__ = line.split("=")[-1]
+            __version__ = __version__.replace('"', "")
             break
 
 
