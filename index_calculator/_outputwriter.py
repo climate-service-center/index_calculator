@@ -1,5 +1,7 @@
 import warnings
 
+from pyhomogenize import save_xrdataset
+
 from ._tables import pjson
 from ._utils import object_attrs_to_self
 
@@ -51,9 +53,7 @@ class OutputWriter:
 
     def to_netcdf(self):
         """Write xarray.Dataset to netCDF file on disk."""
-        MISSVAL = 1e20
         encoding = {
-            self.CIname: {"_FillValue": MISSVAL, "missing_value": MISSVAL},
             "time": {
                 "units": self.ds.time.encoding["units"],
                 "calendar": self.ds.time.encoding["calendar"],
@@ -65,13 +65,13 @@ class OutputWriter:
                 "dtype": self.ds.time.encoding["dtype"],
             },
         }
-        self.postproc.to_netcdf(
-            self.outputname,
-            encoding=encoding,
-            format="NETCDF4",
-            unlimited_dims={"time": True},
+        ds = save_xrdataset(
+            self.postproc,
+            name=self.outputname,
+            encoding_dict={"encoding": encoding},
         )
         print(f"File written: {self.outputname}")
+        return ds
 
     def write_to_netcdf(self, output=True, project=None):
         """Write xarray.Dataset to disk.
@@ -93,4 +93,4 @@ class OutputWriter:
             self.outputname = output
             write = True
         if write:
-            self.to_netcdf()
+            return self.to_netcdf()
