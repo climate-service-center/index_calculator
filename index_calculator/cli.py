@@ -3,49 +3,10 @@ import argparse
 import sys
 
 import dask  # noqa
-import xarray as xr
 from dask.distributed import Client
+from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
-
-
-def open_xrdataset(
-    files,
-    use_cftime=True,
-    parallel=True,
-    data_vars="minimal",
-    chunks={"time": 1},
-    coords="minimal",
-    compat="override",
-    drop=None,
-    **kwargs,
-):
-    """optimized function for opening large cf datasets.
-    based on:
-    https://github.com/pydata/xarray/issues/1385#issuecomment-561920115
-    decode_timedelta=False is added to leave variables and coordinates
-    with time units in {“days”, “hours”, “minutes”, “seconds”,
-    “milliseconds”, “microseconds”} encoded as numbers.
-    """
-
-    def drop_all_coords(ds):
-        return ds.reset_coords(drop=True)
-
-    ds = xr.open_mfdataset(
-        files,
-        parallel=parallel,
-        decode_times=False,
-        combine="by_coords",
-        preprocess=drop_all_coords,
-        decode_cf=False,
-        chunks=chunks,
-        data_vars=data_vars,
-        coords=coords,
-        compat=compat,
-        **kwargs,
-    )
-
-    return xr.decode_cf(ds, use_cftime=use_cftime, decode_timedelta=False)
 
 
 def main():
