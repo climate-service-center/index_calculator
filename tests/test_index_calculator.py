@@ -5,9 +5,6 @@
 import pytest
 
 
-from index_calculator import index_calculator
-
-
 @pytest.fixture
 def response():
     """Sample pytest fixture.
