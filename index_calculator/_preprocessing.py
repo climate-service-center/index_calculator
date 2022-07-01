@@ -42,7 +42,7 @@ class PreProcessing:
 
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
-            self.var_name = time_control.get_var_name()
+            self.var_name = time_control.name
 
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
