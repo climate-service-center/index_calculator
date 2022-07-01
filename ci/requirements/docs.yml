@@ -7,6 +7,7 @@ channels:
 dependencies:
     - python
     - xarray
+    - xclim
     - docutils==0.17.1
     - nbconvert
     - numpydoc
