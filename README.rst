@@ -36,11 +36,11 @@ Features
 Installation
 ------------
 
-You can install the package directly from github using pip:
+You can install the package directly with pip:
 
 .. code-block:: console
 
-     pip install git+https://github.com/ludwiglierhammer/index_calculator
+     pip install index_calculator
 
 If you want to contribute, I recommend cloning the repository and installing the package in development mode, e.g.
 
