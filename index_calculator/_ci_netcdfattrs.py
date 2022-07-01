@@ -47,35 +47,6 @@ class NetCDFattrs:
         return database
 
 
-class NetCDFvariableattrs(NetCDFattrs):
-    """Class for writing key-value pairs to xarray.DataArray attributes."""
-
-    def __init__(self, postproc, da, dictionary={}):
-        """Write key-value-pairs to xarray.DataArray attributes.
-
-        Parameters
-        ----------
-        postproc: PostProcessing
-            index_calculator PostProcessing object
-        da: xarray.DataArray
-            The key-value pairs will be written to the `da` attributes
-        dictionary: dict, optional
-            Dictionary with key-value pairs.
-
-        Returns
-        -------
-        xarray.DataArray
-            Database with new attributes
-        """
-        dictionary = {**dictionary, **self._associated_files(object)}
-        dictionary = self.vanish_dictionary(dictionary)
-        return self.write_dictionary_to_netcdf(da, dictionary)
-
-    def _associated_files(self, input):
-        """Write associated files to attributes."""
-        return {"associated_files": "test"}
-
-
 class NetCDFglobalattrs(NetCDFattrs):
     """Class for writing key-value pairs to xarray.Dataset attributes."""
 
@@ -145,7 +116,7 @@ class NetCDFglobalattrs(NetCDFattrs):
             **self._ci_package_reference(postproc),
         }
         dictionary = self.vanish_dictionary(dictionary)
-        return self.write_dictionary_to_netcdf(ds, dictionary)
+        self.output = self.write_dictionary_to_netcdf(ds, dictionary)
 
     def _ci_additional_reference_period(self, input):
         """Add additional reference period to dictionary."""
