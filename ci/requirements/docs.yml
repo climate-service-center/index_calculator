@@ -7,16 +7,19 @@ channels:
 dependencies:
     - python
     - xarray
+    - docutils==0.17.1
     - nbconvert
     - numpydoc
     - pillow
     - pip
     - sphinx_rtd_theme==1.0.0
     - sphinx==4.2.0
+    - pandoc
     - nbsphinx
     - nbsphinx-link
     - ipython
     - dask
+    - cftime
 
     - pip:
       - sphinxcontrib-mockautodoc
