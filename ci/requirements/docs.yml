@@ -20,3 +20,4 @@ dependecies:
 
     - pip:
       - sphinxcontrib-mockautodoc
+      - pyhomogenize
