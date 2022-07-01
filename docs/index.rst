@@ -1,5 +1,5 @@
 Welcome to index_calculator's documentation!
-======================================
+============================================
 
 .. toctree::
    :maxdepth: 2
@@ -8,9 +8,10 @@ Welcome to index_calculator's documentation!
    readme
    installation
    usage
-   modules
+   notebooks
    contributing
    authors
+   api
    history
 
 Indices and tables
