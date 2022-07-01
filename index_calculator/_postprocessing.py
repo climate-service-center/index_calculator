@@ -1,7 +1,7 @@
 import copy
 import warnings
 
-from ._ci_netcdfattrs import NetCDFglobalattrs, NetCDFvariableattrs
+from ._ci_netcdfattrs import NetCDFglobalattrs
 from ._tables import ijson, istjson, xjson
 from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
@@ -73,15 +73,10 @@ class PostProcessing:
         except KeyError:
             warnings.warn(f"Project {self.project} not known.")
         json = adjust_attributes(json, None)
-        output = NetCDFvariableattrs(
-            self,
-            self.proc[self.CIname],
-            json[self.CIname],
-        )
         output = NetCDFglobalattrs(
             self,
             self.proc,
             json["global_att"],
-        )
+        ).output
 
         return output
