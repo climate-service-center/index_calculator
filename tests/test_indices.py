@@ -1,8 +1,9 @@
 import numpy as np
 import pytest  # noqa
-from conftest import pr_series, tas_series, tasmax_series, tasmin_series
 
 from index_calculator._indices import ClimateIndices
+
+from .conftest import pr_series, tas_series, tasmax_series, tasmin_series
 
 
 def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
