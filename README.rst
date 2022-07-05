@@ -46,7 +46,7 @@ If you want to contribute, I recommend cloning the repository and installing the
 
 .. code-block:: console
 
-    git clone index_calculator
+    git clone https://github.com/ludwiglierhammer/index_calculator
     cd index_calculator
     pip install -e .
 
