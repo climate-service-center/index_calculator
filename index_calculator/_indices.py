@@ -224,7 +224,7 @@ class ClimateIndices:
             Number of tropical nights (tasmin > 20.0 degC).
         """
         return xc.atmos.tropical_nights(
-            thres=20,
+            thresh=20,
             *args,
             **kwargs,
         )
