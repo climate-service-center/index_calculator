@@ -2,6 +2,8 @@ from datetime import datetime as dt
 
 import xclim as xc
 
+from index_calculator import __version__
+
 
 class NetCDFattrs:
     """Class for writing key-value pairs to netCDF attributes."""
@@ -144,7 +146,7 @@ class NetCDFglobalattrs(NetCDFattrs):
 
     def _ci_package_reference(self, input):
         """Add index_calculator version to dictionary."""
-        return {"ci_package_reference": "xcalc_v0.1.0"}
+        return {"ci_package_reference": f"xcalc_{__version__}"}
 
     def _ci_package_name(self, input):
         """Add xclim version to dictionary."""
