@@ -2,7 +2,7 @@ import cftime
 import pyhomogenize as pyh
 import xarray as xr
 
-from ._consts import _tfreq
+from ._consts import _freq, _tfreq
 from ._indices import ClimateIndices as ci
 from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
@@ -30,7 +30,10 @@ class Processing:
 
     def processing(self):
         """Calculate climate index."""
-        array = getattr(ci(), self.CIname)(self.preproc, self.freq)
+        array = getattr(ci(), self.CIname)(
+            ds=self.preproc,
+            freq=_freq[self.freq],
+        )
         basics = pyh.basics()
         date_range = basics.date_range(
             start=self.preproc.time.values[0],
@@ -53,20 +56,32 @@ class Processing:
             calendar=self.ds.time.encoding["calendar"],
         )
         idx_ds = idx_ds.assign_coords({"time": new_time})
-        idx_ds = idx_ds.cf.add_bounds("time")
-        idx_ds = idx_ds.reset_coords("time_bounds")
-        idx_ds["time_bounds"] = idx_ds.time_bounds.transpose()
+        encoding = {
+            "units": self.ds.time.encoding["units"],
+            "calendar": self.ds.time.encoding["calendar"],
+            "dtype": self.ds.time.encoding["dtype"],
+        }
+        self.encoding = {
+            "time": encoding,
+        }
+        if len(idx_ds.time) > 1:
+            idx_ds = idx_ds.cf.add_bounds("time")
+            idx_ds = idx_ds.reset_coords("time_bounds")
+            idx_ds["time_bounds"] = idx_ds.time_bounds.transpose()
+
+            new_time_bnds = cftime.num2date(
+                idx_ds.time_bounds,
+                self.ds.time.encoding["units"],
+                calendar=self.ds.time.encoding["calendar"],
+            )
+            idx_ds.time_bounds.values = new_time_bnds
+            idx_ds = idx_ds.rename({"time_bounds": "time_bnds"})
+            self.encoding["time_bnds"] = encoding
 
         new_time = cftime.num2date(
             idx_ds.time,
             self.ds.time.encoding["units"],
             calendar=self.ds.time.encoding["calendar"],
         )
-        new_time_bnds = cftime.num2date(
-            idx_ds.time_bounds,
-            self.ds.time.encoding["units"],
-            calendar=self.ds.time.encoding["calendar"],
-        )
         idx_ds = idx_ds.assign_coords({"time": new_time})
-        idx_ds.time_bounds.values = new_time_bnds
-        return idx_ds.rename({"time_bounds": "time_bnds"})
+        return idx_ds

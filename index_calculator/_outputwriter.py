@@ -53,22 +53,10 @@ class OutputWriter:
 
     def to_netcdf(self):
         """Write xarray.Dataset to netCDF file on disk."""
-        encoding = {
-            "time": {
-                "units": self.ds.time.encoding["units"],
-                "calendar": self.ds.time.encoding["calendar"],
-                "dtype": self.ds.time.encoding["dtype"],
-            },
-            "time_bnds": {
-                "units": self.ds.time_bnds.encoding["units"],
-                "calendar": self.ds.time_bnds.encoding["calendar"],
-                "dtype": self.ds.time.encoding["dtype"],
-            },
-        }
         ds = save_xrdataset(
             self.postproc,
             name=self.outputname,
-            encoding_dict={"encoding": encoding},
+            encoding_dict={"encoding": self.encoding},
         )
         print(f"File written: {self.outputname}")
         return ds
