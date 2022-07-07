@@ -2,7 +2,7 @@ import copy
 import warnings
 
 from ._ci_netcdfattrs import NetCDFglobalattrs
-from ._tables import ijson, istjson, xjson
+from ._tables import ijson, xjson
 from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
@@ -35,13 +35,6 @@ class PostProcessing:
             self,
         )
         self.contact = check_existance({"contact": contact}, self)
-        if self.institution_id in istjson.keys():
-            info = istjson[self.institution_id]
-            if self.institution == "N/A":
-                self.institution = info["institution_long_name"]
-            if self.contact == "N/A":
-                self.contact = info["institution_contact"]
-
         self.period = check_existance({"period": False}, self)
         self.base_period_time_range = check_existance(
             {"base_period_time_range": False}, self
