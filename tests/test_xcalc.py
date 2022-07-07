@@ -23,6 +23,7 @@ def test_index_calculator():
     tas_ds = open_xrdataset(test_netcdf)
     xcalc.index_calculator(
         ds=tas_ds,
+        freq="week",
         index="TG",
         project="CORDEX",
         institution="test institution",
