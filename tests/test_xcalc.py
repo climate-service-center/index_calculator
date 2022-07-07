@@ -1,4 +1,4 @@
-# import pytest  # noqa
+import pytest  # noqa
 from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
@@ -30,6 +30,3 @@ def test_index_calculator():
         institution_id="TEST",
         contact="test@test.de",
     ).compute(write=True)
-
-
-test_processing()
