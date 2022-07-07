@@ -9,8 +9,7 @@ from pyhomogenize import open_xrdataset
 import index_calculator as xcalc
 
 
-def main():
-    """Console script for index_calculator."""
+def _parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-i",
@@ -47,7 +46,12 @@ def main():
         default=True,
         help="netCDF output file name. Necessary if project is not selected.",
     )
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+
+    args = _parser()
 
     ds = open_xrdataset(args.input_file)
     xcalc.index_calculator(
