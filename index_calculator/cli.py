@@ -26,6 +26,13 @@ def _parser():
         help="climate index short name",
     )
     parser.add_argument(
+        "-freq",
+        "--frequency",
+        dest="frequency",
+        default="year",
+        help="output file frequency",
+    )
+    parser.add_argument(
         "-p",
         "--project",
         dest="project",
@@ -37,7 +44,21 @@ def _parser():
         "--institute",
         dest="institution",
         default="N/A",
-        help="institution name",
+        help="institution long name",
+    )
+    parser.add_argument(
+        "-inst_id",
+        "--institute_id",
+        dest="institution_id",
+        default="N/A",
+        help="institution id",
+    )
+    parser.add_argument(
+        "-contact",
+        "--contact",
+        dest="contact",
+        default="N/A",
+        help="institution mail contact",
     )
     parser.add_argument(
         "-o",
@@ -54,8 +75,11 @@ def _args_to_xcalc(args):
     return xcalc.index_calculator(
         ds=ds,
         index=args.climate_index,
+        freq=args.frequency,
         project=args.project,
-        institution_id=args.institution,
+        institution=args.institution,
+        institution_id=args.institution_id,
+        contact=args.contact,
         output=args.output,
     ).compute(write=True)
 
