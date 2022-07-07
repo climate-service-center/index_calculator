@@ -39,9 +39,10 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     description="Python index-calculator is an xclim wrapper"
     "to calculate climate indices from CMORized netCDF files.",
@@ -61,6 +62,6 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/ludwiglierhammer/index_calculator",
-    version="0.1.0",
+    version=__version__,
     zip_safe=False,
 )

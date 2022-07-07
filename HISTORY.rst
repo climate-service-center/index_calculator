@@ -6,3 +6,10 @@ History
 ------------------
 
 * First release on PyPI.
+
+0.2.0 (2022-07-07)
+------------------
+
+* documentation on readthedocs
+* tests
+* new cli arguments added
