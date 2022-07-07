@@ -6,6 +6,7 @@ dependencies:
     - dask
     - xarray
     - xclim
+    - netCDF4
     - pytest
     - pytest-cov
     - pytest-env
