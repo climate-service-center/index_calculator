@@ -46,21 +46,26 @@ def _parser():
         default=True,
         help="netCDF output file name. Necessary if project is not selected.",
     )
-    return parser.parse_args()
+    return parser
 
 
-def main():
-
-    args = _parser()
-
+def _args_to_xcalc(args):
     ds = open_xrdataset(args.input_file)
-    xcalc.index_calculator(
+    return xcalc.index_calculator(
         ds=ds,
         index=args.climate_index,
         project=args.project,
         institution_id=args.institution,
         output=args.output,
     ).compute(write=True)
+
+
+def main():
+
+    parser = _parser()
+    args = parser.parse_args()
+
+    _args_to_xcalc(args)
     return 0
 
 
