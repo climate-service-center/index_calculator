@@ -1,4 +1,4 @@
-import pytest  # noqa
+# import pytest  # noqa
 from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
@@ -7,7 +7,7 @@ from index_calculator import test_netcdf
 
 def test_processing():
     tas_ds = open_xrdataset(test_netcdf)
-    preproc = xcalc.preprocessing(tas_ds)
+    preproc = xcalc.preprocessing(tas_ds, freq="week")
     proc = xcalc.processing("TG", preproc_obj=preproc)
     postproc = xcalc.postprocessing(
         "CORDEX",
@@ -30,3 +30,6 @@ def test_index_calculator():
         institution_id="TEST",
         contact="test@test.de",
     ).compute(write=True)
+
+
+test_processing()
