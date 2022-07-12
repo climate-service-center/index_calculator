@@ -58,6 +58,7 @@ setup(
     keywords="index_calculator",
     name="index_calculator",
     packages=find_packages(include=["index_calculator", "index_calculator.*"]),
+    package_data={"index_calculator": ["*/*.nc", "*/*.json"]},
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
