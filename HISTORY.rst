@@ -13,3 +13,8 @@ History
 * documentation on readthedocs
 * tests
 * new cli arguments added
+
+0.2.1 (2022-01-12)
+------------------
+
+* install data and tables via pip
