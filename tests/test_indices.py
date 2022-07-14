@@ -57,6 +57,11 @@ def test_R25mm():
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
+def test_DD():
+    result = ClimateIndices().DD(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
 def test_CDD():
     result = ClimateIndices().CDD(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
@@ -79,6 +84,11 @@ def test_RX5day():
 
 def test_TR():
     result = ClimateIndices().TR(tasmin=tasmin_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_SQI():
+    result = ClimateIndices().SQI(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 

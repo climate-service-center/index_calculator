@@ -137,6 +137,25 @@ class ClimateIndices:
             **kwargs,
         )
 
+    def DD(self, *args, **kwargs):
+        """Calculate number of dry days (pr < 1 mm/day).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#dry_days
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of dry days (pr < 1 mm/day).
+        """
+        return xc.atmos.dry_days(
+            thresh="0.1 mm/d",
+            *args,
+            **kwargs,
+        )
+
     def CDD(self, *args, **kwargs):
         """Calculate maximum consecutive dry days (pr < 1 mm/day).
 
@@ -225,6 +244,25 @@ class ClimateIndices:
         """
         return xc.atmos.tropical_nights(
             thresh=20,
+            *args,
+            **kwargs,
+        )
+
+    def SQI(self, *args, **kwargs):
+        """Calculate number of uncomfortable sleep events (tasmin > 18.0 degC).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#tn_days_above
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of uncomfortable sleep events (tasmin > 18.0 degC).
+        """
+        return xc.atmos.tn_days_above(
+            thresh=18,
             *args,
             **kwargs,
         )
