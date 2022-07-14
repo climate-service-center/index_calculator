@@ -14,10 +14,6 @@
     "ci_timerange_index": "<time range of the index data>",
     "ci_timerange_source": "<time range of the input data>"
   },
-  "variable_att": {
-    "associated_files": "<list of input files>",
-    "cell_methods": "<combined cell_methods>"
-  },
   "CMIP5": {
     "global_att": {
       "ci_product": "gcm_derived"

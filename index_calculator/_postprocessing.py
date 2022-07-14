@@ -59,7 +59,6 @@ class PostProcessing:
 
         json = {}
         json[self.CIname] = _ijson[self.CIname]
-        json[self.CIname].update(_xjson["variable_att"])
         json["global_att"] = _xjson["global_att"]
         try:
             json["global_att"].update(_xjson[self.project]["global_att"])
@@ -71,5 +70,11 @@ class PostProcessing:
             self.proc,
             json["global_att"],
         ).output
-
+        for attr_name, attr_value in json[self.CIname].items():
+            output[self.CIname].attrs[attr_name] = attr_value
+        associated_files = []
+        for var_name in self.var_name:
+            associated_files += [self.ds[var_name].attrs["associated_files"]]
+        associated_files = ", ".join(associated_files)
+        output[self.CIname].attrs["associated_files"] = associated_files
         return output
