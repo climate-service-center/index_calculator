@@ -1,28 +1,154 @@
 import xclim as xc
 
 
-class ClimateIndices:
-    """Class for calling xclim to calculate climate indices."""
+def thresh_string(thresh, units):
+    if isinstance(thresh, str):
+        return thresh
+    else:
+        return "{} {}".format(str(thresh), units)
 
-    def TG(self, *args, **kwargs):
-        """Calculate mean daily mean temperature.
+
+class CDD:
+    parameters = {
+        "thresh": 0.1,
+    }
+
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate maximum consecutive dry days.
 
         Parameters
         ----------
         For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tg_mean
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_dry_days
 
         Returns
         -------
         xarray.DataArray
-            Mean daily mean temperature.
+            Maximum consecutive dry days.
         """
-        return xc.atmos.tg_mean(
-            *args,
-            **kwargs,
+        thresh = thresh_string(thresh, "mm/day")
+        return xc.atmos.maximum_consecutive_dry_days(
+            thresh=thresh,
+            **params,
         )
 
-    def RR(self, *args, **kwargs):
+
+class CSU:
+    parameters = {
+        "thresh": 25,
+    }
+
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate maximum consecutive summer days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_warm_days
+        Returns
+        -------
+        xarray.DataArray
+            Maximum consecutive summer days.
+        """
+        thresh = thresh_string(thresh, "degC")
+        return xc.atmos.maximum_consecutive_warm_days(
+            thresh=thresh,
+            **params,
+        )
+
+
+class CWD:
+    parameters = {
+        "thresh": 0.1,
+    }
+
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate maximum consecutive wet days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_wet_days
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum consecutive wet days.
+        """
+        thresh = thresh_string(thresh, "mm/day")
+        return xc.atmos.maximum_consecutive_wet_days(
+            thresh=thresh,
+            **params,
+        )
+
+
+class DD:
+    parameters = {
+        "thresh": 0.1,
+    }
+
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate number of dry days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#dry_days
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of dry days.
+        """
+        thresh = thresh_string(thresh, "mm/day")
+        return xc.atmos.dry_days(
+            thresh=thresh,
+            **params,
+        )
+
+
+class FD:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate number of frost days (tasmin < 0.0 degC).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#frost_days
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of frost days (tasmin < 0.0 degC).
+        """
+        return xc.atmos.frost_days(**params)
+
+
+class ID:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate number of ice days (tasmax < 0.0 degC).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#ice_days
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of ice days (tasmax < 0.0 degC).
+        """
+        return xc.atmos.ice_days(**params)
+
+
+class RR:
+    parameters = {}
+
+    def compute(**params):
         """Calculate total precipitation.
 
         Parameters
@@ -35,12 +161,142 @@ class ClimateIndices:
         xarray.DataArray
             Total precipitation.
         """
-        return xc.atmos.precip_accumulation(
-            *args,
-            **kwargs,
+        return xc.atmos.precip_accumulation(**params)
+
+
+class RR1:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate number of wet days (pr >= 1 mm/day).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet days (pr >= 1 mm/day).
+        """
+        return xc.atmos.wetdays(
+            thresh="1 mm/day",
+            **params,
         )
 
-    def SDII(self, *args, **kwargs):
+
+class R10mm:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate number of wet days (pr >= 10 mm/day).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet days (pr >= 10 mm/day).
+        """
+        return xc.atmos.wetdays(
+            thresh="10 mm/day",
+            **params,
+        )
+
+
+class R20mm:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate number of wet days (pr >= 20 mm/day).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet days (pr >= 20 mm/day).
+        """
+        return xc.atmos.wetdays(
+            thresh="20 mm/day",
+            **params,
+        )
+
+
+class R25mm:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate number of wet days (pr >= 25 mm/day).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet days (pr >= 25 mm/day).
+        """
+        return xc.atmos.wetdays(
+            thresh="25 mm/day",
+            **params,
+        )
+
+
+class RX1day:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate maximum 1-day total precipitation.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#max_1day_precipitation_amount
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum 1-day total precipitation.
+        """
+        return xc.atmos.max_1day_precipitation_amount(**params)
+
+
+class RX5day:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate maximum 5-day total precipitation.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#max_n_day_precipitation_amount
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum 5-day total precipitation.
+        """
+        return xc.atmos.max_n_day_precipitation_amount(
+            window=5,
+            **params,
+        )
+
+
+class SDII:
+    parameters = {}
+
+    def compute(**params):
         """Calculate average precipitation during wet days.
 
         Parameters
@@ -56,200 +312,41 @@ class ClimateIndices:
         xarray.DataArray
             Average precipitation during wet days.
         """
-        return xc.atmos.daily_pr_intensity(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.daily_pr_intensity(**params)
 
-    def RR1(self, *args, **kwargs):
-        """Calculate number of wet days (pr >= 1 mm/day).
 
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+class SU:
+    parameters = {
+        "thresh": 25,
+    }
 
-        Returns
-        -------
-        xarray.DataArray
-            Number of wet days (pr >= 1 mm/day).
-        """
-        return xc.atmos.wetdays(
-            thresh="1 mm/day",
-            *args,
-            **kwargs,
-        )
-
-    def R10mm(self, *args, **kwargs):
-        """Calculate number of wet days (pr >= 10 mm/day).
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate number of summer days.
 
         Parameters
         ----------
         For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#tx_days_above
 
         Returns
         -------
         xarray.DataArray
-            Number of wet days (pr >= 10 mm/day).
+            Number of summer days.
         """
-        return xc.atmos.wetdays(
-            thresh="10 mm/day",
-            *args,
-            **kwargs,
+        thresh = thresh_string(thresh, "degC")
+        return xc.atmos.tx_days_above(
+            thresh=thresh,
+            **params,
         )
 
-    def R20mm(self, *args, **kwargs):
-        """Calculate number of wet days (pr >= 20 mm/day).
 
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+class SQI:
+    parameters = {
+        "thresh": 18,
+    }
 
-        Returns
-        -------
-        xarray.DataArray
-            Number of wet days (pr >= 20 mm/day).
-        """
-        return xc.atmos.wetdays(
-            thresh="20 mm/day",
-            *args,
-            **kwargs,
-        )
-
-    def R25mm(self, *args, **kwargs):
-        """Calculate number of wet days (pr >= 25 mm/day).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of wet days (pr >= 25 mm/day).
-        """
-        return xc.atmos.wetdays(
-            thresh="25 mm/day",
-            *args,
-            **kwargs,
-        )
-
-    def DD(self, *args, **kwargs):
-        """Calculate number of dry days (pr < 1 mm/day).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#dry_days
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of dry days (pr < 1 mm/day).
-        """
-        return xc.atmos.dry_days(
-            thresh="0.1 mm/d",
-            *args,
-            **kwargs,
-        )
-
-    def CDD(self, *args, **kwargs):
-        """Calculate maximum consecutive dry days (pr < 1 mm/day).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_dry_days
-
-        Returns
-        -------
-        xarray.DataArray
-            Maximum consecutive dry days (pr < 1 mm/day).
-        """
-        return xc.atmos.maximum_consecutive_dry_days(
-            *args,
-            **kwargs,
-        )
-
-    def CWD(self, *args, **kwargs):
-        """Calculate maximum consecutive wet days (pr >= 1 mm/day).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_wet_days
-
-        Returns
-        -------
-        xarray.DataArray
-            Maximum consecutive wet days (pr >= 1 mm/day).
-        """
-        return xc.atmos.maximum_consecutive_wet_days(
-            *args,
-            **kwargs,
-        )
-
-    def RX1day(self, *args, **kwargs):
-        """Calculate maximum 1-day total precipitation.
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#max_1day_precipitation_amount
-
-        Returns
-        -------
-        xarray.DataArray
-            Maximum 1-day total precipitation.
-        """
-        return xc.atmos.max_1day_precipitation_amount(
-            *args,
-            **kwargs,
-        )
-
-    def RX5day(self, *args, **kwargs):
-        """Calculate maximum 5-day total precipitation.
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#max_n_day_precipitation_amount
-
-        Returns
-        -------
-        xarray.DataArray
-            Maximum 5-day total precipitation.
-        """
-        return xc.atmos.max_n_day_precipitation_amount(
-            window=5,
-            *args,
-            **kwargs,
-        )
-
-    def TR(self, *args, **kwargs):
-        """Calculate number of tropical nights (tasmin > 20.0 degC).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#tropical_nights
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of tropical nights (tasmin > 20.0 degC).
-        """
-        return xc.atmos.tropical_nights(
-            thresh=20,
-            *args,
-            **kwargs,
-        )
-
-    def SQI(self, *args, **kwargs):
-        """Calculate number of uncomfortable sleep events (tasmin > 18.0 degC).
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate number of uncomfortable sleep events.
 
         Parameters
         ----------
@@ -259,51 +356,63 @@ class ClimateIndices:
         Returns
         -------
         xarray.DataArray
-            Number of uncomfortable sleep events (tasmin > 18.0 degC).
+            Number of uncomfortable sleep events.
         """
+        thresh = thresh_string(thresh, "degC")
         return xc.atmos.tn_days_above(
-            thresh=18,
-            *args,
-            **kwargs,
+            thresh=thresh,
+            **params,
         )
 
-    def FD(self, *args, **kwargs):
-        """Calculate number of frost days (tasmin < 0.0 degC).
+
+class TG:
+    parameters = {}
+
+    def compute(**params):
+        """Calculate mean daily mean temperature.
 
         Parameters
         ----------
         For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#frost_days
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tg_mean
 
         Returns
         -------
         xarray.DataArray
-            Number of frost days (tasmin < 0.0 degC).
+            Mean daily mean temperature.
         """
-        return xc.atmos.frost_days(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tg_mean(**params)
 
-    def ID(self, *args, **kwargs):
-        """Calculate number of ice days (tasmax < 0.0 degC).
+
+class TR:
+    parameters = {
+        "thresh": 20,
+    }
+
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate number of tropical nights.
 
         Parameters
         ----------
         For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#ice_days
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#tn_days_above
 
         Returns
         -------
         xarray.DataArray
-            Number of ice days (tasmax < 0.0 degC).
+            Number of tropical nights.
         """
-        return xc.atmos.ice_days(
-            *args,
-            **kwargs,
+        thresh = thresh_string(thresh, "degC")
+        return xc.atmos.tn_days_above(
+            thresh=thresh,
+            **params,
         )
 
-    def TX(self, *args, **kwargs):
+
+class TX:
+    parameters = {}
+
+    def compute(**params):
         """Calculate mean daily maximum temperature.
 
         Parameters
@@ -316,12 +425,13 @@ class ClimateIndices:
         xarray.DataArray
             Mean daily maximum temperature.
         """
-        return xc.atmos.tx_mean(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tx_mean(**params)
 
-    def TXn(self, *args, **kwargs):
+
+class TXn:
+    parameters = {}
+
+    def compute(**params):
         """Calculate minimum daily maximum temperature.
 
         Parameters
@@ -334,12 +444,13 @@ class ClimateIndices:
         xarray.DataArray
             Minimum daily maximum temperature.
         """
-        return xc.atmos.tx_min(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tx_min(**params)
 
-    def TXx(self, *args, **kwargs):
+
+class TXx:
+    parameters = {}
+
+    def compute(**params):
         """Calculate maximum daily maximum temperature.
 
         Parameters
@@ -352,12 +463,13 @@ class ClimateIndices:
         xarray.DataArray
             Maximum daily maximum temperature.
         """
-        return xc.atmos.tx_max(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tx_max(**params)
 
-    def TN(self, *args, **kwargs):
+
+class TN:
+    parameters = {}
+
+    def compute(**params):
         """Calculate mean daily minimum temperature.
 
         Parameters
@@ -370,12 +482,13 @@ class ClimateIndices:
         xarray.DataArray
             Mean daily minimum temperature.
         """
-        return xc.atmos.tn_mean(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tn_mean(**params)
 
-    def TNn(self, *args, **kwargs):
+
+class TNn:
+    parameters = {}
+
+    def compute(**params):
         """Calculate minimum daily minimum temperature.
 
         Parameters
@@ -388,12 +501,13 @@ class ClimateIndices:
         xarray.DataArray
             Minimum daily minimum temperature.
         """
-        return xc.atmos.tn_min(
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tn_min(**params)
 
-    def TNx(self, *args, **kwargs):
+
+class TNx:
+    parameters = {}
+
+    def compute(**params):
         """Calculate maximum daily minimum temperature.
 
         Parameters
@@ -406,45 +520,4 @@ class ClimateIndices:
         xarray.DataArray
             Maximum daily minimum temperature.
         """
-        return xc.atmos.tn_max(
-            *args,
-            **kwargs,
-        )
-
-    def SU(self, *args, **kwargs):
-        """Calculate number of summer days (tasmax > 25.0 degC).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#tx_days_above
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of summer days (tasmax > 25.0 degC).
-        """
-        return xc.atmos.tx_days_above(
-            thresh=25,
-            *args,
-            **kwargs,
-        )
-
-    def CSU(self, *args, **kwargs):
-        """Calculate maximum consecutive summer days (tasmax > 25.0 degC).
-
-        Parameters
-        ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_warm_days
-
-        Returns
-        -------
-        xarray.DataArray
-            Maximum consecutive summer days (tasmax > 25.0 degC).
-        """
-        return xc.atmos.maximum_consecutive_warm_days(
-            thresh=25,
-            *args,
-            **kwargs,
-        )
+        return xc.atmos.tn_max(**params)
