@@ -58,19 +58,24 @@ class PostProcessing:
             return output
 
         json = {}
-        json[self.CIname] = _ijson[self.CIname]
+        json[self.IDXname] = _ijson[self.IDXname]
         json["global_att"] = _xjson["global_att"]
         try:
             json["global_att"].update(_xjson[self.project]["global_att"])
         except KeyError:
             warnings.warn(f"Project {self.project} not known.")
-        json = adjust_attributes(json, None)
+        replacement = ""
+        if hasattr(self, "thresh"):
+            replacement = self.thresh
+        elif "thresh" in self.parameters.keys():
+            replacement = self.parameters["thresh"]
+        json = adjust_attributes(json, replacement)
         output = NetCDFglobalattrs(
             self,
             self.proc,
             json["global_att"],
         ).output
-        for attr_name, attr_value in json[self.CIname].items():
+        for attr_name, attr_value in json[self.IDXname].items():
             output[self.CIname].attrs[attr_name] = attr_value
         associated_files = []
         for var_name in self.var_name:

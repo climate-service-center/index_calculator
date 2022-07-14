@@ -2,13 +2,14 @@ import cftime
 import pyhomogenize as pyh
 import xarray as xr
 
+# from ._indices import ClimateIndices as ci
+from . import _indices as indices
 from ._consts import _freq, _tfreq
-from ._indices import ClimateIndices as ci
 from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class Processing:
-    """Class for proecssing."""
+    """Class for processing."""
 
     def __init__(
         self,
@@ -23,17 +24,42 @@ class Processing:
                 "'preproc_obj='...'"
             )
         object_attrs_to_self(preproc_obj, self)
-
         self.CIname = check_existance({"index": index}, self)
+        alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
+        numb_name = "".join(filter(lambda x: x.isdigit(), self.CIname))
+        if hasattr(indices, self.CIname):
+            idx_object = getattr(indices, self.CIname)
+            self.IDXname = self.CIname
+        elif hasattr(indices, alpha_name):
+            idx_object = getattr(indices, alpha_name)
+            if numb_name[0] == "0":
+                number = float("{}.{}".format(numb_name[0], numb_name[1:]))
+            else:
+                number = int(numb_name)
+            kwargs["thresh"] = number
+            self.IDXname = alpha_name
+        else:
+            raise NameError("{} not defined.".format(self.CIname))
+
+        object_attrs_to_self(idx_object, self)
         kwargs_to_self(kwargs, self)
         self.proc = self.processing()
 
+    def adjust_params_to_ci(self):
+        params = {
+            "ds": self.preproc,
+            "freq": _freq[self.freq],
+        }
+        params.update(self.parameters)
+        for key, value in self.kwargs.items():
+            if key in self.parameters.keys():
+                params[key] = value
+        return params
+
     def processing(self):
         """Calculate climate index."""
-        array = getattr(ci(), self.CIname)(
-            ds=self.preproc,
-            freq=_freq[self.freq],
-        )
+        params = self.adjust_params_to_ci()
+        array = self.compute(**params)
         basics = pyh.basics()
         date_range = basics.date_range(
             start=self.preproc.time.values[0],
