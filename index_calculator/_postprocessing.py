@@ -64,12 +64,7 @@ class PostProcessing:
             json["global_att"].update(_xjson[self.project]["global_att"])
         except KeyError:
             warnings.warn(f"Project {self.project} not known.")
-        replacement = ""
-        if hasattr(self, "thresh"):
-            replacement = self.thresh
-        elif "thresh" in self.parameters.keys():
-            replacement = self.parameters["thresh"]
-        json = adjust_attributes(json, replacement)
+        json = adjust_attributes(json, self.replacement)
         output = NetCDFglobalattrs(
             self,
             self.proc,

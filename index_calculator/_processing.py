@@ -1,8 +1,9 @@
+import re
+
 import cftime
 import pyhomogenize as pyh
 import xarray as xr
 
-# from ._indices import ClimateIndices as ci
 from . import _indices as indices
 from ._consts import _freq, _tfreq
 from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
@@ -25,25 +26,46 @@ class Processing:
             )
         object_attrs_to_self(preproc_obj, self)
         self.CIname = check_existance({"index": index}, self)
+        idx_object = self.get_idx_name_and_tresh(kwargs)
+        object_attrs_to_self(idx_object, self)
+        kwargs_to_self(kwargs, self)
+        self.replacement = self.get_replacement()
+        self.CIname = self.CIname.replace("YY", self.replacement)
+        self.proc = self.processing()
+
+    def get_replacement(self):
+        if hasattr(self, "thresh"):
+            return str(self.thresh)
+        elif "thresh" in self.parameters.keys():
+            return str(self.parameters["thresh"])
+
+    def get_idx_name_and_tresh(self, kwargs):
         alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
         numb_name = "".join(filter(lambda x: x.isdigit(), self.CIname))
+        if numb_name:
+            if numb_name[0] == "0":
+                number = float("{}.{}".format(numb_name[0], numb_name[1:]))
+            else:
+                number = int(numb_name)
+        else:
+            number = None
+        replace_name = re.sub(r"\d+", "YY", self.CIname)
         if hasattr(indices, self.CIname):
             idx_object = getattr(indices, self.CIname)
             self.IDXname = self.CIname
         elif hasattr(indices, alpha_name):
             idx_object = getattr(indices, alpha_name)
-            if numb_name[0] == "0":
-                number = float("{}.{}".format(numb_name[0], numb_name[1:]))
-            else:
-                number = int(numb_name)
             kwargs["thresh"] = number
             self.IDXname = alpha_name
+        elif hasattr(indices, replace_name):
+            idx_object = getattr(indices, replace_name)
+            kwargs["thresh"] = number
+            self.IDXname = replace_name
+            if hasattr(self, "thresh"):
+                self.thresh = number
         else:
             raise NameError("{} not defined.".format(self.CIname))
-
-        object_attrs_to_self(idx_object, self)
-        kwargs_to_self(kwargs, self)
-        self.proc = self.processing()
+        return idx_object
 
     def adjust_params_to_ci(self):
         params = {

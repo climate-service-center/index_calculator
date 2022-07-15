@@ -6,7 +6,7 @@ from index_calculator import test_netcdf
 
 
 def test_processing():
-    tas_ds = open_xrdataset(test_netcdf)
+    tas_ds = open_xrdataset(test_netcdf["tas"])
     preproc = xcalc.preprocessing(tas_ds, freq="week")
     proc = xcalc.processing("TG", preproc_obj=preproc)
     postproc = xcalc.postprocessing(
@@ -20,7 +20,7 @@ def test_processing():
 
 
 def test_index_calculator():
-    tas_ds = open_xrdataset(test_netcdf)
+    tas_ds = open_xrdataset(test_netcdf["tas"])
     xcalc.index_calculator(
         ds=tas_ds,
         freq="week",
@@ -30,3 +30,29 @@ def test_index_calculator():
         institution_id="TEST",
         contact="test@test.de",
     ).compute(write=True)
+
+
+def test_thresh_index_calculator():
+    pr_ds = open_xrdataset(test_netcdf["pr"])
+    xcalc.index_calculator(
+        ds=pr_ds,
+        freq="week",
+        index="RX3day",
+        project="CORDEX",
+        institution_id="TEST",
+    ).compute()
+    xcalc.index_calculator(
+        ds=pr_ds,
+        freq="week",
+        index="RXYYday",
+        thresh=3,
+        project="CORDEX",
+        institution_id="TEST",
+    ).compute()
+    xcalc.index_calculator(
+        ds=pr_ds,
+        freq="week",
+        index="RXYYday",
+        project="CORDEX",
+        institution_id="TEST",
+    ).compute()

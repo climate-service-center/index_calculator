@@ -252,6 +252,31 @@ class R25mm:
         )
 
 
+class RYYmm:
+    parameters = {
+        "thresh": 25,
+    }
+
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate number of wet days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#wetdays
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet days.
+        """
+        thresh = thresh_string(thresh, "mm/day")
+        return xc.atmos.wetdays(
+            thresh=thresh,
+            **params,
+        )
+
+
 class RX1day:
     parameters = {}
 
@@ -271,11 +296,13 @@ class RX1day:
         return xc.atmos.max_1day_precipitation_amount(**params)
 
 
-class RX5day:
-    parameters = {}
+class RXYYday:
+    parameters = {
+        "thresh": 5,
+    }
 
-    def compute(**params):
-        """Calculate maximum 5-day total precipitation.
+    def compute(thresh=parameters["thresh"], **params):
+        """Calculate maximum {window}-day total precipitation.
 
         Parameters
         ----------
@@ -285,10 +312,10 @@ class RX5day:
         Returns
         -------
         xarray.DataArray
-            Maximum 5-day total precipitation.
+            Maximum {window}-day total precipitation.
         """
         return xc.atmos.max_n_day_precipitation_amount(
-            window=5,
+            window=thresh,
             **params,
         )
 

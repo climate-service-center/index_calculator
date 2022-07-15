@@ -57,6 +57,16 @@ def test_R25mm():
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
+def test_RYYmm():
+    result = indices.RYYmm.compute(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_R30mm():
+    result = indices.RYYmm.compute(pr=pr_xarray(), freq="7D", thresh=30)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
 def test_DD():
     result = indices.DD.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
@@ -77,9 +87,14 @@ def test_RX1day():
     np.testing.assert_allclose(result, 20, rtol=1e-03)
 
 
-def test_RX5day():
-    result = indices.RX5day.compute(pr=pr_xarray(), freq="7D")
+def test_RXYYday():
+    result = indices.RXYYday.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 55, rtol=1e-03)
+
+
+def test_RX7day():
+    result = indices.RXYYday.compute(pr=pr_xarray(), freq="7D", thresh=7)
+    np.testing.assert_allclose(result, 62, rtol=1e-03)
 
 
 def test_TR():
