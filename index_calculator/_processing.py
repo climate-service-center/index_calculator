@@ -38,6 +38,7 @@ class Processing:
             return str(self.thresh)
         elif "thresh" in self.parameters.keys():
             return str(self.parameters["thresh"])
+        return ""
 
     def get_idx_name_and_tresh(self, kwargs):
         alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
