@@ -37,6 +37,7 @@ class Processing:
         if hasattr(indices, self.CIname):
             idx_object = getattr(indices, self.CIname)
             self.IDXname = self.CIname
+            numb_name = ""
         elif hasattr(indices, alpha_name):
             idx_object = getattr(indices, alpha_name)
             self.IDXname = alpha_name
@@ -48,50 +49,55 @@ class Processing:
         return numb_name, idx_object
 
     def _get_replacement(self, obj, numb_name):
+        replacement = {}
+        repl_value = ""
         for attr in dir(obj):
             if attr[0] == "_":
                 continue
-            if not isinstance(getattr(obj, attr), int):
+            if callable(getattr(obj, attr)):
                 continue
             if attr in self.kwargs.keys():
-                return attr, self.kwargs[attr]
-            if numb_name:
-                return attr, numb_name
-            return attr, getattr(obj, attr)
-        return "", ""
+                replacement[attr] = self.kwargs[attr]
+            elif numb_name:
+                replacement[attr] = numb_name
+            else:
+                replacement[attr] = getattr(obj, attr)
+            if repl_value == "":
+                if isinstance(replacement[attr], list):
+                    continue
+                repl_value = replacement[attr]
+                if isinstance(repl_value, str) and len(repl_value) > 0:
+                    if repl_value[0] == "0":
+                        repl_value = float(
+                            "{}.{}".format(
+                                repl_value[0],
+                                repl_value[1:],
+                            )
+                        )
+                    else:
+                        repl_value = int(repl_value)
+                replacement[attr] = repl_value
+                repl_value = str(repl_value)
+        return replacement, repl_value
 
     def _get_idx_name_and_repl(self):
         numb_name, idx_object = self._get_numb_name_and_idx_object()
         object_attrs_to_self(idx_object, self, overwrite=False)
-        repl_key, repl_value = self._get_replacement(idx_object, numb_name)
-        if isinstance(repl_value, str) and len(repl_value) > 0:
-            if repl_value[0] == "0":
-                repl_value = float(
-                    "{}.{}".format(
-                        repl_value[0],
-                        repl_value[1:],
-                    )
-                )
-            else:
-                repl_value = int(repl_value)
-
-        if repl_value:
-            self.repl_value = str(repl_value)
-            self.replacement = {repl_key: repl_value}
-        else:
-            self.repl_value = ""
-            self.replacement = {}
-
+        self.replacement, self.repl_value = self._get_replacement(
+            idx_object,
+            numb_name,
+        )
         if not self.repl_value:
-            pass
-        elif not numb_name:
             pass
         elif "YY" in self.CIname:
             self.CIname = self.CIname.replace("YY", self.repl_value)
+        elif numb_name:
+            self.CIname = self.CIname = self.CIname.replace(
+                numb_name,
+                self.repl_value,
+            )
         elif self.repl_value not in self.CIname:
             self.CIname = "{}{}".format(self.CIname, self.repl_value)
-        elif numb_name in self.CIname:
-            self.CIname = self.CIname.replace(numb_name, self.repl_value)
 
     def _adjust_params_to_ci(self):
         params = {

@@ -211,9 +211,25 @@ def test_CSU():
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
-test_TG10p()
-test_TG90p()
-test_TX10p()
-test_TX90p()
-test_TN10p()
-test_TN90p()
+def test_DSP():
+    result = indices.DSP.compute(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_RDYYp():
+    result = indices.RDYYp.compute(
+        pr=pr_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_RD90p():
+    result = indices.RDYYp.compute(
+        pr=pr_xarray(),
+        perc=90,
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)

@@ -28,5 +28,7 @@
     "TNn": "tasmin",
     "SU": "tasmax",
     "CSU": "tasmax",
-    "SQI": "tasmin"
+    "SQI": "tasmin",
+    "DSP": "pr",
+    "RDYYp": "pr"
 }

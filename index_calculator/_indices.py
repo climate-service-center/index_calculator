@@ -18,14 +18,13 @@ def get_da(dictionary, var):
     raise ValueError("Variable {} not found!")
 
 
-def get_percentile(da, percentile, base_period_time_range):
+def get_percentile(da, perc, base_period_time_range):
     tslice = slice(base_period_time_range[0], base_period_time_range[1])
     base_period = da.sel(time=tslice)
-    per_doy = percentile_doy(base_period, per=percentile)
-    return per_doy.sel(percentiles=percentile)
+    per_doy = percentile_doy(base_period, per=perc)
+    return per_doy.sel(percentiles=perc)
 
 
-# BASE_PERIOD = ["1971-01-01", "2000-12-31"]
 BASE_PERIOD = ["1951-01-01", "1955-12-31"]
 
 
@@ -118,6 +117,25 @@ class DD:
             thresh=thresh,
             **params,
         )
+
+
+class DSP:
+    window = 5
+
+    def compute(window=window, **params):
+        """Calculate number of dry spells of minimum {window} days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#dry_spell_frequency
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of dry periods of minimum {window} days.
+        """
+        return xc.atmos.dry_spell_frequency(window=window, **params)
 
 
 class FD:
@@ -247,6 +265,40 @@ class R25mm:
         """
         return xc.atmos.wetdays(
             thresh="25 mm/day",
+            **params,
+        )
+
+
+class RDYYp:
+
+    perc = 75
+    base_period_time_range = BASE_PERIOD
+
+    def compute(
+        perc=perc,
+        base_period_time_range=base_period_time_range,
+        **params,
+    ):
+        """Calculate number of wet days with daily precip over a given percentile.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#days_over_precip_doy_thresh
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet days over a given percentile.
+        """
+        da = get_da(params, "pr")
+        percentile = get_percentile(
+            da=da,
+            perc=perc,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.days_over_precip_doy_thresh(
+            pr_per=percentile,
             **params,
         )
 
@@ -416,13 +468,12 @@ class TG10p:
         xarray.DataArray
             Fraction of days with mean temperature < 10th percentile".
         """
-        print(base_period_time_range)
         da = get_da(params, "tas")
         percentile = get_percentile(
             da=da,
-            percentile=10,
+            perc=10,
             base_period_time_range=base_period_time_range,
-        )  # .compute()
+        )
         return xc.atmos.tg10p(
             tas_per=percentile,
             **params,
@@ -448,7 +499,7 @@ class TG90p:
         da = get_da(params, "tas")
         percentile = get_percentile(
             da=da,
-            percentile=90,
+            perc=90,
             base_period_time_range=base_period_time_range,
         )
         return xc.atmos.tg90p(
@@ -517,7 +568,7 @@ class TX10p:
         da = get_da(params, "tasmax")
         percentile = get_percentile(
             da=da,
-            percentile=10,
+            perc=10,
             base_period_time_range=base_period_time_range,
         )
         return xc.atmos.tx10p(
@@ -546,7 +597,7 @@ class TX90p:
         da = get_da(params, "tasmax")
         percentile = get_percentile(
             da=da,
-            percentile=90,
+            perc=90,
             base_period_time_range=base_period_time_range,
         )
         return xc.atmos.tx90p(
@@ -626,7 +677,7 @@ class TN10p:
         da = get_da(params, "tasmin")
         percentile = get_percentile(
             da=da,
-            percentile=10,
+            perc=10,
             base_period_time_range=base_period_time_range,
         )
         return xc.atmos.tn10p(
@@ -655,7 +706,7 @@ class TN90p:
         da = get_da(params, "tasmin")
         percentile = get_percentile(
             da=da,
-            percentile=90,
+            perc=90,
             base_period_time_range=base_period_time_range,
         )
         return xc.atmos.tn90p(
