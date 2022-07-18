@@ -1,4 +1,6 @@
+import dask  # noqa
 import xclim as xc
+from xclim.core.calendar import percentile_doy
 
 
 def thresh_string(thresh, units):
@@ -8,12 +10,29 @@ def thresh_string(thresh, units):
         return "{} {}".format(str(thresh), units)
 
 
-class CDD:
-    parameters = {
-        "thresh": 0.1,
-    }
+def get_da(dictionary, var):
+    if "ds" in dictionary.keys():
+        return dictionary["ds"][var]
+    elif var in dictionary.keys():
+        return dictionary[var]
+    raise ValueError("Variable {} not found!")
 
-    def compute(thresh=parameters["thresh"], **params):
+
+def get_percentile(da, percentile, base_period_time_range):
+    tslice = slice(base_period_time_range[0], base_period_time_range[1])
+    base_period = da.sel(time=tslice)
+    per_doy = percentile_doy(base_period, per=percentile)
+    return per_doy.sel(percentiles=percentile)
+
+
+# BASE_PERIOD = ["1971-01-01", "2000-12-31"]
+BASE_PERIOD = ["1951-01-01", "1955-12-31"]
+
+
+class CDD:
+    thresh = 0.1
+
+    def compute(thresh=thresh, **params):
         """Calculate maximum consecutive dry days.
 
         Parameters
@@ -34,11 +53,9 @@ class CDD:
 
 
 class CSU:
-    parameters = {
-        "thresh": 25,
-    }
+    thresh = 25
 
-    def compute(thresh=parameters["thresh"], **params):
+    def compute(thresh=thresh, **params):
         """Calculate maximum consecutive summer days.
 
         Parameters
@@ -58,11 +75,9 @@ class CSU:
 
 
 class CWD:
-    parameters = {
-        "thresh": 0.1,
-    }
+    thresh = 0.1
 
-    def compute(thresh=parameters["thresh"], **params):
+    def compute(thresh=thresh, **params):
         """Calculate maximum consecutive wet days.
 
         Parameters
@@ -83,11 +98,9 @@ class CWD:
 
 
 class DD:
-    parameters = {
-        "thresh": 0.1,
-    }
+    thresh = 0.1
 
-    def compute(thresh=parameters["thresh"], **params):
+    def compute(thresh=thresh, **params):
         """Calculate number of dry days.
 
         Parameters
@@ -108,8 +121,6 @@ class DD:
 
 
 class FD:
-    parameters = {}
-
     def compute(**params):
         """Calculate number of frost days (tasmin < 0.0 degC).
 
@@ -127,8 +138,6 @@ class FD:
 
 
 class ID:
-    parameters = {}
-
     def compute(**params):
         """Calculate number of ice days (tasmax < 0.0 degC).
 
@@ -146,8 +155,6 @@ class ID:
 
 
 class RR:
-    parameters = {}
-
     def compute(**params):
         """Calculate total precipitation.
 
@@ -165,8 +172,6 @@ class RR:
 
 
 class RR1:
-    parameters = {}
-
     def compute(**params):
         """Calculate number of wet days (pr >= 1 mm/day).
 
@@ -187,8 +192,6 @@ class RR1:
 
 
 class R10mm:
-    parameters = {}
-
     def compute(**params):
         """Calculate number of wet days (pr >= 10 mm/day).
 
@@ -209,8 +212,6 @@ class R10mm:
 
 
 class R20mm:
-    parameters = {}
-
     def compute(**params):
         """Calculate number of wet days (pr >= 20 mm/day).
 
@@ -231,8 +232,6 @@ class R20mm:
 
 
 class R25mm:
-    parameters = {}
-
     def compute(**params):
         """Calculate number of wet days (pr >= 25 mm/day).
 
@@ -253,11 +252,10 @@ class R25mm:
 
 
 class RYYmm:
-    parameters = {
-        "thresh": 25,
-    }
 
-    def compute(thresh=parameters["thresh"], **params):
+    thresh = 25
+
+    def compute(thresh=thresh, **params):
         """Calculate number of wet days.
 
         Parameters
@@ -278,8 +276,6 @@ class RYYmm:
 
 
 class RX1day:
-    parameters = {}
-
     def compute(**params):
         """Calculate maximum 1-day total precipitation.
 
@@ -297,11 +293,10 @@ class RX1day:
 
 
 class RXYYday:
-    parameters = {
-        "thresh": 5,
-    }
 
-    def compute(thresh=parameters["thresh"], **params):
+    thresh = 5
+
+    def compute(thresh=thresh, **params):
         """Calculate maximum {window}-day total precipitation.
 
         Parameters
@@ -321,8 +316,6 @@ class RXYYday:
 
 
 class SDII:
-    parameters = {}
-
     def compute(**params):
         """Calculate average precipitation during wet days.
 
@@ -343,11 +336,10 @@ class SDII:
 
 
 class SU:
-    parameters = {
-        "thresh": 25,
-    }
 
-    def compute(thresh=parameters["thresh"], **params):
+    thresh = 25
+
+    def compute(thresh=thresh, **params):
         """Calculate number of summer days.
 
         Parameters
@@ -368,11 +360,9 @@ class SU:
 
 
 class SQI:
-    parameters = {
-        "thresh": 18,
-    }
+    thresh = 18
 
-    def compute(thresh=parameters["thresh"], **params):
+    def compute(thresh=thresh, **params):
         """Calculate number of uncomfortable sleep events.
 
         Parameters
@@ -393,8 +383,6 @@ class SQI:
 
 
 class TG:
-    parameters = {}
-
     def compute(**params):
         """Calculate mean daily mean temperature.
 
@@ -411,12 +399,68 @@ class TG:
         return xc.atmos.tg_mean(**params)
 
 
-class TR:
-    parameters = {
-        "thresh": 20,
-    }
+class TG10p:
 
-    def compute(thresh=parameters["thresh"], **params):
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate fraction of days with mean temperature < 10th percentile".
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tg10p
+
+        Returns
+        -------
+        xarray.DataArray
+            Fraction of days with mean temperature < 10th percentile".
+        """
+        print(base_period_time_range)
+        da = get_da(params, "tas")
+        percentile = get_percentile(
+            da=da,
+            percentile=10,
+            base_period_time_range=base_period_time_range,
+        )  # .compute()
+        return xc.atmos.tg10p(
+            tas_per=percentile,
+            **params,
+        )
+
+
+class TG90p:
+    base_period_time_range = (BASE_PERIOD,)
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate fraction of days with mean temperature > 90th percentile".
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tg90p
+
+        Returns
+        -------
+        xarray.DataArray
+            Fraction of days with mean temperature > 90th percentile".
+        """
+        da = get_da(params, "tas")
+        percentile = get_percentile(
+            da=da,
+            percentile=90,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.tg90p(
+            tas_per=percentile,
+            **params,
+        )
+
+
+class TR:
+    thresh = 20
+
+    def compute(thresh=thresh, **params):
         """Calculate number of tropical nights.
 
         Parameters
@@ -437,8 +481,6 @@ class TR:
 
 
 class TX:
-    parameters = {}
-
     def compute(**params):
         """Calculate mean daily maximum temperature.
 
@@ -455,9 +497,65 @@ class TX:
         return xc.atmos.tx_mean(**params)
 
 
-class TXn:
-    parameters = {}
+class TX10p:
 
+    base_period_time_range = (BASE_PERIOD,)
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate fraction of days with maximum temperature < 10th percentile".
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tx10p
+
+        Returns
+        -------
+        xarray.DataArray
+            Fraction of days with maximum temperature < 10th percentile".
+        """
+        da = get_da(params, "tasmax")
+        percentile = get_percentile(
+            da=da,
+            percentile=10,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.tx10p(
+            tasmax_per=percentile,
+            **params,
+        )
+
+
+class TX90p:
+
+    base_period_time_range = (BASE_PERIOD,)
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate fraction of days with maximum temperature > 90th percentile".
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tx90p
+
+        Returns
+        -------
+        xarray.DataArray
+            Fraction of days with maximum temperature > 90th percentile".
+        """
+        da = get_da(params, "tasmax")
+        percentile = get_percentile(
+            da=da,
+            percentile=90,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.tx90p(
+            tasmax_per=percentile,
+            **params,
+        )
+
+
+class TXn:
     def compute(**params):
         """Calculate minimum daily maximum temperature.
 
@@ -475,8 +573,6 @@ class TXn:
 
 
 class TXx:
-    parameters = {}
-
     def compute(**params):
         """Calculate maximum daily maximum temperature.
 
@@ -494,8 +590,6 @@ class TXx:
 
 
 class TN:
-    parameters = {}
-
     def compute(**params):
         """Calculate mean daily minimum temperature.
 
@@ -512,9 +606,65 @@ class TN:
         return xc.atmos.tn_mean(**params)
 
 
-class TNn:
-    parameters = {}
+class TN10p:
 
+    base_period_time_range = (BASE_PERIOD,)
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate fraction of days with minimum temperature < 10th percentile".
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tn10p
+
+        Returns
+        -------
+        xarray.DataArray
+            Fraction of days with minimum temperature < 10th percentile".
+        """
+        da = get_da(params, "tasmin")
+        percentile = get_percentile(
+            da=da,
+            percentile=10,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.tn10p(
+            tasmin_per=percentile,
+            **params,
+        )
+
+
+class TN90p:
+
+    base_period_time_range = (BASE_PERIOD,)
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate fraction of days with minimum temperature > 90th percentile".
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.atmos.tx90p
+
+        Returns
+        -------
+        xarray.DataArray
+            Fraction of days with minimum temperature > 90th percentile".
+        """
+        da = get_da(params, "tasmin")
+        percentile = get_percentile(
+            da=da,
+            percentile=90,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.tn90p(
+            tasmin_per=percentile,
+            **params,
+        )
+
+
+class TNn:
     def compute(**params):
         """Calculate minimum daily minimum temperature.
 
@@ -532,8 +682,6 @@ class TNn:
 
 
 class TNx:
-    parameters = {}
-
     def compute(**params):
         """Calculate maximum daily minimum temperature.
 

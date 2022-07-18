@@ -27,6 +27,24 @@ def test_TG():
     np.testing.assert_allclose(result, 278, rtol=1e-03)
 
 
+def test_TG10p():
+    result = indices.TG10p.compute(
+        tas=tas_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_TG90p():
+    result = indices.TG90p.compute(
+        tas=tas_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
 def test_RR():
     result = indices.RR.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 62, rtol=1e-03)
@@ -122,6 +140,24 @@ def test_TX():
     np.testing.assert_allclose(result, 278, rtol=1e-03)
 
 
+def test_TX10p():
+    result = indices.TX10p.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_TX90p():
+    result = indices.TX90p.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
 def test_TXn():
     result = indices.TXn.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 263.15, rtol=1e-03)
@@ -135,6 +171,24 @@ def test_TXx():
 def test_TN():
     result = indices.TN.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 278, rtol=1e-03)
+
+
+def test_TN10p():
+    result = indices.TN10p.compute(
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_TN90p():
+    result = indices.TN90p.compute(
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_TNn():
@@ -155,3 +209,11 @@ def test_SU():
 def test_CSU():
     result = indices.CSU.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+test_TG10p()
+test_TG90p()
+test_TX10p()
+test_TX90p()
+test_TN10p()
+test_TN90p()
