@@ -1,7 +1,7 @@
 import pyhomogenize as pyh
 
 from ._consts import _bounds, _fmt
-from ._utils import kwargs_to_self
+from ._utils import get_time_range_as_str, kwargs_to_self
 
 
 class PreProcessing:
@@ -33,12 +33,6 @@ class PreProcessing:
 
     def preprocessing(self):
         """Select and check time range."""
-
-        def get_time_range_as_str(time, fmt):
-            basics = pyh.basics()
-            ts = basics.date_to_str(time[0], fmt)
-            te = basics.date_to_str(time[-1], fmt)
-            return [ts, te]
 
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
