@@ -51,6 +51,22 @@ class CDD:
         )
 
 
+class CFD:
+    def compute(**params):
+        """Calculate maximum number of consecutive frost days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#consecutive_frost_days
+
+        Returns
+        -------
+        Maximum number of consecutive frost days (tasmin < 0 degC).
+        """
+        return xc.atmos.consecutive_frost_days(**params)
+
+
 class CSU:
     thresh = 25
 
@@ -170,6 +186,93 @@ class ID:
             Number of ice days (tasmax < 0.0 degC).
         """
         return xc.atmos.ice_days(**params)
+
+
+class GD:
+
+    thresh = 4
+
+    def compute(thresh=thresh, **params):
+        """Calculate number of growing degree days (tas > 4 degC).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#growing_degree_days
+        Returns
+        -------
+        xarray.DataArray
+            Number of growing degree days (tas > 4 degC).
+        """
+        thresh = thresh_string(thresh, "degC")
+        return xc.atmos.growing_degree_days(
+            thresh=thresh,
+            **params,
+        )
+
+
+class GDYYx:
+
+    thresh = 4
+
+    def compute(thresh=thresh, **params):
+        """Calculate number of consecutive growing degree days (tas > 4 degC).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#growing_season_length
+        Returns
+        -------
+        xarray.DataArray
+            Maximum number of consecutive growing degree days (tas > 4 degC).
+        """
+        thresh = thresh_string(thresh, "degC")
+        return xc.atmos.growing_season_length(
+            thresh=thresh,
+            **params,
+        )
+
+
+class HD17:
+    def compute(**params):
+        """Calculate number of heating degree days (tas < 17 degC).
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#heating_degree_days
+        Returns
+        -------
+        xarray.DataArray
+            Number of growing degree days (tas > 17 degC).
+        """
+        return xc.atmos.heating_degree_days(
+            **params,
+        )
+
+
+class PRCPTOT:
+
+    thresh = 1
+
+    def compute(thresh=thresh, **params):
+        """Calculate total precipitation amount.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#wet_precip_accumulation
+
+        Returns
+        -------
+        Total precipitation amount of wet days (precip >= {thresh} mm)
+        """
+        thresh = thresh_string(thresh, "mm/day")
+        return xc.atmos.wet_precip_accumulation(
+            thresh=thresh,
+            **params,
+        )
 
 
 class RR:
@@ -363,6 +466,40 @@ class RXYYday:
         """
         return xc.atmos.max_n_day_precipitation_amount(
             window=thresh,
+            **params,
+        )
+
+
+class RYYpTOT:
+
+    perc = 75
+    base_period_time_range = BASE_PERIOD
+
+    def compute(
+        perc=perc,
+        base_period_time_range=base_period_time_range,
+        **params,
+    ):
+        """Calculate precipitation fraction with precip > {perc}th percentile.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#fraction_over_precip_thresh
+
+        Returns
+        -------
+        xarray.DataArray
+            Precipitation fraction with precip > {perc}th percentile.
+        """
+        da = get_da(params, "pr")
+        percentile = get_percentile(
+            da=da,
+            perc=perc,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.fraction_over_precip_thresh(
+            pr_per=percentile,
             **params,
         )
 

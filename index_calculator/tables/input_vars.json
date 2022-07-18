@@ -30,5 +30,11 @@
     "CSU": "tasmax",
     "SQI": "tasmin",
     "DSP": "pr",
-    "RDYYp": "pr"
+    "RDYYp": "pr",
+    "CFD": "tasmin",
+    "GD": "tas",
+    "GDYYx": "tas",
+    "HD17": "tas",
+    "PRCPTOT": "pr",
+    "RYYpTOT:": "pr"
 }

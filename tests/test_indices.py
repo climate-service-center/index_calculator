@@ -233,3 +233,57 @@ def test_RD90p():
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
     np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_RYYpTOT():
+    result = indices.RYYpTOT.compute(
+        pr=pr_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0.1452, rtol=1e-03)
+
+
+def test_R90pTOT():
+    result = indices.RYYpTOT.compute(
+        pr=pr_xarray(),
+        perc=90,
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_CFD():
+    result = indices.CFD.compute(tasmin=tasmin_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 2, rtol=1e-03)
+
+
+def test_GD():
+    result = indices.GD.compute(tas=tas_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 41, rtol=1e-03)
+
+
+def test_GD5():
+    result = indices.GD.compute(tas=tas_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 41, rtol=1e-03)
+
+
+def test_GDYYx():
+    result = indices.GDYYx.compute(tas=tas_xarray(), freq="7D")
+    np.testing.assert_allclose(result, np.nan, rtol=1e-03)
+
+
+def test_GD5x():
+    result = indices.GDYYx.compute(tas=tas_xarray(), freq="7D")
+    np.testing.assert_allclose(result, np.nan, rtol=1e-03)
+
+
+def test_HD17():
+    result = indices.HD17.compute(tas=tas_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 100, rtol=1e-03)
+
+
+def test_PRCPTOT():
+    result = indices.PRCPTOT.compute(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 62, rtol=1e-03)
