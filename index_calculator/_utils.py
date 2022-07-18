@@ -1,9 +1,15 @@
 import warnings
 
+from pyhomogenize import basics
 
-def object_attrs_to_self(obj, slf):
+
+def object_attrs_to_self(obj, slf, overwrite=True):
     """Copy object attributes to new object."""
     for attr in dir(obj):
+        if attr[0] == "_":
+            continue
+        if overwrite is False and hasattr(slf, attr):
+            continue
         if attr[0].isalpha():
             setattr(slf, attr, getattr(obj, attr))
 
@@ -43,3 +49,9 @@ def check_existance(attr_dict, slf):
                     return value
         else:
             return value
+
+
+def get_time_range_as_str(time, fmt):
+    ts = basics().date_to_str(time[0], fmt)
+    te = basics().date_to_str(time[-1], fmt)
+    return [ts, te]
