@@ -1,3 +1,4 @@
+import warnings
 from datetime import datetime as dt
 
 import xclim as xc
@@ -25,8 +26,11 @@ class NetCDFattrs:
         """
         new_dictionary = {}
         for key, value in dictionary.items():
-            if value and value[0] != "<":
-                new_dictionary[key] = value
+            if not value:
+                continue
+            if value[0] == "<":
+                continue
+            new_dictionary[key] = value
         return new_dictionary
 
     def write_dictionary_to_netcdf(self, database, dictionary):
@@ -69,103 +73,80 @@ class NetCDFglobalattrs(NetCDFattrs):
         xarray.Dataset
             Database with new attributes
         """
-        dictionary = {
-            **dictionary,
-            **self._ci_additional_reference_period(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_creation_date(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_institute_id(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_institution(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_contact(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_name(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_reference_period(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_frequency(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_timerange_index(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_timerange_source(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_package_name(postproc),
-        }
-        dictionary = {
-            **dictionary,
-            **self._ci_package_reference(postproc),
-        }
+        dictionary = self._create_dictionary(
+            list_of_attributes=[
+                "ci_additional_reference_period",
+                "ci_creation_date",
+                "ci_institute_id",
+                "ci_institution",
+                "ci_contact",
+                "ci_name",
+                "ci_reference_period",
+                "ci_frequency",
+                "ci_timerange_index",
+                "ci_timerange_source",
+                "ci_package_name",
+                "ci_package_reference",
+            ],
+            obj=postproc,
+        )
         dictionary = self.vanish_dictionary(dictionary)
         self.output = self.write_dictionary_to_netcdf(ds, dictionary)
 
-    def _ci_additional_reference_period(self, input):
+    def _create_dictionary(self, list_of_attributes, obj):
+        """Create attributes dictionary."""
+        dictionary = {}
+        for attribute in list_of_attributes:
+            try:
+                dictionary[attribute] = getattr(self, "_" + attribute)(obj)
+            except AttributeError:
+                warnings.warn("Could not set attribute {}".format(attribute))
+        return dictionary
+
+    def _ci_additional_reference_period(self, obj):
         """Add additional reference period to dictionary."""
-        return {"ci_additional_reference_period": input.period}
+        return obj.period
 
-    def _ci_creation_date(self, input):
+    def _ci_creation_date(self, obj):
         """Add creation date to dictionary."""
-        return {"ci_creation_date": dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")}
+        return dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    def _ci_institution(self, input):
+    def _ci_institution(self, obj):
         """Add institution long name to dictionary."""
-        return {"ci_institution": input.institution}
+        return obj.institution
 
-    def _ci_institute_id(self, input):
+    def _ci_institute_id(self, obj):
         """Add institution short name to dictionary."""
-        return {"ci_institute_id": input.institution_id}
+        return obj.institution_id
 
-    def _ci_contact(self, input):
+    def _ci_contact(self, obj):
         """Add contact to dictionary."""
-        return {"ci_contact": input.contact}
+        return obj.contact
 
-    def _ci_name(self, input):
+    def _ci_name(self, obj):
         """Add climate index name to dictionary."""
-        return {"ci_name": input.CIname}
+        return obj.CIname
 
-    def _ci_package_reference(self, input):
+    def _ci_package_reference(self, obj):
         """Add index_calculator version to dictionary."""
-        return {"ci_package_reference": f"xcalc_{__version__}"}
+        return f"xcalc_{__version__}"
 
-    def _ci_package_name(self, input):
+    def _ci_package_name(self, obj):
         """Add xclim version to dictionary."""
-        return {"ci_package_name": f"xclim_{xc.__version__}"}
+        return f"xclim_{xc.__version__}"
 
-    def _ci_reference_period(self, input):
+    def _ci_reference_period(self, obj):
         """Add reference period to dictionary."""
-        return {"ci_reference_period": input.base_period_time_range}
+        return obj.base_period_time_range
 
-    def _ci_frequency(self, input):
+    def _ci_frequency(self, obj):
         """Add frequency to dictionary."""
-        return {"ci_frequency": input.freq}
+        return obj.freq
 
-    def _ci_timerange_index(self, input):
+    def _ci_timerange_index(self, obj):
         """Add time range of the index to dictionary."""
-        tstr = f"{input.TimeRange[0]}-{input.TimeRange[1]}"
-        return {"ci_timerange_index": tstr}
+        return f"{obj.TimeRange[0]}-{obj.TimeRange[1]}"
 
-    def _ci_timerange_source(self, input):
+    def _ci_timerange_source(self, obj):
         """Add time range of the source to dictionary."""
-        atstr = f"{input.ATimeRange[0]}-{input.ATimeRange[1]}"
-        return {"ci_timerange_source": atstr}
+        return f"{obj.ATimeRange[0]}-{obj.ATimeRange[1]}"

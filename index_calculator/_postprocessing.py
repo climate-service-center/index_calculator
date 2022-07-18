@@ -36,10 +36,6 @@ class PostProcessing:
         )
         self.contact = check_existance({"contact": contact}, self)
         self.period = check_existance({"period": False}, self)
-        self.base_period_time_range = check_existance(
-            {"base_period_time_range": False}, self
-        )
-
         kwargs_to_self(kwargs, self)
         self.postproc = self.postprocessing()
 
@@ -64,7 +60,7 @@ class PostProcessing:
             json["global_att"].update(_xjson[self.project]["global_att"])
         except KeyError:
             warnings.warn(f"Project {self.project} not known.")
-        json = adjust_attributes(json, self.replacement)
+        json = adjust_attributes(json, self.repl_value)
         output = NetCDFglobalattrs(
             self,
             self.proc,
