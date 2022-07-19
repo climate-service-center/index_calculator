@@ -36,5 +36,13 @@
     "GDYYx": "tas",
     "HD17": "tas",
     "PRCPTOT": "pr",
-    "RYYpTOT:": "pr"
+    "RYYpTOT:": "pr",
+    "CSDI": "tasmin",
+    "WSDI": "tasmax",
+    "CHDYYx": "tasmax",
+    "CW": ["tas", "pr"],
+    "CD": ["tas", "pr"],
+    "WW": ["tas", "pr"],
+    "WD": ["tas", "pr"],
+    "DTR": ["tasmax", "tasmin"]
 }

@@ -335,7 +335,7 @@
     "units": "days",
     "description": "count of consecutive days with daily maximum temperature above 30 degC"
   },
-  "CHDX30": {
+  "CHD30x": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
     "long_name": "Maximum number of consecutive heat days (maximum temperature > 30 degC)",
     "units": "days",

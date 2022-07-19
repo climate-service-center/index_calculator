@@ -287,3 +287,87 @@ def test_HD17():
 def test_PRCPTOT():
     result = indices.PRCPTOT.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 62, rtol=1e-03)
+
+
+def test_CSDI():
+    result = indices.CSDI.compute(
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_WSDI():
+    result = indices.WSDI.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_CHDYYx():
+    result = indices.CHDYYx.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_CHD30x():
+    result = indices.CHDYYx.compute(
+        thresh=30,
+        tasmax=tasmax_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_CW():
+    result = indices.CW.compute(
+        tas=tas_xarray(),
+        pr=pr_xarray(),
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_CD():
+    result = indices.CD.compute(
+        tas=tas_xarray(),
+        pr=pr_xarray(),
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_WW():
+    result = indices.WW.compute(
+        tas=tas_xarray(),
+        pr=pr_xarray(),
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_WD():
+    result = indices.WD.compute(
+        tas=tas_xarray(),
+        pr=pr_xarray(),
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_DTR():
+    result = indices.DTR.compute(
+        tasmin=tasmin_xarray(),
+        tasmax=tasmax_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)

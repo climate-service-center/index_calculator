@@ -28,6 +28,41 @@ def get_percentile(da, perc, base_period_time_range):
 BASE_PERIOD = ["1951-01-01", "1955-12-31"]
 
 
+class CD:
+
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate number of cold and dry days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#cold_and_dry_days
+
+        Returns
+        -------
+        Number of days where cold and dry conditions coincide.
+        """
+        da_tas = get_da(params, "tas")
+        da_pr = get_da(params, "pr")
+        percentile_tas = get_percentile(
+            da=da_tas,
+            perc=25,
+            base_period_time_range=base_period_time_range,
+        )
+        percentile_pr = get_percentile(
+            da=da_pr,
+            perc=25,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.cold_and_dry_days(
+            tas_per=percentile_tas,
+            pr_per=percentile_pr,
+            **params,
+        )
+
+
 class CDD:
     thresh = 0.1
 
@@ -67,6 +102,54 @@ class CFD:
         return xc.atmos.consecutive_frost_days(**params)
 
 
+class CHDYYx:
+
+    thresh = 30
+
+    def compute(thresh=thresh, **params):
+        """Calculate maximum number of consecutive heat days.
+
+        Parameters
+        ----------
+        https://xclim.readthedocs.io/en/stable/indicators_api.html#maximum_consecutive_warm_days
+
+        Returns
+        -------
+        Maximum number of consecutive heat days (tasmax > 30 degC).
+        """
+        return xc.atmos.maximum_consecutive_warm_days(**params)
+
+
+class CSDI:
+
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate cold spell duration index.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#cold_spell_duration_index
+
+        Returns
+        -------
+        Number of days part of a 10th percentile cold spell.
+        At least 6 consecutive days.
+        """
+        da = get_da(params, "tasmin")
+        percentile = get_percentile(
+            da=da,
+            perc=10,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.cold_spell_duration_index(
+            tasmin_per=percentile,
+            window=6,
+            **params,
+        )
+
+
 class CSU:
     thresh = 25
 
@@ -85,6 +168,41 @@ class CSU:
         thresh = thresh_string(thresh, "degC")
         return xc.atmos.maximum_consecutive_warm_days(
             thresh=thresh,
+            **params,
+        )
+
+
+class CW:
+
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate number of cold and wet days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#cold_and_wet_days
+
+        Returns
+        -------
+        Number of days where cold and wet conditions coincide.
+        """
+        da_tas = get_da(params, "tas")
+        da_pr = get_da(params, "pr")
+        percentile_tas = get_percentile(
+            da=da_tas,
+            perc=25,
+            base_period_time_range=base_period_time_range,
+        )
+        percentile_pr = get_percentile(
+            da=da_pr,
+            perc=75,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.cold_and_wet_days(
+            tas_per=percentile_tas,
+            pr_per=percentile_pr,
             **params,
         )
 
@@ -152,6 +270,22 @@ class DSP:
             Number of dry periods of minimum {window} days.
         """
         return xc.atmos.dry_spell_frequency(window=window, **params)
+
+
+class DTR:
+    def compute(**params):
+        """Calculate mean of daily temperature range.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#daily_temperature_range
+
+        Returns
+        -------
+        Mean of daily temperature range.
+        """
+        return xc.atmos.daily_temperature_range(**params)
 
 
 class FD:
@@ -884,3 +1018,103 @@ class TNx:
             Maximum daily minimum temperature.
         """
         return xc.atmos.tn_max(**params)
+
+
+class WD:
+
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate number of warm and dry days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#warm_and_dry_days
+
+        Returns
+        -------
+        Number of days where warm and dry conditions coincide.
+        """
+        da_tas = get_da(params, "tas")
+        da_pr = get_da(params, "pr")
+        percentile_tas = get_percentile(
+            da=da_tas,
+            perc=75,
+            base_period_time_range=base_period_time_range,
+        )
+        percentile_pr = get_percentile(
+            da=da_pr,
+            perc=25,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.warm_and_dry_days(
+            tas_per=percentile_tas,
+            pr_per=percentile_pr,
+            **params,
+        )
+
+
+class WSDI:
+
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate warm spell duration index.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#warm_spell_duration_index
+
+        Returns
+        -------
+        Number of days part of a 90th percentile warm spell.
+        At least 6 consecutive days.
+        """
+        da = get_da(params, "tasmax")
+        percentile = get_percentile(
+            da=da,
+            perc=90,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.warm_spell_duration_index(
+            tasmax_per=percentile,
+            window=6,
+            **params,
+        )
+
+
+class WW:
+
+    base_period_time_range = BASE_PERIOD
+
+    def compute(base_period_time_range=base_period_time_range, **params):
+        """Calculate number of warm and wet days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#warm_and_wet_days
+
+        Returns
+        -------
+        Number of days where warm and wet conditions coincide.
+        """
+        da_tas = get_da(params, "tas")
+        da_pr = get_da(params, "pr")
+        percentile_tas = get_percentile(
+            da=da_tas,
+            perc=75,
+            base_period_time_range=base_period_time_range,
+        )
+        percentile_pr = get_percentile(
+            da=da_pr,
+            perc=75,
+            base_period_time_range=base_period_time_range,
+        )
+        return xc.atmos.warm_and_wet_days(
+            tas_per=percentile_tas,
+            pr_per=percentile_pr,
+            **params,
+        )
