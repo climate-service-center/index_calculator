@@ -23,6 +23,7 @@ History
 ------------------
 
 * new indices implemented
+
   * CD: number of cold and dry days
   * CHDYYx: Maximum number of consecutive heat days
   * CSDI: Cold spell duration index
@@ -43,3 +44,8 @@ History
   * WD: Number of warm and dry days
   * WSDI: Warm spell duration index
   * WW: Number of warm and wet days
+
+0.3.1 (2022-07-20)
+------------------
+
+* adjustments fro automatically project-specific outfile name generation
