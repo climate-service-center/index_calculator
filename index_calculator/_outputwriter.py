@@ -33,10 +33,9 @@ class OutputWriter:
             return ocomp.replace("/", "")
 
         drs = {}
-        cproj = "climdex" + self.project
         try:
-            drs["output_fmt"] = pjson[cproj]["format"]
-            drs["output_comps"] = pjson[cproj]["components"].split(", ")
+            drs["output_fmt"] = pjson[self.project]["format"]
+            drs["output_comps"] = pjson[self.project]["components"].split(", ")
         except ValueError:
             warnings.warn(f"Project climdex{self.project} not known")
             return
