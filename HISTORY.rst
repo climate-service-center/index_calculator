@@ -49,3 +49,8 @@ History
 ------------------
 
 * adjustments fro automatically project-specific outfile name generation
+
+0.3.2 (2022-07-21)
+------------------
+
+* project-specific directory structure for cordex, cmip5 and cmip6
