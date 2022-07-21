@@ -9,9 +9,8 @@ from ._processing import Processing as processing
 class IndexCalculator:
     """Class for calculating climate indices with xclim."""
 
-    def __init__(self, output=True, **kwargs):
+    def __init__(self, **kwargs):
         """Write input parameters to self."""
-        self.output = output
         self.kwargs = kwargs
 
     def compute(self, write=False):
@@ -32,5 +31,5 @@ class IndexCalculator:
         if write is True:
             outputwriter(
                 postproc_obj=postproc_obj,
-            ).write_to_netcdf(self.output)
+            ).write_to_netcdf(**self.kwargs)
         return postproc_obj
