@@ -10,7 +10,32 @@ from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class Processing:
-    """Class for processing."""
+    """Class for processing ``index_calculator.preprocessing`` object.
+
+    Parameters
+    ----------
+    index: str
+        Climate indicator name to be calculated.
+    preproc_obj: index_calculator.preprocessing
+        ``index_calculator.preprocessing`` object
+
+    Example
+    -------
+    Calculate a climate indicator `TG` from netcdf file on disk::
+
+        from pyhomogenize import open_xrdataset
+        from index_calculator import preprocessing
+        from index_calculator import processing
+
+        netcdf_file = "tas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_"
+                      "GERICS-REMO2015_v1_day_20010101-20051231.nc"
+        ds = open_xrdataset(netcdf_file)
+
+        preproc = preprocessing(ds)
+        proc = processing(index="TG", preproc_obj=preproc)
+
+        proc_ds = proc.proc
+    """
 
     def __init__(
         self,
@@ -18,7 +43,6 @@ class Processing:
         preproc_obj=None,
         **kwargs,
     ):
-        """Write parameters to self."""
         if preproc_obj is None:
             raise ValueError(
                 "Please select an index_calculator.PreProcessing object."
@@ -28,7 +52,6 @@ class Processing:
         self.CIname = check_existance({"index": index}, self)
         kwargs_to_self(kwargs, self)
         self._get_idx_name_and_repl()
-        self.proc = self.processing()
 
     def _get_numb_name_and_idx_object(self):
         alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
@@ -107,7 +130,7 @@ class Processing:
         params.update(self.replacement)
         return params
 
-    def processing(self):
+    def _processing(self):
         """Calculate climate index."""
         params = self._adjust_params_to_ci()
         array = self.compute(**params)
@@ -162,3 +185,8 @@ class Processing:
         )
         idx_ds = idx_ds.assign_coords({"time": new_time})
         return idx_ds
+
+    @property
+    def proc(self):
+        """xr.Dataset containing climate indicator."""
+        return self._processing()

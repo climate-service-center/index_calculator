@@ -7,18 +7,58 @@ from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
 
 
 class PostProcessing:
-    """Class for post-precessing."""
+    """Class for post-processing ``index_calculator.processing`` object.
+
+    Parameters
+    ----------
+    proc_obj: index_calculator.processing
+        ``index_calculator.processing`` object
+    project: {"CORDEX", "CMIP5", "CMIP6", "N/A"} (default: "N/A), optional
+        Project name
+    institution_id: str (default: "N/A"), optional
+        Short name of the institution calculating the climate indicator.
+    institution: str (default: "N/A"), optional
+        Long name of the institution calculating the climate indicator.
+    contact: str (default: "N/A"), optional
+        Mail contact of the institution calculating the climate indicator.
+
+    Example
+    -------
+    Calculate a climate indicator `TG` from netcdf file on disk
+    and do some post-processing::
+
+        from pyhomogenize import open_xrdataset
+        from index_calculator import preprocessing
+        from index_calculator import processing
+        from index_calculator import postprocessing
+
+        netcdf_file = "tas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_"
+                      "GERICS-REMO2015_v1_day_20010101-20051231.nc"
+        ds = open_xrdataset(netcdf_file)
+
+        preproc = preprocessing(ds)
+        proc = processing(index="TG", preproc_obj=preproc)
+        postproc = postprocessing(
+            project="CORDEX",
+            proc_obj=proc,
+            institution="Helmholtz-Zentrum hereon GmbH,"
+                        "Climate Service Center Germany",
+            institution_id="GERICS",
+            contact="gerics-cordex@hereon.de",
+        )
+
+        postproc_ds = postproc.postproc
+    """
 
     def __init__(
         self,
+        proc_obj=None,
         project="N/A",
         institution_id="N/A",
         institution="N/A",
         contact="N/A",
-        proc_obj=None,
         **kwargs,
     ):
-        """Write parameters to self."""
         if proc_obj is None:
             raise ValueError(
                 "Select an index_calculator.Processing object. 'proc_obj=...'"
@@ -37,10 +77,8 @@ class PostProcessing:
         self.contact = check_existance({"contact": contact}, self)
         self.period = check_existance({"period": False}, self)
         kwargs_to_self(kwargs, self)
-        self.postproc = self.postprocessing()
 
-    def postprocessing(self):
-        """Write key-value pairs to netCDF attributes."""
+    def _postprocessing(self):
         _ijson = copy.deepcopy(ijson)
         _xjson = copy.deepcopy(xjson)
 
@@ -74,3 +112,8 @@ class PostProcessing:
         associated_files = ", ".join(associated_files)
         output[self.CIname].attrs["associated_files"] = associated_files
         return output
+
+    @property
+    def postproc(self):
+        """Postprocessed xr.Dataset."""
+        return self._postprocessing()
