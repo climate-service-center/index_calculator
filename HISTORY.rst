@@ -54,3 +54,10 @@ History
 ------------------
 
 * project-specific directory structure for cordex, cmip5 and cmip6
+
+0.3.3 (2022-08-10)
+------------------
+
+* more documentation
+* properties to classes
+* classes automatically call functions
