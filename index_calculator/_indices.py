@@ -516,7 +516,7 @@ class RDYYp:
         base_period_time_range=base_period_time_range,
         **params,
     ):
-        """Calculate number of wet days with daily precip over a given percentile.
+        """Calculate number of wet days with precip over a given percentile.
 
         Parameters
         ----------
@@ -824,7 +824,7 @@ class TX10p:
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with maximum temperature < 10th percentile".
+        """Calculate fraction of days with max temperature < 10th percentile".
 
         Parameters
         ----------
@@ -853,7 +853,7 @@ class TX90p:
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with maximum temperature > 90th percentile".
+        """Calculate fraction of days with max temperature > 90th percentile".
 
         Parameters
         ----------
@@ -933,7 +933,7 @@ class TN10p:
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with minimum temperature < 10th percentile".
+        """Calculate fraction of days with min temperature < 10th percentile".
 
         Parameters
         ----------
@@ -962,7 +962,7 @@ class TN90p:
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with minimum temperature > 90th percentile".
+        """Calculate fraction of days with min temperature > 90th percentile".
 
         Parameters
         ----------
