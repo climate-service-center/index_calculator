@@ -3,14 +3,14 @@ import xclim as xc
 from xclim.core.calendar import percentile_doy
 
 
-def thresh_string(thresh, units):
+def _thresh_string(thresh, units):
     if isinstance(thresh, str):
         return thresh
     else:
         return "{} {}".format(str(thresh), units)
 
 
-def get_da(dictionary, var):
+def _get_da(dictionary, var):
     if "ds" in dictionary.keys():
         return dictionary["ds"][var]
     elif var in dictionary.keys():
@@ -18,7 +18,7 @@ def get_da(dictionary, var):
     raise ValueError("Variable {} not found!")
 
 
-def get_percentile(da, perc, base_period_time_range):
+def _get_percentile(da, perc, base_period_time_range):
     tslice = slice(base_period_time_range[0], base_period_time_range[1])
     base_period = da.sel(time=tslice)
     per_doy = percentile_doy(base_period, per=perc)
@@ -29,6 +29,7 @@ BASE_PERIOD = ["1951-01-01", "1955-12-31"]
 
 
 class CD:
+    """Number of cold and dry days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
 
@@ -44,14 +45,14 @@ class CD:
         -------
         Number of days where cold and dry conditions coincide.
         """
-        da_tas = get_da(params, "tas")
-        da_pr = get_da(params, "pr")
-        percentile_tas = get_percentile(
+        da_tas = _get_da(params, "tas")
+        da_pr = _get_da(params, "pr")
+        percentile_tas = _get_percentile(
             da=da_tas,
             perc=25,
             base_period_time_range=base_period_time_range,
         )
-        percentile_pr = get_percentile(
+        percentile_pr = _get_percentile(
             da=da_pr,
             perc=25,
             base_period_time_range=base_period_time_range,
@@ -64,6 +65,8 @@ class CD:
 
 
 class CDD:
+    """Maximum consecutive dry days (pr)."""
+
     thresh = 0.1
 
     def compute(thresh=thresh, **params):
@@ -79,7 +82,7 @@ class CDD:
         xarray.DataArray
             Maximum consecutive dry days.
         """
-        thresh = thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm/day")
         return xc.atmos.maximum_consecutive_dry_days(
             thresh=thresh,
             **params,
@@ -87,6 +90,8 @@ class CDD:
 
 
 class CFD:
+    """Maximum number of consecutive frost days (tasmin)."""
+
     def compute(**params):
         """Calculate maximum number of consecutive frost days.
 
@@ -103,6 +108,7 @@ class CFD:
 
 
 class CHDYYx:
+    """Maximum number of consecutive heat days (tasmax)."""
 
     thresh = 30
 
@@ -121,6 +127,7 @@ class CHDYYx:
 
 
 class CSDI:
+    """Cold spell duration index (tasmin)."""
 
     base_period_time_range = BASE_PERIOD
 
@@ -137,8 +144,8 @@ class CSDI:
         Number of days part of a 10th percentile cold spell.
         At least 6 consecutive days.
         """
-        da = get_da(params, "tasmin")
-        percentile = get_percentile(
+        da = _get_da(params, "tasmin")
+        percentile = _get_percentile(
             da=da,
             perc=10,
             base_period_time_range=base_period_time_range,
@@ -151,6 +158,8 @@ class CSDI:
 
 
 class CSU:
+    """Maximum consecutive summer days (tasmax)."""
+
     thresh = 25
 
     def compute(thresh=thresh, **params):
@@ -165,7 +174,7 @@ class CSU:
         xarray.DataArray
             Maximum consecutive summer days.
         """
-        thresh = thresh_string(thresh, "degC")
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.maximum_consecutive_warm_days(
             thresh=thresh,
             **params,
@@ -173,6 +182,7 @@ class CSU:
 
 
 class CW:
+    """Number of cold and wet days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
 
@@ -188,14 +198,14 @@ class CW:
         -------
         Number of days where cold and wet conditions coincide.
         """
-        da_tas = get_da(params, "tas")
-        da_pr = get_da(params, "pr")
-        percentile_tas = get_percentile(
+        da_tas = _get_da(params, "tas")
+        da_pr = _get_da(params, "pr")
+        percentile_tas = _get_percentile(
             da=da_tas,
             perc=25,
             base_period_time_range=base_period_time_range,
         )
-        percentile_pr = get_percentile(
+        percentile_pr = _get_percentile(
             da=da_pr,
             perc=75,
             base_period_time_range=base_period_time_range,
@@ -208,6 +218,8 @@ class CW:
 
 
 class CWD:
+    """Consecutive wet days (pr)."""
+
     thresh = 0.1
 
     def compute(thresh=thresh, **params):
@@ -223,7 +235,7 @@ class CWD:
         xarray.DataArray
             Maximum consecutive wet days.
         """
-        thresh = thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm/day")
         return xc.atmos.maximum_consecutive_wet_days(
             thresh=thresh,
             **params,
@@ -231,6 +243,8 @@ class CWD:
 
 
 class DD:
+    """Number of dry days (pr)."""
+
     thresh = 0.1
 
     def compute(thresh=thresh, **params):
@@ -246,7 +260,7 @@ class DD:
         xarray.DataArray
             Number of dry days.
         """
-        thresh = thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm/day")
         return xc.atmos.dry_days(
             thresh=thresh,
             **params,
@@ -254,6 +268,8 @@ class DD:
 
 
 class DSP:
+    """Number of dry spells of minimum {window} days (pr)."""
+
     window = 5
 
     def compute(window=window, **params):
@@ -273,6 +289,8 @@ class DSP:
 
 
 class DTR:
+    """Mean temperature rnage (tasmax, tasmin)."""
+
     def compute(**params):
         """Calculate mean of daily temperature range.
 
@@ -289,6 +307,8 @@ class DTR:
 
 
 class FD:
+    """Number of frost days (tasmin)."""
+
     def compute(**params):
         """Calculate number of frost days (tasmin < 0.0 degC).
 
@@ -306,6 +326,8 @@ class FD:
 
 
 class ID:
+    """Number of ice days (tasmax)."""
+
     def compute(**params):
         """Calculate number of ice days (tasmax < 0.0 degC).
 
@@ -323,6 +345,7 @@ class ID:
 
 
 class GD:
+    """Number of growing degree days (tas)."""
 
     thresh = 4
 
@@ -338,7 +361,7 @@ class GD:
         xarray.DataArray
             Number of growing degree days (tas > 4 degC).
         """
-        thresh = thresh_string(thresh, "degC")
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.growing_degree_days(
             thresh=thresh,
             **params,
@@ -346,6 +369,7 @@ class GD:
 
 
 class GDYYx:
+    """Number of consecutive growing degree day (tas)."""
 
     thresh = 4
 
@@ -361,7 +385,7 @@ class GDYYx:
         xarray.DataArray
             Maximum number of consecutive growing degree days (tas > 4 degC).
         """
-        thresh = thresh_string(thresh, "degC")
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.growing_season_length(
             thresh=thresh,
             **params,
@@ -369,6 +393,8 @@ class GDYYx:
 
 
 class HD17:
+    """Number of heating degree days (tas)."""
+
     def compute(**params):
         """Calculate number of heating degree days (tas < 17 degC).
 
@@ -387,6 +413,7 @@ class HD17:
 
 
 class PRCPTOT:
+    """Total precipitation amount (pr)."""
 
     thresh = 1
 
@@ -402,7 +429,7 @@ class PRCPTOT:
         -------
         Total precipitation amount of wet days (precip >= {thresh} mm)
         """
-        thresh = thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm/day")
         return xc.atmos.wet_precip_accumulation(
             thresh=thresh,
             **params,
@@ -410,6 +437,8 @@ class PRCPTOT:
 
 
 class RR:
+    """Total precipitation (pr)."""
+
     def compute(**params):
         """Calculate total precipitation.
 
@@ -427,6 +456,8 @@ class RR:
 
 
 class RR1:
+    """Number of wet days (pr)."""
+
     def compute(**params):
         """Calculate number of wet days (pr >= 1 mm/day).
 
@@ -447,6 +478,8 @@ class RR1:
 
 
 class R10mm:
+    """Number of heavy precipitaiotn days (pr)."""
+
     def compute(**params):
         """Calculate number of wet days (pr >= 10 mm/day).
 
@@ -467,6 +500,8 @@ class R10mm:
 
 
 class R20mm:
+    """Number of very heavy precipitaiotn days (pr)."""
+
     def compute(**params):
         """Calculate number of wet days (pr >= 20 mm/day).
 
@@ -487,6 +522,8 @@ class R20mm:
 
 
 class R25mm:
+    """Number of super heavy precipitaiotn days (pr)."""
+
     def compute(**params):
         """Calculate number of wet days (pr >= 25 mm/day).
 
@@ -507,6 +544,7 @@ class R25mm:
 
 
 class RDYYp:
+    """Number of wet days with precip over a given percentile (pr)."""
 
     perc = 75
     base_period_time_range = BASE_PERIOD
@@ -528,8 +566,8 @@ class RDYYp:
         xarray.DataArray
             Number of wet days over a given percentile.
         """
-        da = get_da(params, "pr")
-        percentile = get_percentile(
+        da = _get_da(params, "pr")
+        percentile = _get_percentile(
             da=da,
             perc=perc,
             base_period_time_range=base_period_time_range,
@@ -541,6 +579,7 @@ class RDYYp:
 
 
 class RYYmm:
+    """Number of days with precip over {tresh} (pr)."""
 
     thresh = 25
 
@@ -557,7 +596,7 @@ class RYYmm:
         xarray.DataArray
             Number of wet days.
         """
-        thresh = thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm/day")
         return xc.atmos.wetdays(
             thresh=thresh,
             **params,
@@ -565,6 +604,8 @@ class RYYmm:
 
 
 class RX1day:
+    """Maximum 1-day total precipitation (pr)."""
+
     def compute(**params):
         """Calculate maximum 1-day total precipitation.
 
@@ -582,6 +623,7 @@ class RX1day:
 
 
 class RXYYday:
+    """Maximum {window}-day total precipitation (pr)."""
 
     thresh = 5
 
@@ -605,6 +647,7 @@ class RXYYday:
 
 
 class RYYpTOT:
+    """Precipitation fraction with precip > {perc}th percentile (pr)."""
 
     perc = 75
     base_period_time_range = BASE_PERIOD
@@ -626,8 +669,8 @@ class RYYpTOT:
         xarray.DataArray
             Precipitation fraction with precip > {perc}th percentile.
         """
-        da = get_da(params, "pr")
-        percentile = get_percentile(
+        da = _get_da(params, "pr")
+        percentile = _get_percentile(
             da=da,
             perc=perc,
             base_period_time_range=base_period_time_range,
@@ -639,6 +682,8 @@ class RYYpTOT:
 
 
 class SDII:
+    """Average precipitation during wet days (pr)."""
+
     def compute(**params):
         """Calculate average precipitation during wet days.
 
@@ -659,6 +704,7 @@ class SDII:
 
 
 class SU:
+    """Number of summer days (tasmax)."""
 
     thresh = 25
 
@@ -675,7 +721,7 @@ class SU:
         xarray.DataArray
             Number of summer days.
         """
-        thresh = thresh_string(thresh, "degC")
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.tx_days_above(
             thresh=thresh,
             **params,
@@ -683,6 +729,8 @@ class SU:
 
 
 class SQI:
+    """Number of uncomfortable sleep events (tasmin)."""
+
     thresh = 18
 
     def compute(thresh=thresh, **params):
@@ -698,7 +746,7 @@ class SQI:
         xarray.DataArray
             Number of uncomfortable sleep events.
         """
-        thresh = thresh_string(thresh, "degC")
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.tn_days_above(
             thresh=thresh,
             **params,
@@ -706,6 +754,8 @@ class SQI:
 
 
 class TG:
+    """Mean mean temperature (tas)."""
+
     def compute(**params):
         """Calculate mean daily mean temperature.
 
@@ -723,11 +773,12 @@ class TG:
 
 
 class TG10p:
+    """Fraction of days with mean temperature < 10th percentile (tas)."""
 
     base_period_time_range = BASE_PERIOD
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with mean temperature < 10th percentile".
+        """Calculate fraction of days with mean temperature < 10th percentile.
 
         Parameters
         ----------
@@ -739,8 +790,8 @@ class TG10p:
         xarray.DataArray
             Fraction of days with mean temperature < 10th percentile".
         """
-        da = get_da(params, "tas")
-        percentile = get_percentile(
+        da = _get_da(params, "tas")
+        percentile = _get_percentile(
             da=da,
             perc=10,
             base_period_time_range=base_period_time_range,
@@ -752,6 +803,8 @@ class TG10p:
 
 
 class TG90p:
+    """Fraction of days with mean temperature > 90th percentile (tas)."""
+
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
@@ -767,8 +820,8 @@ class TG90p:
         xarray.DataArray
             Fraction of days with mean temperature > 90th percentile".
         """
-        da = get_da(params, "tas")
-        percentile = get_percentile(
+        da = _get_da(params, "tas")
+        percentile = _get_percentile(
             da=da,
             perc=90,
             base_period_time_range=base_period_time_range,
@@ -780,6 +833,8 @@ class TG90p:
 
 
 class TR:
+    """Number of tropical nights (tasmin)."""
+
     thresh = 20
 
     def compute(thresh=thresh, **params):
@@ -795,7 +850,7 @@ class TR:
         xarray.DataArray
             Number of tropical nights.
         """
-        thresh = thresh_string(thresh, "degC")
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.tn_days_above(
             thresh=thresh,
             **params,
@@ -803,6 +858,8 @@ class TR:
 
 
 class TX:
+    """Mean maximum temperature (tasmax)."""
+
     def compute(**params):
         """Calculate mean daily maximum temperature.
 
@@ -820,11 +877,12 @@ class TX:
 
 
 class TX10p:
+    """Fraction of days with max temperature < 10th percentile (tasmax)."""
 
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with max temperature < 10th percentile".
+        """Calculate fraction of days with max temperature < 10th percentile.
 
         Parameters
         ----------
@@ -836,8 +894,8 @@ class TX10p:
         xarray.DataArray
             Fraction of days with maximum temperature < 10th percentile".
         """
-        da = get_da(params, "tasmax")
-        percentile = get_percentile(
+        da = _get_da(params, "tasmax")
+        percentile = _get_percentile(
             da=da,
             perc=10,
             base_period_time_range=base_period_time_range,
@@ -849,11 +907,12 @@ class TX10p:
 
 
 class TX90p:
+    """Fraction of days with max temperature > 90th percentile (tasmax)."""
 
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with max temperature > 90th percentile".
+        """Calculate fraction of days with max temperature > 90th percentile.
 
         Parameters
         ----------
@@ -865,8 +924,8 @@ class TX90p:
         xarray.DataArray
             Fraction of days with maximum temperature > 90th percentile".
         """
-        da = get_da(params, "tasmax")
-        percentile = get_percentile(
+        da = _get_da(params, "tasmax")
+        percentile = _get_percentile(
             da=da,
             perc=90,
             base_period_time_range=base_period_time_range,
@@ -878,6 +937,8 @@ class TX90p:
 
 
 class TXn:
+    """Minimum maximum temperature (tasmax)."""
+
     def compute(**params):
         """Calculate minimum daily maximum temperature.
 
@@ -895,6 +956,8 @@ class TXn:
 
 
 class TXx:
+    """Maximum maximum temperature (tasmax)."""
+
     def compute(**params):
         """Calculate maximum daily maximum temperature.
 
@@ -912,6 +975,8 @@ class TXx:
 
 
 class TN:
+    """Mean minimum temperature (tasmin)."""
+
     def compute(**params):
         """Calculate mean daily minimum temperature.
 
@@ -929,11 +994,12 @@ class TN:
 
 
 class TN10p:
+    """Fraction of days with min temperature < 10th percentile."""
 
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with min temperature < 10th percentile".
+        """Calculate fraction of days with min temperature < 10th percentile.
 
         Parameters
         ----------
@@ -945,8 +1011,8 @@ class TN10p:
         xarray.DataArray
             Fraction of days with minimum temperature < 10th percentile".
         """
-        da = get_da(params, "tasmin")
-        percentile = get_percentile(
+        da = _get_da(params, "tasmin")
+        percentile = _get_percentile(
             da=da,
             perc=10,
             base_period_time_range=base_period_time_range,
@@ -958,11 +1024,12 @@ class TN10p:
 
 
 class TN90p:
+    """Fraction of days with min temperature > 90th percentile."""
 
     base_period_time_range = (BASE_PERIOD,)
 
     def compute(base_period_time_range=base_period_time_range, **params):
-        """Calculate fraction of days with min temperature > 90th percentile".
+        """Calculate fraction of days with min temperature > 90th percentile.
 
         Parameters
         ----------
@@ -974,8 +1041,8 @@ class TN90p:
         xarray.DataArray
             Fraction of days with minimum temperature > 90th percentile".
         """
-        da = get_da(params, "tasmin")
-        percentile = get_percentile(
+        da = _get_da(params, "tasmin")
+        percentile = _get_percentile(
             da=da,
             perc=90,
             base_period_time_range=base_period_time_range,
@@ -987,6 +1054,8 @@ class TN90p:
 
 
 class TNn:
+    """Minimum minimum temperature (tasmin)."""
+
     def compute(**params):
         """Calculate minimum daily minimum temperature.
 
@@ -1004,6 +1073,8 @@ class TNn:
 
 
 class TNx:
+    """Maximum minimum temperature (tasmin)."""
+
     def compute(**params):
         """Calculate maximum daily minimum temperature.
 
@@ -1021,6 +1092,7 @@ class TNx:
 
 
 class WD:
+    """Number of warm and dry days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
 
@@ -1036,14 +1108,14 @@ class WD:
         -------
         Number of days where warm and dry conditions coincide.
         """
-        da_tas = get_da(params, "tas")
-        da_pr = get_da(params, "pr")
-        percentile_tas = get_percentile(
+        da_tas = _get_da(params, "tas")
+        da_pr = _get_da(params, "pr")
+        percentile_tas = _get_percentile(
             da=da_tas,
             perc=75,
             base_period_time_range=base_period_time_range,
         )
-        percentile_pr = get_percentile(
+        percentile_pr = _get_percentile(
             da=da_pr,
             perc=25,
             base_period_time_range=base_period_time_range,
@@ -1056,6 +1128,7 @@ class WD:
 
 
 class WSDI:
+    """Warm spell duration index (tasmax)."""
 
     base_period_time_range = BASE_PERIOD
 
@@ -1072,8 +1145,8 @@ class WSDI:
         Number of days part of a 90th percentile warm spell.
         At least 6 consecutive days.
         """
-        da = get_da(params, "tasmax")
-        percentile = get_percentile(
+        da = _get_da(params, "tasmax")
+        percentile = _get_percentile(
             da=da,
             perc=90,
             base_period_time_range=base_period_time_range,
@@ -1086,6 +1159,7 @@ class WSDI:
 
 
 class WW:
+    """Number of warm and wet days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
 
@@ -1101,14 +1175,14 @@ class WW:
         -------
         Number of days where warm and wet conditions coincide.
         """
-        da_tas = get_da(params, "tas")
-        da_pr = get_da(params, "pr")
-        percentile_tas = get_percentile(
+        da_tas = _get_da(params, "tas")
+        da_pr = _get_da(params, "pr")
+        percentile_tas = _get_percentile(
             da=da_tas,
             perc=75,
             base_period_time_range=base_period_time_range,
         )
-        percentile_pr = get_percentile(
+        percentile_pr = _get_percentile(
             da=da_pr,
             perc=75,
             base_period_time_range=base_period_time_range,

@@ -10,6 +10,7 @@ Welcome to index_calculator's documentation!
    installation
    usage
    notebooks
+   indices
    contributing
    authors
    api
