@@ -10,13 +10,13 @@ def test_processing():
     preproc = xcalc.preprocessing(tas_ds, freq="week")
     proc = xcalc.processing("TG", preproc_obj=preproc)
     postproc = xcalc.postprocessing(
-        "CORDEX",
+        project="CORDEX",
         proc_obj=proc,
         institution="test institution",
         institution_id="TEST",
         contact="test@test.de",
     )
-    xcalc.outputwriter(postproc_obj=postproc).write_to_netcdf()
+    xcalc.outputwriter(postproc_obj=postproc)
 
 
 def test_index_calculator():
@@ -29,7 +29,8 @@ def test_index_calculator():
         institution="test institution",
         institution_id="TEST",
         contact="test@test.de",
-    ).compute(write=True)
+        write=True,
+    )
 
 
 def test_thresh_index_calculator():
@@ -40,7 +41,7 @@ def test_thresh_index_calculator():
         index="RX3day",
         project="CORDEX",
         institution_id="TEST",
-    ).compute()
+    )
     xcalc.index_calculator(
         ds=pr_ds,
         freq="week",
@@ -48,11 +49,11 @@ def test_thresh_index_calculator():
         thresh=3,
         project="CORDEX",
         institution_id="TEST",
-    ).compute()
+    )
     xcalc.index_calculator(
         ds=pr_ds,
         freq="week",
         index="RXYYday",
         project="CORDEX",
         institution_id="TEST",
-    ).compute()
+    )
