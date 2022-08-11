@@ -65,6 +65,7 @@ class PreProcessing:
         self.crop_time_axis = crop_time_axis
         self.check_time_axis = check_time_axis
         kwargs_to_self(kwargs, self)
+        self.preproc
 
     def _preprocessing(self):
         time_control = pyh.time_control(self.ds)

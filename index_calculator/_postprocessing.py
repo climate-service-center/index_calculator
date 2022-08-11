@@ -77,6 +77,7 @@ class PostProcessing:
         self.contact = check_existance({"contact": contact}, self)
         self.period = check_existance({"period": False}, self)
         kwargs_to_self(kwargs, self)
+        self.postproc
 
     def _postprocessing(self):
         _ijson = copy.deepcopy(ijson)

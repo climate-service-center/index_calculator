@@ -52,6 +52,7 @@ class Processing:
         self.CIname = check_existance({"index": index}, self)
         kwargs_to_self(kwargs, self)
         self._get_idx_name_and_repl()
+        self.proc
 
     def _get_numb_name_and_idx_object(self):
         alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
