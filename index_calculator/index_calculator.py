@@ -4,6 +4,7 @@ from ._outputwriter import OutputWriter as outputwriter
 from ._postprocessing import PostProcessing as postprocessing
 from ._preprocessing import PreProcessing as preprocessing
 from ._processing import Processing as processing
+from ._utils import kwargs_to_self, object_attrs_to_self
 
 
 class IndexCalculator:
@@ -45,23 +46,26 @@ class IndexCalculator:
                 contact="gerics-cordex@hereon.de",
         )
 
-        --> File written: TG_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_
+        --> File written: cordex/climdex/EUR-11/GERICS/GERICS/MPI-M-MPI-ESM-LR/
+                          historical/r3i1p1/GERICS-REMO2015/v1/year/TG/
+                          TG_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_
                           GERICS-REMO2015_v1_day_GERICS_year_2001-2005.nc
 
     """
 
     def __init__(self, write=False, **kwargs):
-        self.kwargs = kwargs
-        self._compute(write)
+        kwargs_to_self(kwargs, self)
+        postproc_obj = self._compute(write=write, **kwargs)
+        object_attrs_to_self(postproc_obj, self)
 
-    def _compute(self, write):
+    def _compute(self, write=False, **kwargs):
         """Compute climate index."""
-        preproc_obj = preprocessing(**self.kwargs)
+        preproc_obj = preprocessing(**kwargs)
         proc_obj = processing(preproc_obj=preproc_obj)
         postproc_obj = postprocessing(proc_obj=proc_obj)
         if write is True:
             outputwriter(
                 postproc_obj=postproc_obj,
-                **self.kwargs,
+                **kwargs,
             )
         return postproc_obj

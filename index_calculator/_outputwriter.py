@@ -51,7 +51,9 @@ class OutputWriter:
         outputwriter(postproc_obj=postproc)
 
 
-        --> File written: TG_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_
+        --> File written: cordex/climdex/EUR-11/GERICS/GERICS/MPI-M-MPI-ESM-LR/
+                          historical/r3i1p1/GERICS-REMO2015/v1/year/TG/
+                          TG_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_
                           GERICS-REMO2015_v1_day_GERICS_year_2001-2005.nc
 
     """
