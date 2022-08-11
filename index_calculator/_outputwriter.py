@@ -115,7 +115,7 @@ class OutputWriter:
         except ValueError:
             warnings.warn(f"Project {self.project} not known")
             return
-        return self.parse_components_to_format(output_comps, output_fmt)
+        return self._parse_components_to_format(output_comps, output_fmt)
 
     def _to_netcdf(self):
         """Write xarray.Dataset to netCDF file on disk."""
