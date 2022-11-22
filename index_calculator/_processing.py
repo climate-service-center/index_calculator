@@ -159,7 +159,9 @@ class Processing:
             )
             idx_ds = idx_ds.cf.add_bounds("time")
             idx_ds = idx_ds.reset_coords("time_bounds")
-            idx_ds = idx_ds.rename({"time_bounds": "time_bnds"})
+        for data_var in idx_ds.data_vars:
+            data_var_repl = data_var.replace("bounds", "bnds")
+            idx_ds = idx_ds.rename({data_var: data_var_repl})
         idx_ds = idx_ds.assign_coords({"time": date_range})
         idx_ds.time.encoding = self.ds.time.encoding
         return idx_ds
