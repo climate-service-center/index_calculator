@@ -124,7 +124,6 @@ class OutputWriter:
         ds = save_xrdataset(
             self.postproc,
             name=self.outputname,
-            encoding_dict={"encoding": self.encoding},
         )
         print(f"File written: {self.outputname}")
         return ds
