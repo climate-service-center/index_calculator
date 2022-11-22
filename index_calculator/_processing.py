@@ -152,8 +152,11 @@ class Processing:
         data_vars["time"] = array["time"]
         if "time_bnds" in data_vars.keys():
             del data_vars["time_bnds"]
+        if "time_bounds" in data_vars.keys():
+            del data_vars["time_bounds"]
         idx_ds = xr.Dataset(data_vars=data_vars, attrs=self.preproc.attrs)
-        idx_ds = idx_ds.cf.add_bounds("time")
+        if len(idx_ds.time) > 1:
+            idx_ds = idx_ds.cf.add_bounds("time")
         idx_ds = idx_ds.assign_coords({"time": date_range})
         idx_ds.time.encoding = self.ds.time.encoding
         idx_ds = idx_ds.reset_coords("time_bounds")
