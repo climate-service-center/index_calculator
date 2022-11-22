@@ -142,25 +142,27 @@ class Processing:
             end=self.preproc.time.values[-1],
             frequency=_tfreq[self.freq],
         )
-        array = array.assign_coords({"time": date_range.to_datetimeindex})
         data_vars = {
             k: self.preproc.data_vars[k]
             for k in self.preproc.data_vars.keys()
             if k not in self.var_name
         }
         data_vars[self.CIname] = array
-        data_vars["time"] = array["time"]
         if "time_bnds" in data_vars.keys():
             del data_vars["time_bnds"]
         if "time_bounds" in data_vars.keys():
             del data_vars["time_bounds"]
         idx_ds = xr.Dataset(data_vars=data_vars, attrs=self.preproc.attrs)
         if len(idx_ds.time) > 1:
+            idx_ds = idx_ds.assign_coords(
+                {"time": date_range.to_datetimeindex},
+            )
             idx_ds = idx_ds.cf.add_bounds("time")
+            idx_ds = idx_ds.reset_coords("time_bounds")
+            idx_ds = idx_ds.rename({"time_bounds": "time_bnds"})
         idx_ds = idx_ds.assign_coords({"time": date_range})
         idx_ds.time.encoding = self.ds.time.encoding
-        idx_ds = idx_ds.reset_coords("time_bounds")
-        return idx_ds.rename({"time_bounds": "time_bnds"})
+        return idx_ds
 
     @property
     def proc(self):
