@@ -25,7 +25,7 @@ def _get_percentile(da, perc, base_period_time_range):
     return per_doy.sel(percentiles=perc)
 
 
-BASE_PERIOD = ["1951-01-01", "1955-12-31"]
+BASE_PERIOD = ["1971-01-01", "2000-12-31"]
 
 
 class CD:
