@@ -79,9 +79,7 @@ class PostProcessing:
         )
         self.contact = check_existance({"contact": contact}, self)
         self.period = check_existance({"period": False}, self)
-        # print(self.split)
         self.split = check_existance({"split": split}, self)
-        print(self.split)
         kwargs_to_self(kwargs, self)
         self.postproc
 

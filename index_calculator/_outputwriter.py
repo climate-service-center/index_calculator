@@ -64,7 +64,6 @@ class OutputWriter:
         output_name=True,
         output_dir=".",
         drs=True,
-        split=True,
         **kwargs,
     ):
         if postproc_obj is None:

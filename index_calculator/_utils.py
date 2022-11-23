@@ -49,9 +49,7 @@ def check_existance(attr_dict, slf):
                     raise ValueError(msg)
                 elif method == "warn":
                     warnings.warn(msg)
-                    return value
-        else:
-            return value
+        return value
 
 
 def get_time_range_as_str(time, fmt):
