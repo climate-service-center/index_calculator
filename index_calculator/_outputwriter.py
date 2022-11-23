@@ -14,7 +14,7 @@ class OutputWriter:
 
     Parameters
     ----------
-    postproc_obj: index_calculator.postprocessing
+    postproc_obj: index_calculator.postprocessing or list
         ``index_calculator.postprocessing`` object
     output_name: bool or str (default: True), optional
         If True get project-specific output name.
@@ -64,31 +64,43 @@ class OutputWriter:
         output_name=True,
         output_dir=".",
         drs=True,
+        split=True,
         **kwargs,
     ):
         if postproc_obj is None:
-            raise ValueError(
+            raise NameError(
                 "Please select an index_calculator.PostProcessing object."
                 "'proc_obj=...'"
             )
         object_attrs_to_self(postproc_obj, self)
-        if output_name is True:
-            output_name = self._outname()
-        if not output_name:
-            raise ValueError("Could not write output.")
+        if isinstance(self.postproc, str):
+            postprocs = [self.postproc]
+        else:
+            postprocs = self.postproc
         if drs is True:
-            output_dir = os.path.join(output_dir, self._directory_structure())
+            output_dir = os.path.join(
+                output_dir, self._directory_structure(postprocs[0])
+            )
         os.makedirs(output_dir, exist_ok=True)
-        self.outputname = Path(os.path.join(output_dir, output_name)).resolve()
-        self._to_netcdf()
+        ds_dict = {}
+        for postproc in postprocs:
+            if output_name is True:
+                output_name = self._outname(postproc)
+            if not output_name:
+                print("Could not write output.")
+                continue
+            outputname = Path(os.path.join(output_dir, output_name)).resolve()
+            ds_dict[output_name] = self._to_netcdf(postproc, outputname)
 
-    def _parse_components_to_format(self, out_components, out_format):
+    def _parse_components_to_format(self, ds, out_components, out_format):
         def test_ocomp(ocomp):
             return ocomp.replace("/", "")
 
         ocomps = []
         for comp in out_components:
-            if hasattr(self.proc, comp):
+            if hasattr(ds, comp):
+                ocomps.append(test_ocomp(getattr(ds, comp)))
+            elif hasattr(self.proc, comp):
                 ocomps.append(test_ocomp(getattr(self.proc, comp)))
             elif hasattr(self.ds, comp):
                 ocomps.append(test_ocomp(getattr(self.ds, comp)))
@@ -97,7 +109,7 @@ class OutputWriter:
                 warnings.warn(f"{comp} not found!")
         return out_format.format(*ocomps)
 
-    def _outname(self):
+    def _outname(self, ds):
         """Set project-specific ouput file name."""
 
         try:
@@ -107,9 +119,9 @@ class OutputWriter:
             warnings.warn(f"Project {self.project} not known")
             return
 
-        return self._parse_components_to_format(output_comps, output_fmt)
+        return self._parse_components_to_format(ds, output_comps, output_fmt)
 
-    def _directory_structure(self):
+    def _directory_structure(self, ds):
         """Set project-specific directory structure."""
         try:
             output_fmt = pjson[self.project]["drs_format"]
@@ -117,13 +129,13 @@ class OutputWriter:
         except ValueError:
             warnings.warn(f"Project {self.project} not known")
             return
-        return self._parse_components_to_format(output_comps, output_fmt)
+        return self._parse_components_to_format(ds, output_comps, output_fmt)
 
-    def _to_netcdf(self):
+    def _to_netcdf(self, ds, name):
         """Write xarray.Dataset to netCDF file on disk."""
         ds = save_xrdataset(
-            self.postproc,
-            name=self.outputname,
+            ds,
+            name=name,
         )
-        print(f"File written: {self.outputname}")
+        print(f"File written: {name}")
         return ds

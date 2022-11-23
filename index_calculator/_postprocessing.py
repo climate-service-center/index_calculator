@@ -1,9 +1,11 @@
 import copy
 import warnings
 
+from . import _consts
 from ._ci_netcdfattrs import NetCDFglobalattrs
 from ._tables import ijson, xjson
-from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
+from ._utils import (check_existance, get_time_range_as_str, kwargs_to_self,
+                     object_attrs_to_self)
 
 
 class PostProcessing:
@@ -57,6 +59,7 @@ class PostProcessing:
         institution_id="N/A",
         institution="N/A",
         contact="N/A",
+        split=True,
         **kwargs,
     ):
         if proc_obj is None:
@@ -76,8 +79,15 @@ class PostProcessing:
         )
         self.contact = check_existance({"contact": contact}, self)
         self.period = check_existance({"period": False}, self)
+        # print(self.split)
+        self.split = check_existance({"split": split}, self)
+        print(self.split)
         kwargs_to_self(kwargs, self)
         self.postproc
+
+    def _get_time_borders(self, times):
+        left, right = get_time_range_as_str(times, self.fmt)
+        return "{}-{}".format(left, right)
 
     def _postprocessing(self):
         _ijson = copy.deepcopy(ijson)
@@ -112,7 +122,17 @@ class PostProcessing:
             associated_files += [self.ds[var_name].attrs["associated_files"]]
         associated_files = ", ".join(associated_files)
         output[self.CIname].attrs["associated_files"] = associated_files
-        return output
+        if self.split is True:
+            self.split = _consts._split[self.freq]
+        trange = "ci_timerange_index"
+        if self.split is False:
+            output.attrs[trange] = self._get_time_borders(output.time.values)
+            return output
+        olist = []
+        for name, ds in output.resample({"time": self.split}):
+            ds.attrs[trange] = self._get_time_borders(ds.time.values)
+            olist.append(ds)
+        return olist
 
     @property
     def postproc(self):

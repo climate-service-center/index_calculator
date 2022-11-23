@@ -83,7 +83,6 @@ class NetCDFglobalattrs(NetCDFattrs):
                 "ci_name",
                 "ci_reference_period",
                 "ci_frequency",
-                "ci_timerange_index",
                 "ci_timerange_source",
                 "ci_package_name",
                 "ci_package_reference",
@@ -144,10 +143,6 @@ class NetCDFglobalattrs(NetCDFattrs):
     def _ci_frequency(self, obj):
         """Add frequency to dictionary."""
         return obj.freq
-
-    def _ci_timerange_index(self, obj):
-        """Add time range of the index to dictionary."""
-        return f"{obj.TimeRange[0]}-{obj.TimeRange[1]}"
 
     def _ci_timerange_source(self, obj):
         """Add time range of the source to dictionary."""

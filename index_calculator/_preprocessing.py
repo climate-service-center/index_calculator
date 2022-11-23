@@ -81,12 +81,10 @@ class PreProcessing:
                 smonth=_bounds[self.freq]["start"],
                 emonth=_bounds[self.freq]["end"],
             )
-        req_time = get_time_range_as_str(time_control.time, self.fmt)
 
         if self.check_time_axis:
             time_control.check_timestamps(correct=True)
 
-        self.TimeRange = req_time
         self.ATimeRange = avail_time
 
         return time_control.ds

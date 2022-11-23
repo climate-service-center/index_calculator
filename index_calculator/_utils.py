@@ -37,6 +37,9 @@ def check_existance(attr_dict, slf):
         if value == "N/A":
             method = "warn"
             test = True
+        if value is True:
+            method = ""
+            test = True
         if test:
             if hasattr(slf, key):
                 return getattr(slf, key)

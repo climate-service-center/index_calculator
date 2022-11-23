@@ -45,3 +45,12 @@ _fmt = {
     "sem": "%Y%m",
     "year": "%Y",
 }
+
+_split = {
+    "fx": False,
+    "day": "5A",
+    "week": "10A",
+    "month": "10A",
+    "sem": "10A",
+    "year": "20A",
+}
