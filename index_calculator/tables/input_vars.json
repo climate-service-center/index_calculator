@@ -21,7 +21,7 @@
     "TX10p": "tasmax",
     "TX90p": "tasmax",
     "TXn": "tasmax",
-    "Txx": "tasmax",
+    "TXx": "tasmax",
     "TN": "tasmin",
     "TN10p": "tasmin",
     "TN90p": "tasmin",
