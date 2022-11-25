@@ -7,7 +7,6 @@ channels:
 dependencies:
     - python
     - xarray
-    - xclim
     - docutils==0.17.1
     - nbconvert
     - numpydoc
@@ -21,8 +20,8 @@ dependencies:
     - ipython
     - dask
     - cftime
-    - pint
 
     - pip:
       - sphinxcontrib-mockautodoc
       - pyhomogenize
+      - xclim
