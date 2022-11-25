@@ -5,7 +5,8 @@ channels:
     - nodefaults
 
 dependencies:
-    - python
+    - python==3.10
+    - xclim==0.38.0
     - xarray
     - docutils==0.17.1
     - nbconvert
@@ -24,4 +25,3 @@ dependencies:
     - pip:
       - sphinxcontrib-mockautodoc
       - pyhomogenize
-      - xclim
