@@ -5,8 +5,9 @@ channels:
     - nodefaults
 
 dependencies:
-    - python==3.10
-    - xclim==0.38.0
+    - python
+    - xclim
+    - pint==0.19.2
     - xarray
     - docutils==0.17.1
     - nbconvert
