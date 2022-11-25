@@ -8,6 +8,7 @@ dependencies:
     - python
     - xclim
     - pint==0.19.2
+    - cf_xarray
     - xarray
     - docutils==0.17.1
     - nbconvert
