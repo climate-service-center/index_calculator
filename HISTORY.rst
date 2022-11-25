@@ -61,3 +61,10 @@ History
 * more documentation
 * properties to classes
 * classes automatically call functions
+
+0.4.0 (2022-11-25)
+------------------
+
+* split output files into several files
+* restructuring time encoding
+* properties removed
