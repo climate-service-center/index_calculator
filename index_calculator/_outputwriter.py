@@ -81,15 +81,19 @@ class OutputWriter:
                 output_dir, self._directory_structure(postprocs[0])
             )
         os.makedirs(output_dir, exist_ok=True)
+        self.output_name = output_name
         ds_dict = {}
         for postproc in postprocs:
-            if output_name is True:
-                output_name = self._outname(postproc)
+            ds_ = postproc.copy()
+            if self.output_name is True:
+                output_name = self._outname(ds_)
+            else:
+                output_name = self.output_name
             if not output_name:
                 print("Could not write output.")
                 continue
             outputname = Path(os.path.join(output_dir, output_name)).resolve()
-            ds_dict[output_name] = self._to_netcdf(postproc, outputname)
+            ds_dict[output_name] = self._to_netcdf(ds_, outputname)
 
     def _parse_components_to_format(self, ds, out_components, out_format):
         def test_ocomp(ocomp):
@@ -117,7 +121,6 @@ class OutputWriter:
         except ValueError:
             warnings.warn(f"Project {self.project} not known")
             return
-
         return self._parse_components_to_format(ds, output_comps, output_fmt)
 
     def _directory_structure(self, ds):
