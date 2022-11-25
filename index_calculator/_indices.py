@@ -21,7 +21,8 @@ def _get_da(dictionary, var):
 def _get_percentile(da, perc, base_period_time_range):
     tslice = slice(base_period_time_range[0], base_period_time_range[1])
     base_period = da.sel(time=tslice)
-    per_doy = percentile_doy(base_period, per=perc)
+    with dask.config.set(**{"array.slicing.split_large_chunks": True}):
+        per_doy = percentile_doy(base_period, per=perc)
     return per_doy.sel(percentiles=perc)
 
 
@@ -692,9 +693,6 @@ class SDII:
         For input parameters see:
             https://xclim.readthedocs.io/en/stable/indicators_api.html#xclim.indicators.daily_pr_intensity
 
-        freq: str
-            Resampling frequency.
-
         Returns
         -------
         xarray.DataArray
@@ -805,7 +803,7 @@ class TG10p:
 class TG90p:
     """Fraction of days with mean temperature > 90th percentile (tas)."""
 
-    base_period_time_range = (BASE_PERIOD,)
+    base_period_time_range = BASE_PERIOD
 
     def compute(base_period_time_range=base_period_time_range, **params):
         """Calculate fraction of days with mean temperature > 90th percentile".
@@ -879,7 +877,7 @@ class TX:
 class TX10p:
     """Fraction of days with max temperature < 10th percentile (tasmax)."""
 
-    base_period_time_range = (BASE_PERIOD,)
+    base_period_time_range = BASE_PERIOD
 
     def compute(base_period_time_range=base_period_time_range, **params):
         """Calculate fraction of days with max temperature < 10th percentile.
@@ -909,7 +907,7 @@ class TX10p:
 class TX90p:
     """Fraction of days with max temperature > 90th percentile (tasmax)."""
 
-    base_period_time_range = (BASE_PERIOD,)
+    base_period_time_range = BASE_PERIOD
 
     def compute(base_period_time_range=base_period_time_range, **params):
         """Calculate fraction of days with max temperature > 90th percentile.
@@ -996,7 +994,7 @@ class TN:
 class TN10p:
     """Fraction of days with min temperature < 10th percentile."""
 
-    base_period_time_range = (BASE_PERIOD,)
+    base_period_time_range = BASE_PERIOD
 
     def compute(base_period_time_range=base_period_time_range, **params):
         """Calculate fraction of days with min temperature < 10th percentile.
@@ -1026,7 +1024,7 @@ class TN10p:
 class TN90p:
     """Fraction of days with min temperature > 90th percentile."""
 
-    base_period_time_range = (BASE_PERIOD,)
+    base_period_time_range = BASE_PERIOD
 
     def compute(base_period_time_range=base_period_time_range, **params):
         """Calculate fraction of days with min temperature > 90th percentile.
