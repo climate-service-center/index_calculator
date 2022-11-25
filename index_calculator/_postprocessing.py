@@ -81,7 +81,7 @@ class PostProcessing:
         self.period = check_existance({"period": False}, self)
         self.split = check_existance({"split": split}, self)
         kwargs_to_self(kwargs, self)
-        self.postproc
+        self.postproc = self._postprocessing()
 
     def _get_time_borders(self, times):
         left, right = get_time_range_as_str(times, self.fmt)
@@ -128,11 +128,7 @@ class PostProcessing:
             return output
         olist = []
         for name, ds in output.resample({"time": self.split}):
-            ds.attrs[trange] = self._get_time_borders(ds.time.values)
-            olist.append(ds)
+            ds_ = ds.copy()
+            ds_.attrs[trange] = self._get_time_borders(ds.time.values)
+            olist.append(ds_)
         return olist
-
-    @property
-    def postproc(self):
-        """Postprocessed xr.Dataset."""
-        return self._postprocessing()

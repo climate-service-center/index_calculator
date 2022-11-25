@@ -65,7 +65,7 @@ class PreProcessing:
         self.crop_time_axis = crop_time_axis
         self.check_time_axis = check_time_axis
         kwargs_to_self(kwargs, self)
-        self.preproc
+        self.preproc = self._preprocessing()
 
     def _preprocessing(self):
         time_control = pyh.time_control(self.ds)
@@ -88,8 +88,3 @@ class PreProcessing:
         self.ATimeRange = avail_time
 
         return time_control.ds
-
-    @property
-    def preproc(self):
-        """Preprocessed xr.Dataset."""
-        return self._preprocessing()

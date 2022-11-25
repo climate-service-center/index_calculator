@@ -53,7 +53,7 @@ class Processing:
         self.CIname = check_existance({"index": index}, self)
         kwargs_to_self(kwargs, self)
         self._get_idx_name_and_repl()
-        self.proc
+        self.proc = self._processing()
 
     def _get_numb_name_and_idx_object(self):
         alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
@@ -165,8 +165,3 @@ class Processing:
         idx_ds = idx_ds.assign_coords({"time": date_range})
         idx_ds.time.encoding = self.ds.time.encoding
         return idx_ds
-
-    @property
-    def proc(self):
-        """xr.Dataset containing climate indicator."""
-        return self._processing()
