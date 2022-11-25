@@ -221,16 +221,6 @@ call("conda list", shell=True)
 # disable warnings
 warnings.filterwarnings("ignore")
 
-
-# notebooks = (
-#    "notebooks/method",
-#    "notebooks/plotting",
-#    "notebooks/mask_2D",
-#    "notebooks/mask_3D",
-#    "notebooks/geopandas",
-#    "notebooks/overlap",
-#    "notebooks/create_own_regions",
-# )
 notebooks = ()
 print("\nBuilding notebooks:")
 for nb in notebooks:
