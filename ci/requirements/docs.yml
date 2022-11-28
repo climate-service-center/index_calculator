@@ -6,8 +6,8 @@ channels:
 
 dependencies:
     - python
-    - xclim==0.38.0
-    - pint==0.19.2
+    - xclim>=0.34.0
+    - pint>=0.10
     - cf_xarray
     - xarray
     - docutils==0.17.1
