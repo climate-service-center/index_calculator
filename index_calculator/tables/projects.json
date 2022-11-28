@@ -2,19 +2,19 @@
     "CMIP5": {
 	"components": "ci_name, frequency, model_id, experiment_id, parent_experiment_rip, ci_institute_id, ci_frequency, ci_timerange_index",
 	"format": "{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"drs_components": "ci_institute_id, institute_id, model_id, experiment_id, frequency, modeling_realm, ci_frequency, parent_experiment_rip, ci_name",
-	"drs_format": "cmip5/climdex/{}/{}/{}/{}/{}/{}/{}/{}"
+	"drs_components": "ci_package_reference, ci_institute_id, institute_id, model_id, experiment_id, frequency, modeling_realm, ci_frequency, parent_experiment_rip, ci_name",
+	"drs_format": "cmip5/{}/{}/{}/{}/{}/{}/{}/{}/{}"
     },
     "CMIP6": {
 	"components": "ci_name, table_id, source_id, experiment_id, variant_label, grid_label, ci_institute_id, ci_frequency, ci_timerange_index",
 	"format": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"drs_components": "ci_institute_id, activity_id, institution_id, source_id, experiment_id, variant_label, table_id, ci_frequency, ci_name, grid_label",
-	"drs_format": "cmip6/climdex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
+	"drs_components": "ci_package_reference, ci_institute_id, activity_id, institution_id, source_id, experiment_id, variant_label, table_id, ci_frequency, ci_name, grid_label",
+	"drs_format": "cmip6/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
     },
     "CORDEX": {
 	"components": "ci_name, CORDEX_domain, driving_model_id, driving_experiment_name, driving_model_ensemble_member, model_id, rcm_version_id, frequency, ci_institute_id, ci_frequency, ci_timerange_index",
 	"format": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"drs_components": "CORDEX_domain, ci_institute_id, institute_id, driving_model_id, driving_experiment_name, driving_model_ensemble_member, model_id, rcm_version_id, ci_frequency, ci_name",
-	"drs_format": "cordex/climdex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
+	"drs_components": "ci_package_reference, CORDEX_domain, ci_institute_id, institute_id, driving_model_id, driving_experiment_name, driving_model_ensemble_member, model_id, rcm_version_id, ci_frequency, ci_name",
+	"drs_format": "cordex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
   }
 }
