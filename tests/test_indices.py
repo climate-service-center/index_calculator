@@ -383,7 +383,7 @@ def test_DTR():
 
 
 def test_HSf():
-    result = indices.HDf.compute(
+    result = indices.HSf.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         thresh=35,
@@ -393,7 +393,7 @@ def test_HSf():
 
 
 def test_HSx():
-    result = indices.HDx.compute(
+    result = indices.HSx.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         thresh=35,
