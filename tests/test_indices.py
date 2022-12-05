@@ -3,7 +3,8 @@ import pytest  # noqa
 
 import index_calculator._indices as indices
 
-from .conftest import pr_series, tas_series, tasmax_series, tasmin_series
+from .conftest import (pr_series, prsn_series, snd_series, tas_series,
+                       tasmax_series, tasmin_series)
 
 
 def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
@@ -20,6 +21,14 @@ def tasmax_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
 
 def pr_xarray(series=[3, 4, 20, 20, 0, 6, 9]):
     return pr_series(np.array(series) / 86400)
+
+
+def prsn_xarray(series=[7, 0, 0.5, 10, 6, 0, 4]):
+    return prsn_series(np.array(series) / 86400)
+
+
+def snd_xarray(series=[0, 20, 150, 340, 170, 90, 0]):
+    return snd_series(np.array(series) / 100)
 
 
 def test_TG():
@@ -368,6 +377,68 @@ def test_DTR():
     result = indices.DTR.compute(
         tasmin=tasmin_xarray(),
         tasmax=tasmax_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_HSf():
+    result = indices.HDf.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+        thresh=35,
+        window=5,
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_HSx():
+    result = indices.HDx.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+        thresh=35,
+        window=5,
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_CWf():
+    result = indices.CWf.compute(
+        tasmax=tasmax_xarray(),
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        thresh_tasmax=10,
+        thresh_tasmin=-10,
+        window=5,
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_CWx():
+    result = indices.CWx.compute(
+        tasmax=tasmax_xarray(),
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        thresh_tasmax=10,
+        thresh_tasmin=-10,
+        window=5,
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_SD():
+    result = indices.SD.compute(
+        prsn=prsn_xarray(),
+        thresh=2,
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_SCD():
+    result = indices.SCD.compute(
+        prsn=snd_xarray(),
+        thresh=2,
         freq="7D",
     )
     np.testing.assert_allclose(result, 0, rtol=1e-03)

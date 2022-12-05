@@ -72,3 +72,39 @@ def tasmax_series(values):
         )
 
     return _tasmax_series(values)
+
+
+def prsn_series(values):
+    def _prsn_series(values, start="1/1/2000"):
+        coords = pd.date_range(start, periods=len(values), freq="D")
+        return xr.DataArray(
+            values,
+            coords=[coords],
+            dims="time",
+            name="prsn",
+            attrs={
+                "standard_name": "snowfall_flux",
+                "cell_methods": "time: mean",
+                "units": "kg m-2 s-1",
+            },
+        )
+
+    return _prsn_series(values)
+
+
+def snd_series(values):
+    def _snd_series(values, start="1/1/2000"):
+        coords = pd.date_range(start, periods=len(values), freq="D")
+        return xr.DataArray(
+            values,
+            coords=[coords],
+            dims="time",
+            name="snd",
+            attrs={
+                "standard_name": "surface_snow_thickness",
+                "cell_methods": "time: mean",
+                "units": "m",
+            },
+        )
+
+    return _snd_series(values)
