@@ -386,20 +386,20 @@ def test_HSf():
     result = indices.HSf.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
-        thresh=35,
-        window=5,
+        thresh=27,
+        window=1,
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_HSx():
     result = indices.HSx.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
-        thresh=35,
-        window=5,
+        thresh=27,
+        window=1,
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_CWf():
@@ -409,9 +409,9 @@ def test_CWf():
         freq="7D",
         thresh_tasmax=10,
         thresh_tasmin=-10,
-        window=5,
+        window=1,
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_CWx():
@@ -421,24 +421,24 @@ def test_CWx():
         freq="7D",
         thresh_tasmax=10,
         thresh_tasmin=-10,
-        window=5,
+        window=1,
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_SD():
     result = indices.SD.compute(
         prsn=prsn_xarray(),
-        thresh=2,
+        thresh=1 / 86400,
         freq="7D",
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 4, rtol=1e-03)
 
 
 def test_SCD():
     result = indices.SCD.compute(
-        prsn=snd_xarray(),
+        snd=snd_xarray(),
         thresh=2,
         freq="7D",
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 5, rtol=1e-03)
