@@ -490,5 +490,41 @@
     "long_name": "Number of hot & humid days (ambient vapor pressure > 18.8 hPa)",
     "units": "days",
     "description": "count of days with ambient vapor pressure (derived from vapor pressure at saturation (derived from mean temperature and Magnus formulae) and relative humidity) above 18.8 hPa"
-  }
+  },
+  "HSf": {
+      "standard_name": "hot_spell_frequency",
+      "long_name": "Number of hot spells (maximum temperature > {thresh} degC)",
+      "units": "days",
+      "description": "Total number of series of at least {window} consecutive days with maximum temperature above {thresh}"
+  },
+    "HSx": {
+	"standard_name": "hot_spell_duration",
+	"long_name": "Maximum length of hot spells (maximum temperature > {thresh} degC)",
+	"units": "days",
+	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh}"
+   },
+    "CWf": {
+	"standard_name": "cold_wave_frequency",
+	"long_name": "Number of cold waves (maximum temperature < {thresh_tasmax} degC and minimum temperature > {thresh_tasmin} degC)",
+	"units": "days",
+	"description": "Total number of series of at least {window} consecutive days with minimum temperature above {thresh_tasmin} and maximum temperature above {thresh_tasmax}"
+    },
+    "CWx": {
+	"standard_name": "cold_wave_duration",
+	"long_name": "Maximum length of cold waves (maximum temperature < {thresh_tasmax} degC and minimum temperature > {thresh_tasmin} degC)",
+	"units": "days",
+	"description": "Longest series of at least {window} consecutive days with minimum temperature above {thresh_tasmin} and maximum temperature above {thresh_tasmax}"
+    },
+    "SD": {
+	"standard_name": "snow_days",
+	"long_name": "Number of days with snow above {} kgm-2s-1",
+	"units": "days",
+	"description":"Number of days with solid precipitation flux above{} threshold"
+    },
+    "SCD": {
+	"standard_name": "snow_cover_duration",
+	"long_name": "Number of days when the snow depth is greater than or equal to a {} cm",
+	"units": "days",
+	"description": "Number of days with snow depth at or above threshold {}"
+    }
 }

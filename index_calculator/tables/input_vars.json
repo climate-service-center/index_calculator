@@ -44,5 +44,11 @@
     "CD": ["tas", "pr"],
     "WW": ["tas", "pr"],
     "WD": ["tas", "pr"],
-    "DTR": ["tasmax", "tasmin"]
+    "DTR": ["tasmax", "tasmin"],
+    "HSf": "tasmax",
+    "HSx": "tasmax",
+    "CWf": ["tasmax", "tasmin"],
+    "CWx": ["tasmax", "tasmin"],
+    "SD": "prsn",
+    "SCD": "snd"
 }

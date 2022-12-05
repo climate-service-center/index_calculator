@@ -21,9 +21,10 @@ def _get_da(dictionary, var):
 def _get_percentile(da, perc, base_period_time_range):
     tslice = slice(base_period_time_range[0], base_period_time_range[1])
     base_period = da.sel(time=tslice)
-    with dask.config.set(**{"array.slicing.split_large_chunks": True}):
+    with dask.config.set(**{"array.slicing.split_large_chunks": False}):
         per_doy = percentile_doy(base_period, per=perc)
-    return per_doy.sel(percentiles=perc)
+        per_doy_comp = per_doy.compute()
+    return per_doy_comp.sel(percentiles=perc)
 
 
 BASE_PERIOD = ["1971-01-01", "2000-12-31"]
@@ -58,11 +59,12 @@ class CD:
             perc=25,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.cold_and_dry_days(
-            tas_per=percentile_tas,
-            pr_per=percentile_pr,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.cold_and_dry_days(
+                tas_per=percentile_tas,
+                pr_per=percentile_pr,
+                **params,
+            )
 
 
 class CDD:
@@ -151,11 +153,12 @@ class CSDI:
             perc=10,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.cold_spell_duration_index(
-            tasmin_per=percentile,
-            window=6,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.cold_spell_duration_index(
+                tasmin_per=percentile,
+                window=6,
+                **params,
+            )
 
 
 class CSU:
@@ -211,11 +214,12 @@ class CW:
             perc=75,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.cold_and_wet_days(
-            tas_per=percentile_tas,
-            pr_per=percentile_pr,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.cold_and_wet_days(
+                tas_per=percentile_tas,
+                pr_per=percentile_pr,
+                **params,
+            )
 
 
 class CWD:
@@ -573,10 +577,11 @@ class RDYYp:
             perc=perc,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.days_over_precip_doy_thresh(
-            pr_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.days_over_precip_doy_thresh(
+                pr_per=percentile,
+                **params,
+            )
 
 
 class RYYmm:
@@ -676,10 +681,11 @@ class RYYpTOT:
             perc=perc,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.fraction_over_precip_thresh(
-            pr_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.fraction_over_precip_thresh(
+                pr_per=percentile,
+                **params,
+            )
 
 
 class SDII:
@@ -794,10 +800,11 @@ class TG10p:
             perc=10,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.tg10p(
-            tas_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.tg10p(
+                tas_per=percentile,
+                **params,
+            )
 
 
 class TG90p:
@@ -824,10 +831,11 @@ class TG90p:
             perc=90,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.tg90p(
-            tas_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.tg90p(
+                tas_per=percentile,
+                **params,
+            )
 
 
 class TR:
@@ -898,10 +906,11 @@ class TX10p:
             perc=10,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.tx10p(
-            tasmax_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.tx10p(
+                tasmax_per=percentile,
+                **params,
+            )
 
 
 class TX90p:
@@ -928,10 +937,11 @@ class TX90p:
             perc=90,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.tx90p(
-            tasmax_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.tx90p(
+                tasmax_per=percentile,
+                **params,
+            )
 
 
 class TXn:
@@ -1015,10 +1025,11 @@ class TN10p:
             perc=10,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.tn10p(
-            tasmin_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.tn10p(
+                tasmin_per=percentile,
+                **params,
+            )
 
 
 class TN90p:
@@ -1045,10 +1056,11 @@ class TN90p:
             perc=90,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.tn90p(
-            tasmin_per=percentile,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.tn90p(
+                tasmin_per=percentile,
+                **params,
+            )
 
 
 class TNn:
@@ -1118,11 +1130,12 @@ class WD:
             perc=25,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.warm_and_dry_days(
-            tas_per=percentile_tas,
-            pr_per=percentile_pr,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.warm_and_dry_days(
+                tas_per=percentile_tas,
+                pr_per=percentile_pr,
+                **params,
+            )
 
 
 class WSDI:
@@ -1149,11 +1162,12 @@ class WSDI:
             perc=90,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.warm_spell_duration_index(
-            tasmax_per=percentile,
-            window=6,
-            **params,
-        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.warm_spell_duration_index(
+                tasmax_per=percentile,
+                window=6,
+                **params,
+            )
 
 
 class WW:
@@ -1185,8 +1199,183 @@ class WW:
             perc=75,
             base_period_time_range=base_period_time_range,
         )
-        return xc.atmos.warm_and_wet_days(
-            tas_per=percentile_tas,
-            pr_per=percentile_pr,
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            return xc.atmos.warm_and_wet_days(
+                tas_per=percentile_tas,
+                pr_per=percentile_pr,
+                **params,
+            )
+
+
+class HSf:
+    """Number of hot spells (tasmax)."""
+
+    thresh = 30
+    window = 3
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate number of hot spells.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#hot_spell_frequency
+
+        Returns
+        -------
+        Number of hot spells of at least {window} consecutive days
+        with maximum temperature above {thresh}.
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.hot_spell_frequency(
+            thresh_tasmax=thresh,
+            window=window,
+            **params,
+        )
+
+
+class HSx:
+    """Maximum lenght of hot spells (tasmax)."""
+
+    thresh = 30
+    window = 1
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate maximum lenght of hot spells.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#hot_spell_max_length
+
+        Returns
+        -------
+        Maximum length of hot spells of at least {window} consecutive days
+        with maximum temperature above {thresh}.
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.hot_spell_max_length(
+            thresh_tasmax=thresh,
+            window=window,
+            **params,
+        )
+
+
+class CWf:
+    """Number of cold waves (tasmax, tasmin)."""
+
+    thresh_tasmax = -20
+    thresh_tasmin = -30
+    window = 3
+
+    def compute(
+        thresh_tasmax=thresh_tasmax,
+        thresh_tasmin=thresh_tasmin,
+        window=window,
+        **params,
+    ):
+        """Calculate number of cold waves.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#heat_wave_frequency
+
+        Returns
+        -------
+        Number of cold waves of at least {window} consecutive days
+        with minimum temperature above {thresh_tasmin} and maximum
+        temperature below {thresh_tasmax}.
+        """
+        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
+        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
+        return xc.atmos.heat_wave_frequency(
+            thresh_tasmax=thresh_tasmax,
+            thresh_tasmin=thresh_tasmin,
+            window=window,
+            **params,
+        )
+
+
+class CWx:
+    """Maximum lenght of cold waves (tasmax, tasmin)."""
+
+    thresh_tasmax = -20
+    thresh_tasmin = -30
+    window = 1
+
+    def compute(
+        thresh_tasmax=thresh_tasmax,
+        thresh_tasmin=thresh_tasmin,
+        window=window,
+        **params,
+    ):
+        """Calculate maximum lenght of cold waves.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#heat_wave_max_length
+
+        Returns
+        -------
+        Maximum length of cold waves of at least {window} consecutive days
+        with minimum temperature above {thresh_tasmin} and maximum
+        temperature below {thresh_tasmax}.
+        """
+        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
+        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
+        return xc.atmos.heat_wave_max_length(
+            thresh_tasmax=thresh_tasmax,
+            thresh_tasmin=thresh_tasmin,
+            window=window,
+            **params,
+        )
+
+
+class SD:
+    """Number of snow days."""
+
+    thresh = 1
+
+    def compute(thresh=thresh, **params):
+        """Calculate number of snow days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#days_with_snow
+
+        Returns
+        -------
+        Number of days with solid precipitation flux above {thresh} threshold.
+        """
+        thresh = _thresh_string(thresh, "kg m-2 s-1")
+        return xc.atmos.days_with_snow(
+            low=thresh,
+            **params,
+        )
+
+
+class SCD:
+    """Snow cover duration."""
+
+    thresh = 1
+
+    def compute(thresh=thresh, **params):
+        """Calculate snow cover duration.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#snow_cover_duration
+
+        Returns
+        -------
+        Number of days with snow cover above {thresh} threshold.
+        """
+        thresh = _thresh_string(thresh, "cm")
+        return xc.atmos.days_with_snow(
+            thresh=thresh,
             **params,
         )
