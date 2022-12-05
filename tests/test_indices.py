@@ -3,8 +3,10 @@ import pytest  # noqa
 
 import index_calculator._indices as indices
 
-from .conftest import (pr_series, prsn_series, snd_series, tas_series,
-                       tasmax_series, tasmin_series)
+from .conftest import (hurs_series, mrt_series, pr_series, prsn_series,
+                       rlds_series, rlus_series, rsds_series, rsus_series,
+                       sfcWind_series, snd_series, tas_series, tasmax_series,
+                       tasmin_series)
 
 
 def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
@@ -29,6 +31,34 @@ def prsn_xarray(series=[7, 0, 0.5, 10, 6, 0, 4]):
 
 def snd_xarray(series=[0, 20, 150, 340, 170, 90, 0]):
     return snd_series(np.array(series) / 100)
+
+
+def hurs_xarray(series=[50, 75, 25, 90, 10, 60, 30]):
+    return hurs_series(np.array(series))
+
+
+def rsds_xarray(series=[200, 250, 300, 350, 270, 230, 180]):
+    return rsds_series(np.array(series))
+
+
+def rsus_xarray(series=[30, 50, 100, 150, 70, 30, 8]):
+    return rsus_series(np.array(series))
+
+
+def rlds_xarray(series=[200, 250, 300, 350, 270, 230, 180]):
+    return rlds_series(np.array(series))
+
+
+def rlus_xarray(series=[30, 50, 100, 150, 70, 30, 8]):
+    return rlus_series(np.array(series))
+
+
+def sfcWind_xarray(series=[2, 18, 5, 10, 23, 1, 7]):
+    return sfcWind_series(np.array(series))
+
+
+def mrt_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
+    return mrt_series(np.array(series))
 
 
 def test_TG():
@@ -442,3 +472,13 @@ def test_SCD():
         freq="7D",
     )
     np.testing.assert_allclose(result, 5, rtol=1e-03)
+
+
+def test_UTCI():
+    result = indices.UTCI.compute(
+        tas=tas_xarray(),
+        hurs=hurs_xarray(),
+        sfcWind=sfcWind_xarray(),
+        mrt=mrt_xarray(),
+    )
+    np.testing.assert_allclose(result, [np.nan] * 7, rtol=1e-03)

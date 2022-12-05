@@ -1379,3 +1379,28 @@ class SCD:
             thresh=thresh,
             **params,
         )
+
+
+class UTCI:
+    """Universal thermal climate index."""
+
+    stat = "average"
+    mask_invalid = True
+
+    def compute(stat=stat, mask_invalid=mask_invalid, **params):
+        """Calculate universal thermal cliamte index.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#universal_thermal_cliamte_index
+
+        Returns
+        -------
+        Universal Thermal Climate Index.
+        """
+        return xc.atmos.universal_thermal_climate_index(
+            stat=stat,
+            mask_invalid=mask_invalid,
+            **params,
+        )

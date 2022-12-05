@@ -526,5 +526,11 @@
 	"long_name": "Number of days when the snow depth is greater than or equal to a {} cm",
 	"units": "days",
 	"description": "Number of days with snow depth at or above threshold {}"
+    },
+    "UTCI": {
+	"standard_name": "universal_thermal_climate_index",
+	"long_name": "Universal thermal climate index",
+	"units": "K",
+	"description": "UTCI is the equivalent temperature for the environment derived from a reference environment and is used to evaluate heat stress in outdoor spaces."
     }
 }

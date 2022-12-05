@@ -50,5 +50,6 @@
     "CWf": ["tasmax", "tasmin"],
     "CWx": ["tasmax", "tasmin"],
     "SD": "prsn",
-    "SCD": "snd"
+    "SCD": "snd",
+    "UTCI": ["tas", "hurs", "sfcWind", "rsds", "rsus", "rlds", "rlus"]
 }
