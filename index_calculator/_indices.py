@@ -1336,7 +1336,7 @@ class CWx:
 class SD:
     """Number of snow days."""
 
-    thresh = 1
+    thresh = 0
 
     def compute(thresh=thresh, **params):
         """Calculate number of snow days.
@@ -1375,7 +1375,7 @@ class SCD:
         Number of days with snow cover above {thresh} threshold.
         """
         thresh = _thresh_string(thresh, "cm")
-        return xc.atmos.days_with_snow(
+        return xc.land.snow_cover_duration(
             thresh=thresh,
             **params,
         )
