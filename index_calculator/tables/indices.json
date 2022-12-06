@@ -527,6 +527,18 @@
 	"units": "days",
 	"description": "Number of days with snow depth at or above threshold {}"
     },
+    "Sint": {
+	"standard_name": "snowfall_intensity",
+	"long_name": "Mean snowfall during days with snowfall > 1mm",
+	"units": "mm",
+	"description": "Mean snowfall flux above 1mm/day"
+    },
+    "Sfreq": {
+	"standard_name": "snowfall_frequency",
+	"long_name": "Percentage of days with snowfall flux > 1mm/day",
+	"units": "%",
+	"description": "Snowfall intensity is derived by dividing the total number of days with snowfall > 1mm by the total number of days within the analysed time period."
+    },
     "UTCI": {
 	"standard_name": "universal_thermal_climate_index",
 	"long_name": "Universal thermal climate index",

@@ -1350,7 +1350,7 @@ class SD:
         -------
         Number of days with solid precipitation flux above {thresh} threshold.
         """
-        thresh = _thresh_string(thresh, "kg m-2 s-1")
+        thresh = _thresh_string(thresh, "mm/day")
         return xc.atmos.days_with_snow(
             low=thresh,
             **params,
@@ -1380,7 +1380,47 @@ class SCD:
             **params,
         )
 
+class Sint:
+    """Snowfall intensity."""
 
+    def compute(**params):
+        """Calculate snowfall intensity.
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#days_with_snow
+
+        Returns
+        -------
+        Mean daily snowfall during days with snowfall > 1mm/day
+        """
+
+        NotImplementedError
+
+class Sfreq:
+    """Snowfall frequency."""
+
+    def compute(**params):
+        """Calculate snowfall frequency.
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#days_with_snow
+
+        Returns
+        -------
+        Percentage of days with snowfall > 1mm/day.
+        """
+        da = _get_da(params, "prsn")
+        thresh=_thresh_string(1, "mm/day")
+        sd = xc.atmos.days_with_snow(
+            low=thresh,
+            **params,
+        )
+        ndays = da.resample(time=params["freq"]).count(dim="time")
+        return sd / ndays * 100
+
+        
 class UTCI:
     """Universal thermal climate index."""
 
@@ -1388,7 +1428,7 @@ class UTCI:
     mask_invalid = True
 
     def compute(stat=stat, mask_invalid=mask_invalid, **params):
-        """Calculate universal thermal cliamte index.
+        """Calculate universal thermal climate index.
 
         Parameters
         ----------

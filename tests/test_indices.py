@@ -1,9 +1,9 @@
 import numpy as np
-import pytest  # noqa
+#import pytest  # noqa
 
 import index_calculator._indices as indices
 
-from .conftest import (hurs_series, mrt_series, pr_series, prsn_series,
+from conftest import (hurs_series, mrt_series, pr_series, prsn_series,
                        rlds_series, rlus_series, rsds_series, rsus_series,
                        sfcWind_series, snd_series, tas_series, tasmax_series,
                        tasmin_series)
@@ -473,7 +473,13 @@ def test_SCD():
     )
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
-
+def test_Sfreq():
+    result = indices.Sfreq.compute(
+        prsn=prsn_xarray(),
+        freq="7D"
+    )
+    np.testing.assert_allclose(result, 4/7*100, rtol=1e-03)
+    
 def test_UTCI():
     result = indices.UTCI.compute(
         tas=tas_xarray(),
