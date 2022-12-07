@@ -141,8 +141,8 @@ class Processing:
             frequency=_tfreq[self.freq],
         )
         data_vars = {
-            k: self.preproc.data_vars[k]
-            for k in self.preproc.data_vars.keys()
+            k: v
+            for k, v in self.preproc.data_vars.items()
             if k not in self.var_name
         }
         data_vars[self.CIname] = array
@@ -150,7 +150,16 @@ class Processing:
             del data_vars["time_bnds"]
         if "time_bounds" in data_vars.keys():
             del data_vars["time_bounds"]
-        idx_ds = xr.Dataset(data_vars=data_vars, attrs=self.preproc.attrs)
+        coords = {
+            k: v
+            for k, v in self.ds.coords.items()
+            if not "time" in k
+        }
+        idx_ds = xr.Dataset(
+            data_vars=data_vars,
+            coords=coords,
+            attrs=self.preproc.attrs,
+        )
         if len(idx_ds.time) > 1:
             idx_ds = idx_ds.assign_coords(
                 {"time": date_range.to_datetimeindex},
