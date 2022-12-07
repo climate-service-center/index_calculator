@@ -43,9 +43,9 @@
   },
   "RYYmm": {
     "standard_name": "days_with_precipitation_amount_above_or_equal_threshold",
-    "long_name": "Number of precipitation days (precipitation >= {} mm)",
+    "long_name": "Number of precipitation days (precipitation >= {thresh} mm)",
     "units": "days",
-    "description": "count of days with daily total precipitation equal or above {} mm"
+    "description": "count of days with daily total precipitation equal or above {thresh} mm"
   },
   "DD": {
     "standard_name": "days_with_precipitation_amount_below_threshold",
@@ -103,9 +103,9 @@
   },
   "RXYYday": {
     "standard_name": "precipitation",
-    "long_name": "Maximum {}-day precipitation amount",
+    "long_name": "Maximum {thresh}-day precipitation amount",
     "units": "mm",
-    "description": "maximum total precipitation amount occurring within {} days"
+    "description": "maximum total precipitation amount occurring within {thresh} days"
   },
   "R75p": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
@@ -145,15 +145,15 @@
   },
   "RYYp": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
-    "long_name": "Total precipitation amount with precipitation > {}th percentile on wet days (precipitation >= 1 mm)",
+    "long_name": "Total precipitation amount with precipitation > {perc}th percentile on wet days (precipitation >= 1 mm)",
     "units": "mm",
-    "description": "annual total precipitation amount of days with precipitation above the {}th percentile of days with total precipitation above or equal 1 mm"
+    "description": "annual total precipitation amount of days with precipitation above the {perc}th percentile of days with total precipitation above or equal 1 mm"
   },
   "RDYYp": {
     "standard_name": "days_with_precpitation_amount_from_wet_days_above_threshold",
-    "long_name": "Number of days with precipitation > {}th percentile on wet days (precipitation >= 1 mm)",
+    "long_name": "Number of days with precipitation > {perc}th percentile on wet days (precipitation >= 1 mm)",
     "units": "days",
-    "description": "Number of days with daily precipitation amount on wet days (precipitation >= 1 mm) > {}th percentile during reference period) (days)"
+    "description": "Number of days with daily precipitation amount on wet days (precipitation >= 1 mm) > {perc}th percentile during reference period) (days)"
   },
   "R95pTOT": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
@@ -169,9 +169,9 @@
   },
   "RYYpTOT": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
-    "long_name": "Precipitation fraction with precipitation > {}th percentile on wet days (precipitation >= 1 mm)",
+    "long_name": "Precipitation fraction with precipitation > {perc}th percentile on wet days (precipitation >= 1 mm)",
     "units": "%",
-    "description": "fraction of days with precipitation above the {}th percentile of days with total precipitation above or equal 1 mm"
+    "description": "fraction of days with precipitation above the {perc}th percentile of days with total precipitation above or equal 1 mm"
   },
   "RR95p": {
     "standard_name": "precpitation",
@@ -181,9 +181,9 @@
   },
   "RRYYp": {
     "standard_name": "precpitation",
-    "long_name": "{}th percentile of daily precipitation amount",
+    "long_name": "{perc}th percentile of daily precipitation amount",
     "units": "mm day-1",
-    "description": "{}th percentile of daily total precipitation amount"
+    "description": "{perc}th percentile of daily total precipitation amount"
   },
   "PRCPTOT": {
     "standard_name": "precipitation",
@@ -259,27 +259,27 @@
   },
   "SU": {
     "standard_name": "days_with_air_temperature_above_or_equal_threshold",
-    "long_name": "Number of summer days (maximum temperature > {} degC)",
+    "long_name": "Number of summer days (maximum temperature > {thresh} degC)",
     "units": "days",
-    "description": "count of days with daily maximum temperature above {} degC"
+    "description": "count of days with daily maximum temperature above {thresh} degC"
   },
   "CSU": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
-    "long_name": "Maximum number of consecutive summer days (maximum temperature > {} degC)",
+    "long_name": "Maximum number of consecutive summer days (maximum temperature > {threh} degC)",
     "units": "days",
-    "description": "maximum count of consecutive days with daily maximum temperature above {} degC"
+    "description": "maximum count of consecutive days with daily maximum temperature above {tresh} degC"
   },
   "TR": {
     "standard_name": "days_with_air_temperature_above_threshold",
-    "long_name": "Number of tropical nights (minimum temperature > {} degC)",
+    "long_name": "Number of tropical nights (minimum temperature > {thresh} degC)",
     "units": "days",
-    "description": "count of days with daily minimum temperature above {} degC"
+    "description": "count of days with daily minimum temperature above {thresh} degC"
   },
   "SQI": {
     "standard_name": "days_with_air_temperature_above_threshold",
-    "long_name": "Number of uncomfortable sleep events (minimum temperature > {} degC)",
+    "long_name": "Number of uncomfortable sleep events (minimum temperature > {tresh} degC)",
     "units": "days",
-    "description": "count of days with daily minimum temperature above {} degC"
+    "description": "count of days with daily minimum temperature above {thresh} degC"
   },
   "HD17": {
     "standard_name": "days_with_air_temperature_below_threshold",
@@ -301,9 +301,9 @@
   },
   "GD": {
     "standard_name": "days_with_air_temperature_above_threshold",
-    "long_name": "Number of growing degree days (mean temperature > {} degC)",
+    "long_name": "Number of growing degree days (mean temperature > {thresh} degC)",
     "units": "days",
-    "description": "count of days with daily mean temperature above {} degC"
+    "description": "count of days with daily mean temperature above {thresh} degC"
   },
   "GD5x": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
@@ -313,9 +313,9 @@
   },
   "GDYYx": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
-    "long_name": "Maximum number of consecutive growing degree days (mean temperature > {} degC)",
+    "long_name": "Maximum number of consecutive growing degree days (mean temperature > {thresh} degC)",
     "units": "days",
-    "description": "maximum count of consecutive days with daily mean temperature above {} degC"
+    "description": "maximum count of consecutive days with daily mean temperature above {thresh} degC"
   },
   "CSDI": {
     "standard_name": "consecutive_days_with_air_temperature_below_threshold",
@@ -517,15 +517,15 @@
     },
     "SD": {
 	"standard_name": "snow_days",
-	"long_name": "Number of days with snow above {} kgm-2s-1",
+	"long_name": "Number of days with snow above {thresh} kgm-2s-1",
 	"units": "days",
-	"description":"Number of days with solid precipitation flux above{} threshold"
+	"description":"Number of days with solid precipitation flux above{thresh} threshold"
     },
     "SCD": {
 	"standard_name": "snow_cover_duration",
-	"long_name": "Number of days when the snow depth is greater than or equal to a {} cm",
+	"long_name": "Number of days when the snow depth is greater than or equal to a {thresh} cm",
 	"units": "days",
-	"description": "Number of days with snow depth at or above threshold {}"
+	"description": "Number of days with snow depth at or above threshold {thresh}"
     },
     "Sint": {
 	"standard_name": "snowfall_intensity",

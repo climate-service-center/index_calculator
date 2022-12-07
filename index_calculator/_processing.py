@@ -75,7 +75,7 @@ class Processing:
 
     def _get_replacement(self, obj, numb_name):
         replacement = {}
-        repl_value = ""
+        repl_dict = ""
         for attr in dir(obj):
             if attr[0] == "_":
                 continue
@@ -87,42 +87,40 @@ class Processing:
                 replacement[attr] = numb_name
             else:
                 replacement[attr] = getattr(obj, attr)
-            if repl_value == "":
-                if isinstance(replacement[attr], list):
-                    continue
-                repl_value = replacement[attr]
-                if isinstance(repl_value, str) and len(repl_value) > 0:
-                    if repl_value[0] == "0":
-                        repl_value = float(
-                            "{}.{}".format(
-                                repl_value[0],
-                                repl_value[1:],
-                            )
+            if isinstance(replacement[attr], list):
+                continue
+            if isinstance(replacement[attr], str):
+                if replacement[attr][0] == "0":
+                    replacement[attr] = float(
+                        "{}.{}".format(
+                            replacement[attr][0],
+                            replacement[attr][1:],
                         )
-                    else:
-                        repl_value = int(repl_value)
-                replacement[attr] = repl_value
-                repl_value = str(repl_value)
-        return replacement, repl_value
+                    )
+                else:
+                    replacement[attr] = int(replacement[attr])
+        return replacement
 
     def _get_idx_name_and_repl(self):
         numb_name, idx_object = self._get_numb_name_and_idx_object()
+        defaults = [attr for attr in dir(idx_object)]
         object_attrs_to_self(idx_object, self, overwrite=False)
-        self.replacement, self.repl_value = self._get_replacement(
+        self.replacement = self._get_replacement(
             idx_object,
             numb_name,
         )
-        if not self.repl_value:
-            pass
-        elif "YY" in self.CIname:
-            self.CIname = self.CIname.replace("YY", self.repl_value)
-        elif numb_name:
-            self.CIname = self.CIname = self.CIname.replace(
-                numb_name,
-                self.repl_value,
-            )
-        elif self.repl_value not in self.CIname:
-            self.CIname = "{}{}".format(self.CIname, self.repl_value)
+        for k, v in self.replacement.items():
+            if k in defaults and k in self.kwargs.keys():
+                if "YY" in self.CIname:
+                    self.CIname = self.CIname.replace("YY", str(v))
+                elif numb_name:
+                    self.CIname = self.CIname = self.CIname.replace(
+                        numb_name,
+                        v,
+                    )
+                elif str(v) not in self.CIname:
+                    self.CIname = "{}{}".format(self.CIname, str(v))
+                break
 
     def _adjust_params_to_ci(self):
         params = {

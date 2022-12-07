@@ -97,7 +97,7 @@ class PostProcessing:
                 if isinstance(dictionary[key], dict):
                     output[key] = adjust_attributes(dictionary[key], value)
                 else:
-                    output[key] = dictionary[key].format(value)
+                    output[key] = dictionary[key].format(**value)
             return output
 
         json = {}
@@ -107,7 +107,7 @@ class PostProcessing:
             json["global_att"].update(_xjson[self.project]["global_att"])
         except KeyError:
             warnings.warn(f"Project {self.project} not known.")
-        json = adjust_attributes(json, self.repl_value)
+        json = adjust_attributes(json, self.replacement)
         output = NetCDFglobalattrs(
             self,
             self.proc,
