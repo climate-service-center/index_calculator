@@ -1,6 +1,7 @@
 import dask  # noqa
 import xclim as xc
 from xclim.core.calendar import percentile_doy
+import xarray as xr
 
 
 def _thresh_string(thresh, units):
@@ -26,6 +27,8 @@ def _get_percentile(da, perc, base_period_time_range):
         per_doy_comp = per_doy.compute()
     return per_doy_comp.sel(percentiles=perc)
 
+def _convert_snow_mm_day(da):
+    return da / 312 * 1000
 
 BASE_PERIOD = ["1971-01-01", "2000-12-31"]
 
@@ -1336,7 +1339,7 @@ class CWx:
 class SD:
     """Number of snow days."""
 
-    thresh = 0
+    thresh = 1
 
     def compute(thresh=thresh, **params):
         """Calculate number of snow days.
@@ -1351,7 +1354,13 @@ class SD:
         Number of days with solid precipitation flux above {thresh} threshold.
         """
         thresh = _thresh_string(thresh, "mm/day")
+        da = _get_da(params, "prsn")
+        prsn = _convert_snow_mm_day(da)
+        prsn.attrs["units"] = "kg m-2 s-1"
+        if "ds" in params.keys():
+            del params["ds"]
         return xc.atmos.days_with_snow(
+            prsn=prsn,
             low=thresh,
             **params,
         )
@@ -1387,15 +1396,19 @@ class Sint:
         """Calculate snowfall intensity.
         Parameters
         ----------
-        For input parameters see:
-            https://xclim.readthedocs.io/en/stable/indicators_api.html#days_with_snow
-
+        
         Returns
         -------
         Mean daily snowfall during days with snowfall > 1mm/day
         """
 
-        NotImplementedError
+        thresh = _thresh_string(1, "mm/day")
+        da = _get_da(params, "prsn")
+        prsn = _convert_snow_mm_day(da) * 86400
+        if "ds" in params.keys():
+            del params["ds"]
+        masked = xr.where(prsn > 1, prsn, 0)
+        return masked.resample(time=params["freq"]).mean(dim="time")
 
 class Sfreq:
     """Snowfall frequency."""
@@ -1411,9 +1424,14 @@ class Sfreq:
         -------
         Percentage of days with snowfall > 1mm/day.
         """
+        thresh = _thresh_string(1, "mm/day")
         da = _get_da(params, "prsn")
-        thresh=_thresh_string(1, "mm/day")
+        prsn = _convert_snow_mm_day(da)
+        prsn.attrs["units"] = "kg m-2 s-1"
+        if "ds" in params.keys():
+            del params["ds"]
         sd = xc.atmos.days_with_snow(
+            prsn=prsn,
             low=thresh,
             **params,
         )
