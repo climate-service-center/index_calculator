@@ -1,7 +1,7 @@
 import dask  # noqa
+import xarray as xr
 import xclim as xc
 from xclim.core.calendar import percentile_doy
-import xarray as xr
 
 
 def _thresh_string(thresh, units):
@@ -27,8 +27,10 @@ def _get_percentile(da, perc, base_period_time_range):
         per_doy_comp = per_doy.compute()
     return per_doy_comp.sel(percentiles=perc)
 
+
 def _convert_snow_mm_day(da):
     return da / 312 * 1000
+
 
 BASE_PERIOD = ["1971-01-01", "2000-12-31"]
 
@@ -1359,8 +1361,8 @@ class SD:
         prsn.attrs["units"] = "kg m-2 s-1"
         if "ds" in params.keys():
             del params["ds"]
+        params["prsn"] = prsn
         return xc.atmos.days_with_snow(
-            prsn=prsn,
             low=thresh,
             **params,
         )
@@ -1389,6 +1391,7 @@ class SCD:
             **params,
         )
 
+
 class Sint:
     """Snowfall intensity."""
 
@@ -1396,19 +1399,19 @@ class Sint:
         """Calculate snowfall intensity.
         Parameters
         ----------
-        
+
         Returns
         -------
         Mean daily snowfall during days with snowfall > 1mm/day
         """
 
-        thresh = _thresh_string(1, "mm/day")
         da = _get_da(params, "prsn")
         prsn = _convert_snow_mm_day(da) * 86400
         if "ds" in params.keys():
             del params["ds"]
         masked = xr.where(prsn > 1, prsn, 0)
         return masked.resample(time=params["freq"]).mean(dim="time")
+
 
 class Sfreq:
     """Snowfall frequency."""
@@ -1430,15 +1433,15 @@ class Sfreq:
         prsn.attrs["units"] = "kg m-2 s-1"
         if "ds" in params.keys():
             del params["ds"]
+        params["prsn"] = prsn
         sd = xc.atmos.days_with_snow(
-            prsn=prsn,
             low=thresh,
             **params,
         )
         ndays = da.resample(time=params["freq"]).count(dim="time")
         return sd / ndays * 100
 
-        
+
 class UTCI:
     """Universal thermal climate index."""
 
