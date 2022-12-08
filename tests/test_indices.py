@@ -459,10 +459,9 @@ def test_CWx():
 def test_SD():
     result = indices.SD.compute(
         prsn=prsn_xarray(),
-        thresh=1 / 86400,
         freq="7D",
     )
-    np.testing.assert_allclose(result, 4, rtol=1e-03)
+    np.testing.assert_allclose(result, 5, rtol=1e-03)
 
 
 def test_SCD():
@@ -473,12 +472,11 @@ def test_SCD():
     )
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
+
 def test_Sfreq():
-    result = indices.Sfreq.compute(
-        prsn=prsn_xarray(),
-        freq="7D"
-    )
-    np.testing.assert_allclose(result, 4/7*100, rtol=1e-03)
+    result = indices.Sfreq.compute(prsn=prsn_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 5 / 7 * 100, rtol=1e-03)
+
 
 def test_Sint():
     result = indices.Sint.compute(
@@ -486,7 +484,8 @@ def test_Sint():
         freq="7D",
     )
     np.testing.assert_allclose(result, 12.59, rtol=1e-03)
-    
+
+
 def test_UTCI():
     result = indices.UTCI.compute(
         tas=tas_xarray(),
