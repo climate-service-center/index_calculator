@@ -138,11 +138,11 @@ class OutputWriter:
         ds = save_xrdataset(
             ds,
             name=name,
-            encoding_dict={"encoding": {
-                "time": {"dtype": "i4"},
-                "time_bnds": {"dtype": "i4"},
-                self.CIname: {"dtype": "float32"},
-            }},
+            encoding_dict={
+                "encoding": {
+                    self.CIname: {"dtype": "float32"},
+                }
+            },
         )
         print(f"File written: {name}")
         return ds
