@@ -75,7 +75,6 @@ class Processing:
 
     def _get_replacement(self, obj, numb_name):
         replacement = {}
-        repl_dict = ""
         for attr in dir(obj):
             if attr[0] == "_":
                 continue
@@ -140,21 +139,14 @@ class Processing:
             end=self.preproc.time.values[-1],
             frequency=_tfreq[self.freq],
         )
-        data_vars = {
-            k: v
-            for k, v in self.preproc.data_vars.items()
-            if k not in self.var_name
-        }
+        dvars = self.preproc.data_vars
+        data_vars = {k: v for k, v in dvars.items() if k not in self.var_name}
         data_vars[self.CIname] = array
         if "time_bnds" in data_vars.keys():
             del data_vars["time_bnds"]
         if "time_bounds" in data_vars.keys():
             del data_vars["time_bounds"]
-        coords = {
-            k: v
-            for k, v in self.ds.coords.items()
-            if not "time" in k
-        }
+        coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
         idx_ds = xr.Dataset(
             data_vars=data_vars,
             coords=coords,
