@@ -483,7 +483,7 @@ def test_Sint():
         prsn=prsn_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, 12.59, rtol=1e-03)
+    np.testing.assert_allclose(result, 17.63, rtol=1e-03)
 
 
 def test_UTCI():

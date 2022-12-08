@@ -1,4 +1,5 @@
 import dask  # noqa
+import numpy as np
 import xarray as xr
 import xclim as xc
 from xclim.core.calendar import percentile_doy
@@ -1409,8 +1410,9 @@ class Sint:
         prsn = _convert_snow_mm_day(da) * 86400
         if "ds" in params.keys():
             del params["ds"]
-        masked = xr.where(prsn > 1, prsn, 0)
-        return masked.resample(time=params["freq"]).mean(dim="time")
+        masked = xr.where(prsn > 1, prsn, np.nan)
+        mean = masked.resample(time=params["freq"]).mean(dim="time")
+        return xr.where(mean == np.nan, 0, mean)
 
 
 class Sfreq:
