@@ -1216,7 +1216,7 @@ class WW:
 class HSf:
     """Number of hot spells (tasmax)."""
 
-    thresh = 30
+    thresh = 35
     window = 3
 
     def compute(thresh=thresh, window=window, **params):
@@ -1243,7 +1243,7 @@ class HSf:
 class HSx:
     """Maximum lenght of hot spells (tasmax)."""
 
-    thresh = 30
+    thresh = 35
     window = 1
 
     def compute(thresh=thresh, window=window, **params):
