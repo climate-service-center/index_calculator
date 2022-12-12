@@ -144,7 +144,7 @@ class Processing:
         data_vars[self.CIname] = array
         if "time_bnds" in data_vars.keys():
             del data_vars["time_bnds"]
-        if "time_bounds" in data_vars.keys():
+        elif "time_bounds" in data_vars.keys():
             del data_vars["time_bounds"]
         coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
         idx_ds = xr.Dataset(
@@ -152,15 +152,11 @@ class Processing:
             coords=coords,
             attrs=self.preproc.attrs,
         )
-        if len(idx_ds.time) > 1:
-            idx_ds = idx_ds.assign_coords(
-                {"time": date_range.to_datetimeindex},
-            )
-            idx_ds = idx_ds.cf.add_bounds("time")
-            idx_ds = idx_ds.reset_coords("time_bounds")
+        idx_ds = idx_ds.assign_coords(
+            {"time": date_range},
+        )
+        idx_ds.time.encoding = self.ds.time.encoding
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
             idx_ds = idx_ds.rename({data_var: data_var_repl})
-        idx_ds = idx_ds.assign_coords({"time": date_range})
-        idx_ds.time.encoding = self.ds.time.encoding
         return idx_ds
