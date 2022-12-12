@@ -48,9 +48,9 @@ _fmt = {
 
 _split = {
     "fx": False,
-    "day": "5AS",
-    "week": "10AS",
-    "mon": "10AS",
-    "sem": "10AS",
-    "year": "20AS",
+    "day": "5A",
+    "week": "10A",
+    "mon": "10A",
+    "sem": "10A",
+    "year": "20A",
 }
