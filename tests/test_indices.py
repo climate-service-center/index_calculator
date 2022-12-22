@@ -3,10 +3,21 @@ import pytest  # noqa
 
 import index_calculator._indices as indices
 
-from .conftest import (hurs_series, mrt_series, pr_series, prsn_series,
-                       rlds_series, rlus_series, rsds_series, rsus_series,
-                       sfcWind_series, snd_series, tas_series, tasmax_series,
-                       tasmin_series)
+from .conftest import (
+    hurs_series,
+    mrt_series,
+    pr_series,
+    prsn_series,
+    rlds_series,
+    rlus_series,
+    rsds_series,
+    rsus_series,
+    sfcWind_series,
+    snd_series,
+    tas_series,
+    tasmax_series,
+    tasmin_series,
+)
 
 
 def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
@@ -430,30 +441,6 @@ def test_HSx():
         window=1,
     )
     np.testing.assert_allclose(result, 1, rtol=1e-03)
-
-
-def test_CWf():
-    result = indices.CWf.compute(
-        tasmax=tasmax_xarray(),
-        tasmin=tasmin_xarray(),
-        freq="7D",
-        thresh_tasmax=10,
-        thresh_tasmin=-10,
-        window=1,
-    )
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
-
-
-def test_CWx():
-    result = indices.CWx.compute(
-        tasmax=tasmax_xarray(),
-        tasmin=tasmin_xarray(),
-        freq="7D",
-        thresh_tasmax=10,
-        thresh_tasmin=-10,
-        window=1,
-    )
-    np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_SD():
