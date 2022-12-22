@@ -434,7 +434,7 @@ def test_CSf():
         thresh=-10,
         window=1,
     )
-    np.testing.assert_allclose(result, 3, rtol=1e-03)
+    np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_HSf():
