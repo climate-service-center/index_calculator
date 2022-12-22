@@ -1234,7 +1234,7 @@ class CSf:
         """
         thresh = _thresh_string(thresh, "degC")
         return xc.atmos.cold_spell_frequency(
-            thresh_tasmax=thresh,
+            thresh=thresh,
             window=window,
             **params,
         )
