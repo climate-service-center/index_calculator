@@ -1213,6 +1213,33 @@ class WW:
             )
 
 
+class CSf:
+    """Number of hot spells (tasmax)."""
+
+    thresh = -10
+    window = 3
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate number of cold spells.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#cold_spell_frequency
+
+        Returns
+        -------
+        Number of cold spells of at least {window} consecutive days
+        with temperature below {thresh}.
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.cold_spell_frequency(
+            thresh_tasmax=thresh,
+            window=window,
+            **params,
+        )
+
+
 class HSf:
     """Number of hot spells (tasmax)."""
 

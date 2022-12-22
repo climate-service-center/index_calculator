@@ -395,6 +395,12 @@
     "units": "m s-1",
     "description": "mean of daily mean wind speed"
   },
+  "FGX": {
+      "standard_name": "wind_speed",
+      "long_name": "Maximum daily mean wind speed",
+      "units": "m s-1",
+      "description": "maximum of daily mean wind speed"
+  },
   "UFG": {
     "standard_name": "eastward_wind",
     "long_name": "Mean daily mean u-component of wind speed",
@@ -502,7 +508,13 @@
 	"long_name": "Maximum length of hot spells (maximum temperature > {thresh} degC)",
 	"units": "days",
 	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh}"
-   },
+    },
+   "CSf": {
+      "standard_name": "cold_spell_frequency",
+      "long_name": "Number of cold spells (temperature < {thresh} degC)",
+      "units": "days",
+      "description": "Total number of series of at least {window} consecutive days with temperature below {thresh}"
+  },
     "SD": {
 	"standard_name": "snow_days",
 	"long_name": "Number of days with snow above {thresh} kgm-2s-1",

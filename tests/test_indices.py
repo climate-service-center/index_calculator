@@ -24,6 +24,10 @@ def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
     return tas_series(np.array(series) + 273.15)
 
 
+def tas_c_xarray(series=[-15, -11, 0, 26, -32, 17, -9]):
+    return tas_series(np.array(series) + 273.15)
+
+
 def tasmin_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
     return tasmin_series(np.array(series) + 273.15)
 
@@ -421,6 +425,16 @@ def test_DTR():
         freq="7D",
     )
     np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_CSf():
+    result = indices.CSf.compute(
+        tas=tas_c_xarray(),
+        freq="7D",
+        thresh=-10,
+        window=1,
+    )
+    np.testing.assert_allclose(result, 3, rtol=1e-03)
 
 
 def test_HSf():

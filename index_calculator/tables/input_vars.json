@@ -47,6 +47,7 @@
     "DTR": ["tasmax", "tasmin"],
     "HSf": "tasmax",
     "HSx": "tasmax",
+    "CSf": "tas",
     "SD": "prsn",
     "SCD": "snd",
     "Sint": "prsn",
