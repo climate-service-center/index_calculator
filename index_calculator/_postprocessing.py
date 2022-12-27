@@ -4,8 +4,12 @@ import warnings
 from . import _consts
 from ._ci_netcdfattrs import NetCDFglobalattrs
 from ._tables import ijson, xjson
-from ._utils import (check_existance, get_time_range_as_str, kwargs_to_self,
-                     object_attrs_to_self)
+from ._utils import (
+    check_existance,
+    get_time_range_as_str,
+    kwargs_to_self,
+    object_attrs_to_self,
+)
 
 
 class PostProcessing:
