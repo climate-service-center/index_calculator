@@ -4,8 +4,12 @@ import warnings
 from . import _consts
 from ._ci_netcdfattrs import NetCDFglobalattrs
 from ._tables import ijson, xjson
-from ._utils import (check_existance, get_time_range_as_str, kwargs_to_self,
-                     object_attrs_to_self)
+from ._utils import (
+    check_existance,
+    get_time_range_as_str,
+    kwargs_to_self,
+    object_attrs_to_self,
+)
 
 
 class PostProcessing:
@@ -117,7 +121,10 @@ class PostProcessing:
             output[self.CIname].attrs[attr_name] = attr_value
         associated_files = []
         for var_name in self.var_name:
-            associated_files += [self.ds[var_name].attrs["associated_files"]]
+            if "associated_files" not in self.ds[var_name].attrs.keys():
+                continue
+            for assoc_file in self.ds[var_name].attrs["associated_files"]:
+                associated_files += [assoc_file]
         associated_files = ", ".join(associated_files)
         output[self.CIname].attrs["associated_files"] = associated_files
         if self.split is True:
