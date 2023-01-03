@@ -123,7 +123,10 @@ class PostProcessing:
         for var_name in self.var_name:
             if "associated_files" not in self.ds[var_name].attrs.keys():
                 continue
-            for assoc_file in self.ds[var_name].attrs["associated_files"]:
+            assoc_files = self.ds[var_name].attrs["associated_files"]
+            if isinstance(assoc_files, str):
+                assoc_files = [assoc_files]
+            for assoc_file in assoc_files:
                 associated_files += [assoc_file]
         associated_files = ", ".join(associated_files)
         output[self.CIname].attrs["associated_files"] = associated_files
