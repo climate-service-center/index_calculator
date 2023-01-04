@@ -1214,7 +1214,7 @@ class WW:
 
 
 class CSf:
-    """Number of hot spells (tasmax)."""
+    """Number of cold spells (tas)."""
 
     thresh = -10
     window = 3
