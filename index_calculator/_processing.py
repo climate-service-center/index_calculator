@@ -6,8 +6,13 @@ import pyhomogenize as pyh
 import xarray as xr
 
 from . import _indices as indices
-from ._consts import _freq, _tfreq
-from ._utils import check_existance, kwargs_to_self, object_attrs_to_self
+from ._consts import _bfreq, _freq, _tfreq
+from ._utils import (
+    check_existance,
+    get_time_bounds,
+    kwargs_to_self,
+    object_attrs_to_self,
+)
 
 
 class Processing:
@@ -141,11 +146,11 @@ class Processing:
         )
         dvars = self.preproc.data_vars
         data_vars = {k: v for k, v in dvars.items() if k not in self.var_name}
-        data_vars[self.CIname] = array
         if "time_bnds" in data_vars.keys():
             del data_vars["time_bnds"]
         elif "time_bounds" in data_vars.keys():
             del data_vars["time_bounds"]
+        data_vars[self.CIname] = array
         coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
         idx_ds = xr.Dataset(
             data_vars=data_vars,
@@ -156,6 +161,16 @@ class Processing:
             {"time": date_range},
         )
         idx_ds.time.encoding = self.ds.time.encoding
+        t_bounds = get_time_bounds(
+            self.preproc.time.values[0],
+            self.preproc.time.values[-1],
+            idx_ds.time,
+            l_freq=_bfreq[self.freq][0],
+            u_freq=_bfreq[self.freq][1],
+            td=_bfreq[self.freq][2],
+        )
+        idx_ds["time_bnds"] = t_bounds
+        idx_ds["time"].attrs["bounds"] = "time_bnds"
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
             idx_ds = idx_ds.rename({data_var: data_var_repl})

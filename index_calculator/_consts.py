@@ -16,6 +16,14 @@ _tfreq = {
     "year": ["AS", "A"],
 }
 
+_bfreq = {
+    "fx": None,
+    "day": ["D", "D", 12],
+    "week": ["7D", "7D", 42],
+    "mon": ["MS", "M", 0],
+    "sem": ["QS-DEC", "Q-FEB", 0],
+    "year": ["AS", "A", 0],
+}
 _bounds = {
     "fx": {
         "start": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
