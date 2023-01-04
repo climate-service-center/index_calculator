@@ -20,9 +20,9 @@ _bfreq = {
     "fx": None,
     "day": ["D", "D", 12],
     "week": ["7D", "7D", 42],
-    "mon": ["MS", "M", 0],
-    "sem": ["QS-DEC", "Q-FEB", 0],
-    "year": ["AS", "A", 0],
+    "mon": ["MS", "M", 12],
+    "sem": ["QS-DEC", "Q-FEB", 12],
+    "year": ["AS", "A", 12],
 }
 _bounds = {
     "fx": {
