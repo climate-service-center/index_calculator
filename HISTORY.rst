@@ -68,3 +68,19 @@ History
 * split output files into several files
 * restructuring time encoding
 * properties removed
+
+0.5.0 (2023-01-04)
+------------------
+
+* new indices:
+  * CSf (Number of cold spells)
+  * HSf (Number of hot spells)
+  * HSx (Maximum length of hot spells)
+  * SD (Number od snow days)
+  * SCD (Snow cover duration)
+  * Sint (Snowfall intensity)
+  * Sfreq (Snowfall freqeuncy)
+  * UTCI (Universal Thermal Climate Index)
+
+* add time bounds
+* index-calculator version in DRS
