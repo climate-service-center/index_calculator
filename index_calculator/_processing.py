@@ -150,6 +150,9 @@ class Processing:
             del data_vars["time_bnds"]
         elif "time_bounds" in data_vars.keys():
             del data_vars["time_bounds"]
+        if "grid_mapping" in self.ds[self.var_name[0]].attrs:
+            gm = self.ds[self.var_name[0]].attrs["grid_mapping"]
+            array.attrs["grid_mapping"] = gm
         data_vars[self.CIname] = array
         coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
         idx_ds = xr.Dataset(
@@ -170,6 +173,7 @@ class Processing:
             td=_bfreq[self.freq][2],
         )
         idx_ds["time_bnds"] = t_bounds
+        idx_ds["time_bnds"].encoding = self.ds.time.encoding
         idx_ds["time"].attrs["bounds"] = "time_bnds"
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
