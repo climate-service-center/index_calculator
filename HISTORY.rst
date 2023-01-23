@@ -84,3 +84,8 @@ History
 
 * add time bounds
 * index-calculator version in DRS
+
+0.5.1 (2023-01-023)
+-------------------
+
+* add grid mapping if necessary
