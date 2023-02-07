@@ -85,7 +85,6 @@ def _args_to_xcalc(args):
 
 
 def main():
-
     parser = _parser()
     args = parser.parse_args()
 
