@@ -85,7 +85,12 @@ History
 * add time bounds
 * index-calculator version in DRS
 
-0.5.1 (2023-01-023)
+0.5.1 (2023-01-23)
 -------------------
 
 * add grid mapping if necessary
+
+0.5.2 (2023-02-07)
+------------------
+
+* add input format and component information to index_calculation.pjson
