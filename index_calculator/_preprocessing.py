@@ -16,6 +16,8 @@ class PreProcessing:
         If None (default) `var_name` is read from `ds` with pyhomogenize.
     freq: str (default="year"), optional
         Climate indicator output frequency
+    ifreq: str (default="day"), optional
+        Climate indicator input frequency
     time_range: list, optional
         List of two strings representing the left and right time bounds.
         Select time slice with those limits from `ds`.
@@ -49,6 +51,7 @@ class PreProcessing:
         ds=None,
         var_name=None,
         freq="year",
+        ifreq="day",
         time_range=None,
         crop_time_axis=True,
         check_time_axis=True,
@@ -56,11 +59,12 @@ class PreProcessing:
     ):
         if ds is None:
             raise ValueError("Please select an input xarray dataset. 'ds=...'")
+        ds.attrs["frequency"] = ifreq
         self.ds = ds
         self.var_name = var_name
         self.freq = freq
         self.fmt = _fmt[freq]
-        self.afmt = _fmt[ds.frequency]
+        self.afmt = _fmt[ifreq]
         self.time_range = time_range
         self.crop_time_axis = crop_time_axis
         self.check_time_axis = check_time_axis
