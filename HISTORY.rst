@@ -94,3 +94,8 @@ History
 ------------------
 
 * add input format and component information to index_calculation.pjson
+
+0.5.3 (2023-02-13)
+------------------
+
+* new projects E-OBS and ERA5 included
