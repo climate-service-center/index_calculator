@@ -136,6 +136,7 @@ class Processing:
 
     def _processing(self):
         """Calculate climate index."""
+        dvars = self.preproc.data_vars
         params = self._adjust_params_to_ci()
         array = self.compute(**params)
         basics = pyh.basics()
@@ -144,7 +145,6 @@ class Processing:
             end=self.preproc.time.values[-1],
             frequency=_tfreq[self.freq],
         )
-        dvars = self.preproc.data_vars
         data_vars = {k: v for k, v in dvars.items() if k not in self.var_name}
         if "time_bnds" in data_vars.keys():
             del data_vars["time_bnds"]
