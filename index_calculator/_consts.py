@@ -62,3 +62,12 @@ _split = {
     "sem": "10A",
     "year": "20A",
 }
+
+_cf_names = {
+    "fg": "sfcWind",
+    "hu": "hurs",
+    "rr": "pr",
+    "qq": "rsds",
+    "tg": "tas",
+    "tx": "tasmax",
+}

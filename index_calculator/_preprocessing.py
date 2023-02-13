@@ -1,6 +1,6 @@
 import pyhomogenize as pyh
 
-from ._consts import _bounds, _fmt
+from ._consts import _bounds, _cf_names, _fmt
 from ._utils import get_time_range_as_str, kwargs_to_self
 
 
@@ -72,6 +72,9 @@ class PreProcessing:
         self.preproc = self._preprocessing()
 
     def _preprocessing(self):
+        for data_var in self.ds.data_vars:
+            if data_var in _cf_names.keys():
+                self.ds = self.ds.rename({data_var: _cf_names[data_var]})
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
             self.var_name = time_control.name
@@ -90,5 +93,4 @@ class PreProcessing:
             time_control.check_timestamps(correct=True)
 
         self.ATimeRange = avail_time
-
         return time_control.ds
