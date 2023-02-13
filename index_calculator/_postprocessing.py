@@ -19,7 +19,8 @@ class PostProcessing:
     ----------
     proc_obj: index_calculator.processing
         ``index_calculator.processing`` object
-    project: {"CORDEX", "CMIP5", "CMIP6", "N/A"} (default: "N/A), optional
+    project: {"CORDEX", "CMIP5", "CMIP6", "EOBS", "ERA5", "N/A"}
+        (default: "N/A), optional
         Project name
     institution_id: str (default: "N/A"), optional
         Short name of the institution calculating the climate indicator.

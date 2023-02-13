@@ -22,5 +22,21 @@
 	"iformat": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
 	"drs_components": "CORDEX_domain, ci_institute_id, institute_id, driving_model_id, driving_experiment_name, driving_model_ensemble_member, model_id, rcm_version_id, ci_frequency, ci_name, ci_package_reference",
 	"drs_format": "cordex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
-  }
+    },
+    "EOBS": {
+	"components": "ci_name, resolution, observ_version, ci_institute_id, ci_frequency",
+	"format": "{}_ens_mean_{}_reg_{}_{}_{}.nc",
+	"icomponents": "variable_id, resolution, observ_version",
+	"iformat": "{}_ens_mean_{}_reg_{}.nc",
+	"drs_components": "ci_institute_id, resolution, observ_version, ci_frequency, ci_name, ci_package_reference",
+	"drs_format": "eobs/{}/{}/{}/{}/{}/{}"
+    },
+    "ERA5": {
+	"components": "ci_name, reana_version, frequency, ci_institute_id, ci_frequency, startdate, enddate",
+	"format": "{}_{}_{}_{}_{}_{}-{}.nc",
+	"icomponents": "variable_id, reana_version, frequency, startdate, enddate",
+	"iformat": "{}_{}_{}_{}-{}.nc",
+	"drs_components": "ci_institute_id, reana_version, ci_frequency, ci_name, ci_package_reference",
+	"drs_format": "era5/{}/{}/{}/{}/{}"
+    }
 }
