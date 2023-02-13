@@ -32,11 +32,11 @@
 	"drs_format": "eobs/{}/0.1deg/{}/{}/{}/{}"
     },
     "ERA5": {
-	"components": "ci_name, reana_version, frequency, ci_institute_id, ci_frequency, startdate, enddate",
-	"format": "{}_{}_{}_{}_{}_{}-{}.nc",
-	"icomponents": "variable_id, reana_version, frequency, startdate, enddate",
-	"iformat": "{}_{}_{}_{}-{}.nc",
-	"drs_components": "ci_institute_id, reana_version, ci_frequency, ci_name, ci_package_reference",
-	"drs_format": "era5/{}/{}/{}/{}/{}"
+	"components": "ci_name, frequency, ci_institute_id, ci_frequency, ci_timerange_index",
+	"format": "{}_era5_{}_{}_{}_{}.nc",
+	"icomponents": "variable_id, frequency, startdate, enddate",
+	"iformat": "{}_era5_{}_{}-{}.nc",
+	"drs_components": "ci_institute_id, ci_frequency, ci_name, ci_package_reference",
+	"drs_format": "era5/{}/{}/{}/{}"
     }
 }
