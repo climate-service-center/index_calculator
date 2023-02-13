@@ -24,12 +24,12 @@
 	"drs_format": "cordex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
     },
     "EOBS": {
-	"components": "ci_name, resolution, observ_version, ci_institute_id, ci_frequency",
-	"format": "{}_ens_mean_{}_reg_{}_{}_{}.nc",
-	"icomponents": "variable_id, resolution, observ_version",
-	"iformat": "{}_ens_mean_{}_reg_{}.nc",
-	"drs_components": "ci_institute_id, resolution, observ_version, ci_frequency, ci_name, ci_package_reference",
-	"drs_format": "eobs/{}/{}/{}/{}/{}/{}"
+	"components": "ci_name, E-OBS_version, ci_institute_id, ci_frequency, ci_timerange_index",
+	"format": "{}_ens_mean_0.1deg_reg_v{}_{}_{}_{}.nc",
+	"icomponents": "variable_id, resolution, E-OBS_version",
+	"iformat": "{}_ens_mean_0.1deg_reg_v{}.nc",
+	"drs_components": "ci_institute_id, E-OBS_version, ci_frequency, ci_name, ci_package_reference",
+	"drs_format": "eobs/{}/0.1deg/{}/{}/{}/{}"
     },
     "ERA5": {
 	"components": "ci_name, reana_version, frequency, ci_institute_id, ci_frequency, startdate, enddate",
