@@ -1422,3 +1422,28 @@ class UTCI:
             mask_invalid=mask_invalid,
             **params,
         )
+
+
+class WI:
+    """Number of winter days (tas)."""
+
+    thresh = -10
+
+    def compute(thresh=thresh, **params):
+        """Calculate number of winter days.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#tg_days_below
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of winter days.
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.tg_days_below(
+            thresh=thresh,
+            **params,
+        )

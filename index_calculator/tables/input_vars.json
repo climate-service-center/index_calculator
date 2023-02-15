@@ -52,5 +52,6 @@
     "SCD": "snd",
     "Sint": "prsn",
     "Sfreq": "prsn",
-    "UTCI": ["tas", "hurs", "sfcWind", "rsds", "rsus", "rlds", "rlus"]
+    "UTCI": ["tas", "hurs", "sfcWind", "rsds", "rsus", "rlds", "rlus"],
+    "WI": "tas"
 }
