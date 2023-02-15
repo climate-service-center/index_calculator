@@ -145,11 +145,11 @@ class Processing:
             end=self.preproc.time.values[-1],
             frequency=_tfreq[self.freq],
         )
-        data_vars = {k: v for k, v in dvars.items() if k not in self.var_name}
-        if "time_bnds" in data_vars.keys():
-            del data_vars["time_bnds"]
-        elif "time_bounds" in data_vars.keys():
-            del data_vars["time_bounds"]
+        data_vars = {
+            k: v
+            for k, v in dvars.items()
+            if k not in self.var_name and "time" not in self.ds[k].coords
+        }
         if "grid_mapping" in self.ds[self.var_name[0]].attrs:
             gm = self.ds[self.var_name[0]].attrs["grid_mapping"]
             array.attrs["grid_mapping"] = gm
