@@ -38,5 +38,13 @@
 	"iformat": "{}_era5_{}_{}-{}.nc",
 	"drs_components": "ci_institute_id, ci_frequency, ci_name, ci_package_reference",
 	"drs_format": "era5/{}/{}/{}/{}"
+    },
+    "HYRAS": {
+	"components": "ci_name, ci_timerange_index, realization",
+	"format": "{}_hyras_5_{}_{}_de.nc",
+	"icomponents": "variable_id, year, realization",
+	"iformat": "{}_hyras_5_{}_{}_de.nc",
+	"drs_components": "realization, ci_institute_id, ci_frequency, ci_name, ci_package_name",
+	"drs_format": "hyras/{}/{}/{}/{}/{}"
     }
 }
