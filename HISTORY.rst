@@ -99,3 +99,9 @@ History
 ------------------
 
 * new projects E-OBS and ERA5 included
+
+0.5.4 (2023-02-15)
+------------------
+
+* new project HYRAS
+* ignore time-dependent data variables other than input variable
