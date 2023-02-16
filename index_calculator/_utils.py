@@ -56,8 +56,12 @@ def check_existance(attr_dict, slf):
 
 
 def get_time_range_as_str(time, fmt):
-    ts = basics().date_to_str(time[0], fmt)
-    te = basics().date_to_str(time[-1], fmt)
+    ts = time[0]
+    te = time[-1]
+    if not isinstance(ts, str):
+        ts = basics().date_to_str(ts, fmt)
+    if not isinstance(te, str):
+        te = basics().date_to_str(te, fmt)
     return [ts, te]
 
 

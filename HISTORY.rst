@@ -105,3 +105,10 @@ History
 
 * new project HYRAS
 * ignore time-dependent data variables other than input variable
+
+0.5.5 (2023-02-16)
+------------------
+
+* new index (WI): number of winter days (tas<-10°C)
+* use pyhomogenize>=0.2.9
+* write time and time_bnds to float
