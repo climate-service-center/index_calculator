@@ -88,6 +88,9 @@ class Processing:
             if attr in self.kwargs.keys():
                 replacement[attr] = self.kwargs[attr]
             elif numb_name:
+                default_value = int(getattr(obj, attr))
+                if default_value < 0:
+                    numb_name = "-{}".format(numb_name)
                 replacement[attr] = numb_name
             else:
                 replacement[attr] = getattr(obj, attr)
@@ -118,7 +121,7 @@ class Processing:
                 if "YY" in self.CIname:
                     self.CIname = self.CIname.replace("YY", str(v))
                 elif numb_name:
-                    self.CIname = self.CIname = self.CIname.replace(
+                    self.CIname = self.CIname.replace(
                         numb_name,
                         v,
                     )
