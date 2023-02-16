@@ -1,3 +1,4 @@
+import re
 import warnings
 from datetime import timedelta
 
@@ -76,3 +77,15 @@ def get_time_bounds(start, end, da_time, l_freq="AS", u_freq="A", td=0):
     upper = xr.DataArray(ul, coords=da.coords, dims=da.dims)
     bounds = xr.concat([lower, upper], dim="bnds")
     return bounds.transpose(..., "bnds")
+
+
+def get_alpha_name(var_name):
+    return "".join(filter(lambda x: x.isalpha(), var_name))
+
+
+def get_numb_name(var_name):
+    return "".join(filter(lambda x: x.isdigit(), var_name))
+
+
+def get_replace_name(var_name):
+    return re.sub(r"\d+", "YY", var_name)

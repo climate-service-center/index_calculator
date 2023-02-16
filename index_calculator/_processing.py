@@ -1,5 +1,3 @@
-import re
-
 import cf_xarray  # noqa
 import cftime  # noqa
 import numpy as np
@@ -10,6 +8,9 @@ from . import _indices as indices
 from ._consts import _bfreq, _freq, _tfreq
 from ._utils import (
     check_existance,
+    get_alpha_name,
+    get_numb_name,
+    get_replace_name,
     get_time_bounds,
     kwargs_to_self,
     object_attrs_to_self,
@@ -62,9 +63,9 @@ class Processing:
         self.proc = self._processing()
 
     def _get_numb_name_and_idx_object(self):
-        alpha_name = "".join(filter(lambda x: x.isalpha(), self.CIname))
-        numb_name = "".join(filter(lambda x: x.isdigit(), self.CIname))
-        replace_name = re.sub(r"\d+", "YY", self.CIname)
+        alpha_name = get_alpha_name(self.CIname)
+        numb_name = get_numb_name(self.CIname)
+        replace_name = get_replace_name(self.CIname)
         if hasattr(indices, self.CIname):
             idx_object = getattr(indices, self.CIname)
             self.IDXname = self.CIname
