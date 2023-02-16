@@ -2,6 +2,7 @@ import re
 
 import cf_xarray  # noqa
 import cftime  # noqa
+import numpy as np
 import pyhomogenize as pyh
 import xarray as xr
 
@@ -166,7 +167,9 @@ class Processing:
         idx_ds = idx_ds.assign_coords(
             {"time": date_range},
         )
-        idx_ds.time.encoding = self.ds.time.encoding
+        time_encoding = self.ds.time.encoding
+        time_encoding["dtype"] = np.float64
+        idx_ds.time.encoding = time_encoding
         t_bounds = get_time_bounds(
             self.preproc.time.values[0],
             self.preproc.time.values[-1],
@@ -176,7 +179,7 @@ class Processing:
             td=_bfreq[self.freq][2],
         )
         idx_ds["time_bnds"] = t_bounds
-        idx_ds["time_bnds"].encoding = self.ds.time.encoding
+        idx_ds["time_bnds"].encoding = time_encoding
         idx_ds["time"].attrs["bounds"] = "time_bnds"
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
