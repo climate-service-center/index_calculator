@@ -1,5 +1,5 @@
 xarray>=2022.3.0
 dask>=2021.10.0
 xclim>=0.34.0
-pyhomogenize>=0.2.9
+pyhomogenize>=0.3.0
 pint>=0.10
