@@ -84,6 +84,7 @@ class PreProcessing:
 
         if self.time_range:
             time_control.select_time_range(self.time_range)
+
         if self.crop_time_axis:
             time_control.select_limited_time_range(
                 smonth=_bounds[self.freq]["start"],
