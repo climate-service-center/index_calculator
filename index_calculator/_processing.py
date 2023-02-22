@@ -3,15 +3,15 @@ import cftime  # noqa
 import numpy as np
 import pyhomogenize as pyh
 import xarray as xr
+from pyhomogenize._consts import freqs as _freq
+from pyhomogenize._consts import frequencies as _tfreq
 
 from . import _indices as indices
-from ._consts import _bfreq, _freq, _tfreq
 from ._utils import (
     check_existance,
     get_alpha_name,
     get_numb_name,
     get_replace_name,
-    get_time_bounds,
     kwargs_to_self,
     object_attrs_to_self,
 )
@@ -171,17 +171,13 @@ class Processing:
         time_encoding = self.ds.time.encoding
         time_encoding["dtype"] = np.float64
         idx_ds.time.encoding = time_encoding
-        t_bounds = get_time_bounds(
-            self.preproc.time.values[0],
-            self.preproc.time.values[-1],
-            idx_ds.time,
-            l_freq=_bfreq[self.freq][0],
-            u_freq=_bfreq[self.freq][1],
-            td=_bfreq[self.freq][2],
+        idx_ds = (
+            pyh.time_control(idx_ds)
+            .add_time_bounds(
+                frequency=self.freq,
+            )
+            .ds
         )
-        idx_ds["time_bnds"] = t_bounds
-        idx_ds["time_bnds"].encoding = time_encoding
-        idx_ds["time"].attrs["bounds"] = "time_bnds"
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
             idx_ds = idx_ds.rename({data_var: data_var_repl})

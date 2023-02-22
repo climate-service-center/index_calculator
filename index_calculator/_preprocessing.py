@@ -1,6 +1,7 @@
 import pyhomogenize as pyh
+from pyhomogenize._consts import fmt as _fmt
 
-from ._consts import _bounds, _cf_names, _fmt
+from ._consts import _bounds, _cf_names
 from ._utils import get_time_range_as_str, kwargs_to_self
 
 
@@ -63,8 +64,8 @@ class PreProcessing:
         self.ds = ds
         self.var_name = var_name
         self.freq = freq
-        self.fmt = _fmt[freq]
-        self.afmt = _fmt[ifreq]
+        self.fmt = _fmt[freq].replace("-", "")
+        self.afmt = _fmt[ifreq].replace("-", "")
         self.time_range = time_range
         self.crop_time_axis = crop_time_axis
         self.check_time_axis = check_time_axis

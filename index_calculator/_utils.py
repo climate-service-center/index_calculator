@@ -1,8 +1,6 @@
 import re
 import warnings
-from datetime import timedelta
 
-import xarray as xr
 from pyhomogenize import basics
 
 
@@ -63,24 +61,6 @@ def get_time_range_as_str(time, fmt):
     if not isinstance(te, str):
         te = basics().date_to_str(te, fmt)
     return [ts, te]
-
-
-def get_time_bounds(start, end, da_time, l_freq="AS", u_freq="A", td=0):
-    da = da_time.reset_coords(drop=True)
-    ll = basics().date_range(
-        start=start,
-        end=end,
-        frequency=l_freq,
-    ) - timedelta(hours=td)
-    ul = basics().date_range(
-        start=start,
-        end=end,
-        frequency=u_freq,
-    ) + timedelta(hours=td)
-    lower = xr.DataArray(ll, coords=da.coords, dims=da.dims)
-    upper = xr.DataArray(ul, coords=da.coords, dims=da.dims)
-    bounds = xr.concat([lower, upper], dim="bnds")
-    return bounds.transpose(..., "bnds")
 
 
 def get_alpha_name(var_name):
