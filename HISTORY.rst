@@ -112,3 +112,8 @@ History
 * new index (WI): number of winter days (tas<-10°C)
 * use pyhomogenize>=0.2.9
 * write time and time_bnds to float
+
+0.5.6 (2023-02-22)
+------------------
+
+* time controlling to pyhomogenize
