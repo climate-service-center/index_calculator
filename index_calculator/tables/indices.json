@@ -552,33 +552,34 @@
     "description": "count of days with daily temperature below {thresh} degC"
     },
     "HW": {
-    "standard_name": "",
-    "long_name": "",
-    "units": "",
-    "description": ""
+    "standard_name": "maximum_length_of_heat_waves",
+    "long_name": "Maximum length of heat waves (maximum temperature > {thresh_max} degC), minimum temperature > {thresh_min} degC)",
+    "units": "days",
+    "description": "count days with daily maximum temperature above {thresh_max} degC and minimum temperature above {thresh_min} degC)"
     },
     "GSS": {
-    "standard_name": "",
-    "long_name": "",
-    "units": "",
-    "description": ""
+    "standard_name": "growing_season_start",
+    "long_name": "Growing season start (mean temperature >= {thresh} degC), window >= {number} days)",
+    "units": "day",
+    "description": "Day of year, when minimum {number} of days with daily mean temperature above or equal {thresh} degC"
     },
     "GSE": {
-    "standard_name": "",
-    "long_name": "",
-    "units": "",
-    "description": ""
+    "standard_name": "growing_season_end",
+    "long_name": "Growing season end (mean temperature < {thresh} degC), window >= {number} days)",
+    "units": "day",
+    "description": "Day of year after mid date (07-01), when minimum {number} of days with daily mean temperature below {thresh} degC"
+    "
     },
     "FFS": {
-    "standard_name": "",
-    "long_name": "",
-    "units": "",
-    "description": ""
+    "standard_name": "frost_free_season_start",
+    "long_name": "Frost free season start (minimum temperature >= {thresh} degC), window >= {number} days)",
+    "units": "day",
+    "description": "Day of the year, when for a minimum {number} of days the daily minimum temperature is consistently above or equal {thresh} degC."
     },
     "FFE": {
-    "standard_name": "",
-    "long_name": "",
-    "units": "",
-    "description": ""
+    "standard_name": "frost_free_season_end",
+    "long_name": "Frost free season end (mean temperature < {thresh} degC), window >= {number} days)",
+    "units": "day",
+    "description": "Day of the year after mid date (07-01), when for a minimum {number} of days the daily minimum temperature is consistently below {thresh} degC."
     }
 }
