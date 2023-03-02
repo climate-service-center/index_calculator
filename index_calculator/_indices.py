@@ -3,6 +3,7 @@ import numpy as np
 import xarray as xr
 import xclim as xc
 from xclim.core.calendar import percentile_doy
+from xclim.core.units import rate2amount
 
 
 def _thresh_string(thresh, units):
@@ -464,6 +465,29 @@ class RR:
             Total precipitation.
         """
         return xc.atmos.precip_accumulation(**params)
+
+
+class RRm:
+    """Mean daily precipitation (pr)."""
+
+    def compute(**params):
+        """Calculate mean daily precipitation.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Mean daily precipitation.
+        """
+        da = _get_da(params, "pr")
+        pram = rate2amount(da)
+        return (
+            pram.resample(time=params["freq"])
+            .mean(dim="time")
+            .assign_attrs(units=pram.units)
+        )
 
 
 class RR1:
@@ -1353,6 +1377,7 @@ class Sint:
 
     def compute(**params):
         """Calculate snowfall intensity.
+
         Parameters
         ----------
 
@@ -1375,6 +1400,7 @@ class Sfreq:
 
     def compute(**params):
         """Calculate snowfall frequency.
+
         Parameters
         ----------
         For input parameters see:

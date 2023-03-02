@@ -512,7 +512,6 @@ def test_HW():
         window=1,
         freq="7D",
     )
-
     np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
@@ -522,7 +521,6 @@ def test_GSS():
         window=1,
         freq="7D",
     )
-
     np.testing.assert_allclose(result, [4], rtol=1e-03)
 
 
@@ -532,7 +530,6 @@ def test_GSE():
         window=1,
         freq="7D",
     )
-
     np.testing.assert_allclose(result, [np.nan], rtol=1e-03)
 
 
@@ -542,7 +539,6 @@ def test_FFS():
         window=1,
         freq="7D",
     )
-
     np.testing.assert_allclose(result, [3], rtol=1e-03)
 
 
@@ -552,5 +548,12 @@ def test_FFE():
         window=1,
         freq="7D",
     )
-
     np.testing.assert_allclose(result, [np.nan], rtol=1e-03)
+
+
+def test_RRm():
+    result = indices.RRm.compute(
+        pr=pr_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
