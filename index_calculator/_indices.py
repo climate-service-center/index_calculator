@@ -1447,3 +1447,130 @@ class WI:
             thresh=thresh,
             **params,
         )
+
+
+class HW:
+    """Maximum length of heat waves (tasmax, tasmin)."""
+
+    def compute(**params):
+        """Calculate maximum number of heat waves.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#heat_wave_max_length
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum length of heat waves.
+        """
+        thresh_tasmax = _thresh_string(30, "degC")
+        thresh_tasmin = _thresh_string(22, "degC")
+        return xc.atmos.heat_wave_max_length(
+            thresh_tasmax=thresh_tasmax,
+            thresh_tasmin=thresh_tasmin,
+            **params,
+        )
+
+
+class GSS:
+    """Growing season start (tas)."""
+
+    thresh = 5
+    window = 5
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate growing season start.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#growing_season_start
+
+        Returns
+        -------
+        xarray.DataArray
+            Growing season start.
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.growing_season_start(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class GSE:
+    """Growing season end (tas)."""
+
+    thresh = 5
+    window = 5
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate growing season end.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#growing_season_end
+
+        Returns
+        -------
+        xarray.DataArray
+            Growing season end.
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.growing_season_end(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class FFS:
+    """Frost free season start (tasmin)."""
+
+    window = 5
+
+    def compute(window=window, **params):
+        """Calculate frost free season start.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#frost_free_season_start
+
+        Returns
+        -------
+        xarray.DataArray
+            Frost free season start.
+        """
+        return xc.atmos.frost_free_season_start(
+            window=window,
+            **params,
+        )
+
+
+class FFE:
+    """Frost free season end (tasmin)."""
+
+    window = 5
+
+    def compute(window=window, **params):
+        """Calculate frost free season end.
+
+        Parameters
+        ----------
+        For input parameters see:
+            https://xclim.readthedocs.io/en/stable/indicators_api.html#frost_free_season_end
+
+        Returns
+        -------
+        xarray.DataArray
+            Frost free season end.
+        """
+        return xc.atmos.frost_free_season_end(
+            window=window,
+            **params,
+        )

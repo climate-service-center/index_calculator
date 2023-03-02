@@ -53,5 +53,10 @@
     "Sint": "prsn",
     "Sfreq": "prsn",
     "UTCI": ["tas", "hurs", "sfcWind", "rsds", "rsus", "rlds", "rlus"],
-    "WI": "tas"
+    "WI": "tas",
+    "HW": ["tasmax", "tasmin"],
+    "GSS": "tas",
+    "GSE": "tas",
+    "FFS": "tasmin",
+    "FFE": "tasmin"
 }

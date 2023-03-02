@@ -550,5 +550,35 @@
     "long_name": "Number of winter days (temperature < {thresh} degC)",
     "units": "days",
     "description": "count of days with daily temperature below {thresh} degC"
-  }
+    },
+    "HW": {
+    "standard_name": "",
+    "long_name": "",
+    "units": "",
+    "description": ""
+    },
+    "GSS": {
+    "standard_name": "",
+    "long_name": "",
+    "units": "",
+    "description": ""
+    },
+    "GSE": {
+    "standard_name": "",
+    "long_name": "",
+    "units": "",
+    "description": ""
+    },
+    "FFS": {
+    "standard_name": "",
+    "long_name": "",
+    "units": "",
+    "description": ""
+    },
+    "FFE": {
+    "standard_name": "",
+    "long_name": "",
+    "units": "",
+    "description": ""
+    }
 }
