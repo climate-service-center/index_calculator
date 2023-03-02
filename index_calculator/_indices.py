@@ -1413,6 +1413,7 @@ class Sfreq:
         thresh = _thresh_string(1, "mm/day")
         da = _get_da(params, "prsn")
         prsn = _convert_snow_mm_day(da)
+        prsn = prsn.assign_attrs(**da.attrs)
         prsn.attrs["units"] = "kg m-2 s-1"
         if "ds" in params.keys():
             del params["ds"]
@@ -1422,7 +1423,8 @@ class Sfreq:
             **params,
         )
         ndays = da.resample(time=params["freq"]).count(dim="time")
-        return sd / ndays * 100
+        sfreq = sd / ndays * 100
+        return sfreq.assign_attrs(**sd.attrs)
 
 
 class UTCI:
