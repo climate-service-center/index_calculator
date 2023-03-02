@@ -1480,7 +1480,14 @@ class WI:
 class HW:
     """Maximum length of heat waves (tasmax, tasmin)."""
 
-    def compute(**params):
+    thresh_tasmin = 22
+    thresh_tasmax = 30
+
+    def compute(
+        thresh_tasmax=thresh_tasmax,
+        thresh_tasmin=thresh_tasmin,
+        **params,
+    ):
         """Calculate maximum number of heat waves.
 
         Parameters
@@ -1493,8 +1500,8 @@ class HW:
         xarray.DataArray
             Maximum length of heat waves.
         """
-        thresh_tasmax = _thresh_string(30, "degC")
-        thresh_tasmin = _thresh_string(22, "degC")
+        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
+        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
         return xc.atmos.heat_wave_max_length(
             thresh_tasmax=thresh_tasmax,
             thresh_tasmin=thresh_tasmin,
