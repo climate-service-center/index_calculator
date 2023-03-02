@@ -498,15 +498,16 @@ def test_UTCI():
 
 
 def test_WI():
-    result = indices.WI.compute(tas=tas_xarray())
+    result = indices.WI.compute(tas=tas_c_xarray())
 
-    np.testing.assert_allclose(result, [1], rtol=1e-03)
+    np.testing.assert_allclose(result, [3], rtol=1e-03)
 
 
 def test_HW():
     result = indices.HW.compute(
         tasmax=tasmax_xarray(),
         tasmin=tasmin_xarray(),
+        window=1,
     )
 
     np.testing.assert_allclose(result, [1], rtol=1e-03)
@@ -515,6 +516,7 @@ def test_HW():
 def test_GSS():
     result = indices.GSS.compute(
         tas=tas_xarray(),
+        window=1,
     )
 
     np.testing.assert_allclose(result, [1], rtol=1e-03)
@@ -523,6 +525,7 @@ def test_GSS():
 def test_GSE():
     result = indices.GSE.compute(
         tas=tas_xarray(),
+        window=1,
     )
 
     np.testing.assert_allclose(result, [1], rtol=1e-03)
@@ -531,6 +534,7 @@ def test_GSE():
 def test_FFS():
     result = indices.FFS.compute(
         tas=tas_xarray(),
+        window=1,
     )
 
     np.testing.assert_allclose(result, [1], rtol=1e-03)
@@ -539,6 +543,7 @@ def test_FFS():
 def test_FFE():
     result = indices.FFE.compute(
         tas=tas_xarray(),
+        window=1,
     )
 
     np.testing.assert_allclose(result, [1], rtol=1e-03)
