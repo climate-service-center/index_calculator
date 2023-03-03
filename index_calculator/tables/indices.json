@@ -107,49 +107,49 @@
     "units": "mm",
     "description": "maximum total precipitation amount occurring within {thresh} days"
   },
-  "R75p": {
+  "R75pABS": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Total precipitation amount with precipitation > 75th percentile on wet days (precipitation >= 1 mm)",
     "units": "mm",
     "description": "annual total precipitation amount of days with precipitation above the 75th percentile of days with total precipitation above or equal 1 mm"
   },
-  "RD75p": {
+  "R75p": {
     "standard_name": "days_with_precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Number of moderate wet days (days)",
     "units": "days",
     "description": "Number of moderate wet days (days > 75th percentile of daily precipitation amount on wet days (precipitation >= 1 mm) during reference period) (days)"
   },
-  "R95p": {
+  "R95pABS": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Total precipitation amount with precipitation > 95th percentile on wet days (precipitation >= 1 mm)",
     "units": "mm",
     "description": "annual total precipitation amount of days with precipitation above the 95th percentile of days with total precipitation above or equal 1 mm"
   },
-  "RD95p": {
+  "R95p": {
     "standard_name": "days_with_precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Number of very wet days (days)",
     "units": "days",
     "description": "Number of very wet days (days > 95th percentile of daily precipitation amount on wet days (precipitation >= 1 mm) during reference period) (days)"
   },
-  "R99p": {
+  "R99pABS": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Total precipitation amount with precipitation > 99th percentile on wet days (precipitation >= 1 mm)",
     "units": "mm",
     "description": "annual total precipitation amount of days with precipitation above the 99th percentile of days with total precipitation above or equal 1 mm"
   },
-  "RD99p": {
+  "R99p": {
     "standard_name": "days_with_precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Number of extremely wet days (days)",
     "units": "days",
     "description": "Number of extremely wet days (days > 99th percentile of daily precipitation amount on wet days (precipitation >= 1 mm) during reference period) (days)"
   },
-  "RYYp": {
+  "RYYpABS": {
     "standard_name": "precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Total precipitation amount with precipitation > {perc}th percentile on wet days (precipitation >= 1 mm)",
     "units": "mm",
     "description": "annual total precipitation amount of days with precipitation above the {perc}th percentile of days with total precipitation above or equal 1 mm"
   },
-  "RDYYp": {
+  "RYYp": {
     "standard_name": "days_with_precpitation_amount_from_wet_days_above_threshold",
     "long_name": "Number of days with precipitation > {perc}th percentile on wet days (precipitation >= 1 mm)",
     "units": "days",
