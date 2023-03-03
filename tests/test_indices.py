@@ -270,8 +270,8 @@ def test_DSP():
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
-def test_RDYYp():
-    result = indices.RDYYp.compute(
+def test_RYYp():
+    result = indices.RYYp.compute(
         pr=pr_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -279,8 +279,26 @@ def test_RDYYp():
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
-def test_RD90p():
-    result = indices.RDYYp.compute(
+def test_RRYYp():
+    result = indices.RRYYp.compute(
+        pr=pr_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    expected = [
+        2.006173e-04,
+        2.314815e-04,
+        2.314815e-04,
+        2.314815e-04,
+        2.314815e-04,
+        1.784336e-04,
+        9.837963e-05,
+    ]
+    np.testing.assert_allclose(result, expected, rtol=1e-03)
+
+
+def test_R90p():
+    result = indices.RYYp.compute(
         pr=pr_xarray(),
         perc=90,
         freq="7D",
@@ -296,6 +314,15 @@ def test_RYYpTOT():
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
     np.testing.assert_allclose(result, 0.1452, rtol=1e-03)
+
+
+def test_RYYpABS():
+    result = indices.RYYpABS.compute(
+        pr=pr_xarray(),
+        freq="7D",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    np.testing.assert_allclose(result, 9, rtol=1e-03)
 
 
 def test_R90pTOT():
