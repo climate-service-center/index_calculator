@@ -2,8 +2,8 @@ import dask  # noqa
 import numpy as np
 import xarray as xr
 import xclim as xc
-from xclim.core.calendar import percentile_doy
-from xclim.core.units import convert_units_to, rate2amount, resample_doy
+from xclim.core.calendar import percentile_doy, resample_doy
+from xclim.core.units import convert_units_to, rate2amount
 from xclim.indices.generic import compare
 
 
