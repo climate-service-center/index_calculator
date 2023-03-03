@@ -117,3 +117,17 @@ History
 ------------------
 
 * time controlling to pyhomogenize
+
+0.6.0 (2023-03-03)
+------------------
+
+* new indices:
+  * HW: maximum length of heat waves
+  * GSS: start of growing season
+  * GSE: end of growing season
+  * FFS: start of frost-free season
+  * FFE: end of frost-free season
+  * RRm: mean daily precipitation
+  * RRYYp: precipitation percentile value
+* rename RYYp to RYYpABS and RDYYP to RYYp according to ICCLIM
+* optional argument perc woth percentile indicators
