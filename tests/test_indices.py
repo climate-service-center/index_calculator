@@ -295,6 +295,7 @@ def test_RRYYp():
     ]
     np.testing.assert_allclose(result, expected, rtol=1e-03)
 
+
 def test_RYYP_perc():
     pr = pr_xarray()
     perc = indices.RRYYp.compute(
@@ -307,6 +308,7 @@ def test_RYYP_perc():
         freq="7D",
     )
     np.testing.assert_allclose(result, 1, rtol=1e-03)
+
 
 def test_R90p():
     result = indices.RYYp.compute(
