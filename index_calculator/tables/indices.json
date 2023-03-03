@@ -568,7 +568,6 @@
     "long_name": "Growing season end (mean temperature < {thresh} degC), window >= {number} days)",
     "units": "day",
     "description": "Day of year after mid date (07-01), when minimum {number} of days with daily mean temperature below {thresh} degC"
-    "
     },
     "FFS": {
     "standard_name": "frost_free_season_start",
