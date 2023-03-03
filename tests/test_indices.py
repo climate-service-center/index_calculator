@@ -282,7 +282,6 @@ def test_RYYp():
 def test_RRYYp():
     result = indices.RRYYp.compute(
         pr=pr_xarray(),
-        freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
     expected = [
@@ -296,6 +295,18 @@ def test_RRYYp():
     ]
     np.testing.assert_allclose(result, expected, rtol=1e-03)
 
+def test_RYYP_perc():
+    pr = pr_xarray()
+    perc = indices.RRYYp.compute(
+        pr=pr,
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    result = indices.RYYp.compute(
+        pr=pr,
+        perc=perc,
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 def test_R90p():
     result = indices.RYYp.compute(

@@ -24,7 +24,7 @@ def _get_da(dictionary, var):
 
 def _get_percentile(da, perc, base_period_time_range):
     if isinstance(perc, xr.Dataset):
-        return perc[da.data_vars[0]]
+        return perc["per"]
     elif isinstance(perc, xr.DataArray):
         return perc
     tslice = slice(base_period_time_range[0], base_period_time_range[1])
