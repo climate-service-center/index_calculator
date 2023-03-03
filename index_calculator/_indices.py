@@ -3,7 +3,8 @@ import numpy as np
 import xarray as xr
 import xclim as xc
 from xclim.core.calendar import percentile_doy
-from xclim.core.units import rate2amount
+from xclim.core.units import convert_units_to, rate2amount, resample_doy
+from xclim.indices.generic import compare
 
 
 def _thresh_string(thresh, units):
@@ -22,6 +23,10 @@ def _get_da(dictionary, var):
 
 
 def _get_percentile(da, perc, base_period_time_range):
+    if isinstance(perc, xr.Dataset):
+        return perc[da.data_vars[0]]
+    elif isinstance(perc, xr.DataArray):
+        return perc
     tslice = slice(base_period_time_range[0], base_period_time_range[1])
     base_period = da.sel(time=tslice)
     with dask.config.set(**{"array.slicing.split_large_chunks": False}):
@@ -41,8 +46,15 @@ class CD:
     """Number of cold and dry days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
+    perc_tas = None
+    perc_pr = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc_tas=perc_tas,
+        perc_pr=perc_pr,
+        **params,
+    ):
         """Calculate number of cold and dry days.
 
         Parameters
@@ -56,20 +68,22 @@ class CD:
         """
         da_tas = _get_da(params, "tas")
         da_pr = _get_da(params, "pr")
-        percentile_tas = _get_percentile(
-            da=da_tas,
-            perc=25,
-            base_period_time_range=base_period_time_range,
-        )
-        percentile_pr = _get_percentile(
-            da=da_pr,
-            perc=25,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc_tas is None:
+            perc_tas = _get_percentile(
+                da=da_tas,
+                perc=25,
+                base_period_time_range=base_period_time_range,
+            )
+        if perc_pr is None:
+            perc_pr = _get_percentile(
+                da=da_pr,
+                perc=25,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.cold_and_dry_days(
-                tas_per=percentile_tas,
-                pr_per=percentile_pr,
+                tas_per=perc_tas,
+                pr_per=perc_pr,
                 **params,
             )
 
@@ -140,8 +154,13 @@ class CSDI:
     """Cold spell duration index (tasmin)."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate cold spell duration index.
 
         Parameters
@@ -155,14 +174,15 @@ class CSDI:
         At least 6 consecutive days.
         """
         da = _get_da(params, "tasmin")
-        percentile = _get_percentile(
-            da=da,
-            perc=10,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=10,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.cold_spell_duration_index(
-                tasmin_per=percentile,
+                tasmin_per=perc,
                 window=6,
                 **params,
             )
@@ -196,8 +216,15 @@ class CW:
     """Number of cold and wet days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
+    perc_tas = None
+    perc_pr = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc_tas=perc_tas,
+        perc_pr=perc_pr,
+        **params,
+    ):
         """Calculate number of cold and wet days.
 
         Parameters
@@ -211,20 +238,22 @@ class CW:
         """
         da_tas = _get_da(params, "tas")
         da_pr = _get_da(params, "pr")
-        percentile_tas = _get_percentile(
-            da=da_tas,
-            perc=25,
-            base_period_time_range=base_period_time_range,
-        )
-        percentile_pr = _get_percentile(
-            da=da_pr,
-            perc=75,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc_tas is None:
+            perc_tas = _get_percentile(
+                da=da_tas,
+                perc=25,
+                base_period_time_range=base_period_time_range,
+            )
+        if perc_tas is None:
+            perc_pr = _get_percentile(
+                da=da_pr,
+                perc=75,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.cold_and_wet_days(
-                tas_per=percentile_tas,
-                pr_per=percentile_pr,
+                tas_per=perc_tas,
+                pr_per=perc_pr,
                 **params,
             )
 
@@ -578,7 +607,36 @@ class R25mm:
         )
 
 
-class RDYYp:
+class RRYYp:
+    """Precip percentil value (pr)."""
+
+    perc = 75
+    base_period_time_range = BASE_PERIOD
+
+    def compute(
+        perc=perc,
+        base_period_time_range=base_period_time_range,
+        **params,
+    ):
+        """Calculate precip percentile value.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Precip percentil value.
+        """
+        da = _get_da(params, "pr")
+        return _get_percentile(
+            da=da,
+            perc=perc,
+            base_period_time_range=base_period_time_range,
+        )
+
+
+class RYYp:
     """Number of wet days with precip over a given percentile (pr)."""
 
     perc = 75
@@ -680,6 +738,56 @@ class RXYYday:
             window=thresh,
             **params,
         )
+
+
+class RYYpABS:
+    """Total precipitation amount with precip > {perc}th percentile (pr)."""
+
+    perc = 75
+    base_period_time_range = BASE_PERIOD
+
+    def compute(
+        perc=perc,
+        base_period_time_range=base_period_time_range,
+        **params,
+    ):
+        """Calculate total precipitation amount
+        with precip > {perc}th percentile.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Precipitation fraction with precip > {perc}th percentile.
+        """
+        da = _get_da(params, "pr")
+        pr_per = _get_percentile(
+            da=da,
+            perc=perc,
+            base_period_time_range=base_period_time_range,
+        )
+        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+            pr_per = convert_units_to(pr_per, da, context="hydro")
+            thresh = convert_units_to("1 mm/day", da, context="hydro")
+
+            tp = pr_per.where(pr_per > thresh, thresh)
+            if "dayofyear" in pr_per.coords:
+                # Create time series out of doy values.
+                tp = resample_doy(tp, da)
+
+            constrain = (">", ">=")
+
+            # Compute the days when precip is both over the wet day threshold
+            # and the percentile threshold.
+            over = (
+                da.where(compare(da, ">", tp, constrain))
+                .resample(time=params["freq"])
+                .sum(dim="time")
+            )
+            over.attrs["units"] = "mm"
+            return over
 
 
 class RYYpTOT:
@@ -810,8 +918,13 @@ class TG10p:
     """Fraction of days with mean temperature < 10th percentile (tas)."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate fraction of days with mean temperature < 10th percentile.
 
         Parameters
@@ -825,14 +938,15 @@ class TG10p:
             Fraction of days with mean temperature < 10th percentile".
         """
         da = _get_da(params, "tas")
-        percentile = _get_percentile(
-            da=da,
-            perc=10,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=10,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.tg10p(
-                tas_per=percentile,
+                tas_per=perc,
                 **params,
             )
 
@@ -841,8 +955,13 @@ class TG90p:
     """Fraction of days with mean temperature > 90th percentile (tas)."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate fraction of days with mean temperature > 90th percentile".
 
         Parameters
@@ -856,14 +975,15 @@ class TG90p:
             Fraction of days with mean temperature > 90th percentile".
         """
         da = _get_da(params, "tas")
-        percentile = _get_percentile(
-            da=da,
-            perc=90,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=perc,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.tg90p(
-                tas_per=percentile,
+                tas_per=perc,
                 **params,
             )
 
@@ -916,8 +1036,13 @@ class TX10p:
     """Fraction of days with max temperature < 10th percentile (tasmax)."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate fraction of days with max temperature < 10th percentile.
 
         Parameters
@@ -931,14 +1056,15 @@ class TX10p:
             Fraction of days with maximum temperature < 10th percentile".
         """
         da = _get_da(params, "tasmax")
-        percentile = _get_percentile(
-            da=da,
-            perc=10,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=perc,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.tx10p(
-                tasmax_per=percentile,
+                tasmax_per=perc,
                 **params,
             )
 
@@ -947,8 +1073,13 @@ class TX90p:
     """Fraction of days with max temperature > 90th percentile (tasmax)."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate fraction of days with max temperature > 90th percentile.
 
         Parameters
@@ -962,14 +1093,15 @@ class TX90p:
             Fraction of days with maximum temperature > 90th percentile".
         """
         da = _get_da(params, "tasmax")
-        percentile = _get_percentile(
-            da=da,
-            perc=90,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=perc,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.tx90p(
-                tasmax_per=percentile,
+                tasmax_per=perc,
                 **params,
             )
 
@@ -1035,8 +1167,13 @@ class TN10p:
     """Fraction of days with min temperature < 10th percentile."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate fraction of days with min temperature < 10th percentile.
 
         Parameters
@@ -1050,14 +1187,15 @@ class TN10p:
             Fraction of days with minimum temperature < 10th percentile".
         """
         da = _get_da(params, "tasmin")
-        percentile = _get_percentile(
-            da=da,
-            perc=10,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=perc,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.tn10p(
-                tasmin_per=percentile,
+                tasmin_per=perc,
                 **params,
             )
 
@@ -1066,8 +1204,13 @@ class TN90p:
     """Fraction of days with min temperature > 90th percentile."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate fraction of days with min temperature > 90th percentile.
 
         Parameters
@@ -1081,14 +1224,15 @@ class TN90p:
             Fraction of days with minimum temperature > 90th percentile".
         """
         da = _get_da(params, "tasmin")
-        percentile = _get_percentile(
-            da=da,
-            perc=90,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=perc,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.tn90p(
-                tasmin_per=percentile,
+                tasmin_per=perc,
                 **params,
             )
 
@@ -1135,8 +1279,15 @@ class WD:
     """Number of warm and dry days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
+    perc_tas = None
+    perc_pr = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc_tas=perc_tas,
+        perc_pr=perc_pr,
+        **params,
+    ):
         """Calculate number of warm and dry days.
 
         Parameters
@@ -1150,20 +1301,22 @@ class WD:
         """
         da_tas = _get_da(params, "tas")
         da_pr = _get_da(params, "pr")
-        percentile_tas = _get_percentile(
-            da=da_tas,
-            perc=75,
-            base_period_time_range=base_period_time_range,
-        )
-        percentile_pr = _get_percentile(
-            da=da_pr,
-            perc=25,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc_tas is None:
+            perc_tas = _get_percentile(
+                da=da_tas,
+                perc=75,
+                base_period_time_range=base_period_time_range,
+            )
+        if perc_pr is None:
+            perc_pr = _get_percentile(
+                da=da_pr,
+                perc=25,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.warm_and_dry_days(
-                tas_per=percentile_tas,
-                pr_per=percentile_pr,
+                tas_per=perc_tas,
+                pr_per=perc_pr,
                 **params,
             )
 
@@ -1172,8 +1325,13 @@ class WSDI:
     """Warm spell duration index (tasmax)."""
 
     base_period_time_range = BASE_PERIOD
+    perc = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc=perc,
+        **params,
+    ):
         """Calculate warm spell duration index.
 
         Parameters
@@ -1187,14 +1345,15 @@ class WSDI:
         At least 6 consecutive days.
         """
         da = _get_da(params, "tasmax")
-        percentile = _get_percentile(
-            da=da,
-            perc=90,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc is None:
+            perc = _get_percentile(
+                da=da,
+                perc=90,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.warm_spell_duration_index(
-                tasmax_per=percentile,
+                tasmax_per=perc,
                 window=6,
                 **params,
             )
@@ -1204,8 +1363,15 @@ class WW:
     """Number of warm and wet days (tas, pr)."""
 
     base_period_time_range = BASE_PERIOD
+    perc_tas = None
+    perc_pr = None
 
-    def compute(base_period_time_range=base_period_time_range, **params):
+    def compute(
+        base_period_time_range=base_period_time_range,
+        perc_tas=perc_tas,
+        perc_pr=perc_pr,
+        **params,
+    ):
         """Calculate number of warm and wet days.
 
         Parameters
@@ -1219,20 +1385,22 @@ class WW:
         """
         da_tas = _get_da(params, "tas")
         da_pr = _get_da(params, "pr")
-        percentile_tas = _get_percentile(
-            da=da_tas,
-            perc=75,
-            base_period_time_range=base_period_time_range,
-        )
-        percentile_pr = _get_percentile(
-            da=da_pr,
-            perc=75,
-            base_period_time_range=base_period_time_range,
-        )
+        if perc_tas is None:
+            perc_tas = _get_percentile(
+                da=da_tas,
+                perc=75,
+                base_period_time_range=base_period_time_range,
+            )
+        if perc_pr is None:
+            perc_pr = _get_percentile(
+                da=da_pr,
+                perc=75,
+                base_period_time_range=base_period_time_range,
+            )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             return xc.atmos.warm_and_wet_days(
-                tas_per=percentile_tas,
-                pr_per=percentile_pr,
+                tas_per=perc_tas,
+                pr_per=perc_pr,
                 **params,
             )
 
