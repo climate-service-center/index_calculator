@@ -244,7 +244,7 @@ class CW:
                 perc=25,
                 base_period_time_range=base_period_time_range,
             )
-        if perc_tas is None:
+        if perc_pr is None:
             perc_pr = _get_percentile(
                 da=da_pr,
                 perc=75,
@@ -786,8 +786,9 @@ class RYYpABS:
                 .resample(time=params["freq"])
                 .sum(dim="time")
             )
-            over.attrs["units"] = "mm"
-            return over
+            out = convert_units_to(over, "mm/day")
+            out.attrs["units"] = "mm"
+            return out
 
 
 class RYYpTOT:
@@ -978,7 +979,7 @@ class TG90p:
         if perc is None:
             perc = _get_percentile(
                 da=da,
-                perc=perc,
+                perc=90,
                 base_period_time_range=base_period_time_range,
             )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
@@ -1059,7 +1060,7 @@ class TX10p:
         if perc is None:
             perc = _get_percentile(
                 da=da,
-                perc=perc,
+                perc=10,
                 base_period_time_range=base_period_time_range,
             )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
@@ -1096,7 +1097,7 @@ class TX90p:
         if perc is None:
             perc = _get_percentile(
                 da=da,
-                perc=perc,
+                perc=90,
                 base_period_time_range=base_period_time_range,
             )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
@@ -1190,7 +1191,7 @@ class TN10p:
         if perc is None:
             perc = _get_percentile(
                 da=da,
-                perc=perc,
+                perc=10,
                 base_period_time_range=base_period_time_range,
             )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
@@ -1227,7 +1228,7 @@ class TN90p:
         if perc is None:
             perc = _get_percentile(
                 da=da,
-                perc=perc,
+                perc=90,
                 base_period_time_range=base_period_time_range,
             )
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
@@ -1506,6 +1507,7 @@ class SD:
         thresh = _thresh_string(thresh, "mm/day")
         da = _get_da(params, "prsn")
         prsn = _convert_snow_mm_day(da)
+        prsn = prsn.assign_attrs(**da.attrs)
         prsn.attrs["units"] = "kg m-2 s-1"
         if "ds" in params.keys():
             del params["ds"]
