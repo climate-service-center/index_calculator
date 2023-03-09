@@ -131,3 +131,8 @@ History
   * RRYYp: precipitation percentile value
 * rename RYYp to RYYpABS and RDYYP to RYYp according to ICCLIM
 * optional argument perc woth percentile indicators
+
+0.6.1 (2023-03-09)
+------------------
+
+* some metadata corrections
