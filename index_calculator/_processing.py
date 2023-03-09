@@ -90,9 +90,13 @@ class Processing:
             if attr in self.kwargs.keys():
                 replacement[attr] = self.kwargs[attr]
             elif numb_name:
-                default_value = int(getattr(obj, attr))
-                if default_value < 0:
-                    numb_name = "-{}".format(numb_name)
+                default_value = getattr(obj, attr)
+                if not isinstance(default_value, list):
+                    default_value = int(default_value)
+                    if default_value < 0:
+                        numb_name = "-{}".format(numb_name)
+                else:
+                    continue
                 replacement[attr] = numb_name
             else:
                 replacement[attr] = getattr(obj, attr)
