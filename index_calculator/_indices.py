@@ -1736,9 +1736,10 @@ class GSE:
 class FFS:
     """Frost free season start (tasmin)."""
 
+    thresh = 0
     window = 5
 
-    def compute(window=window, **params):
+    def compute(thresh=thresh, window=window, **params):
         """Calculate frost free season start.
 
         Parameters
@@ -1751,7 +1752,9 @@ class FFS:
         xarray.DataArray
             Frost free season start.
         """
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.frost_free_season_start(
+            thresh=thresh,
             window=window,
             **params,
         )
@@ -1760,9 +1763,10 @@ class FFS:
 class FFE:
     """Frost free season end (tasmin)."""
 
+    thresh = 0
     window = 5
 
-    def compute(window=window, **params):
+    def compute(thresh=thresh, window=window, **params):
         """Calculate frost free season end.
 
         Parameters
@@ -1775,7 +1779,9 @@ class FFE:
         xarray.DataArray
             Frost free season end.
         """
+        thresh = _thresh_string(thresh, "degC")
         return xc.atmos.frost_free_season_end(
+            thresh=thresh,
             window=window,
             **params,
         )
