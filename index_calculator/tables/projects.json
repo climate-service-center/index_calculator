@@ -44,7 +44,7 @@
 	"format": "{}_hyras_{}_{}_{}_de.nc",
 	"icomponents": "variable_id, year, realization",
 	"iformat": "{}_hyras_{}_{}_{}_de.nc",
-	"drs_components": "ci_institute_id, ci_frequency, ci_name, realization, horizontal_resolution, ci_package_reference",
+	"drs_components": "ci_institute_id, realization, horizontal_resolution, ci_frequency, ci_name, ci_package_reference",
 	"drs_format": "hyras/{}/{}/{}/{}/{}/{}"
     }
 }

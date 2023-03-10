@@ -136,3 +136,8 @@ History
 ------------------
 
 * some metadata corrections
+
+0.6.2 (2023-03-10)
+------------------
+
+* component name adjusments with HYRA
