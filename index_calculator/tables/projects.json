@@ -40,11 +40,11 @@
 	"drs_format": "era5/{}/{}/{}/{}"
     },
     "HYRAS": {
-	"components": "ci_name, ci_timerange_index, realization",
-	"format": "{}_hyras_5_{}_{}_de.nc",
+	"components": "ci_name, horizontal_resolution, ci_timerange_index, realization",
+	"format": "{}_hyras_{}_{}_{}_de.nc",
 	"icomponents": "variable_id, year, realization",
-	"iformat": "{}_hyras_5_{}_{}_de.nc",
-	"drs_components": "realization, ci_institute_id, ci_frequency, ci_name, ci_package_name",
-	"drs_format": "hyras/{}/{}/{}/{}/{}"
+	"iformat": "{}_hyras_{}_{}_{}_de.nc",
+	"drs_components": "ci_institute_id, ci_frequency, ci_name, realization, horizontal_resolution, ci_package_reference",
+	"drs_format": "hyras/{}/{}/{}/{}/{}/{}"
     }
 }

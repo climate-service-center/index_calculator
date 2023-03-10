@@ -97,7 +97,7 @@ class OutputWriter:
 
     def _parse_components_to_format(self, ds, out_components, out_format):
         def test_ocomp(ocomp):
-            return ocomp.replace("/", "")
+            return ocomp.replace("/", "").replace(" ", "_")
 
         ocomps = []
         for comp in out_components:
