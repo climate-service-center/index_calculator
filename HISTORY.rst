@@ -146,4 +146,9 @@ History
 ------------------
 
 * take coordinate attributes from input dataset
+
+0.6.4 (2023-03-13)
+------------------
+
 * HYRAS file naming convention
+* convert precip units from mm to mm day-1
