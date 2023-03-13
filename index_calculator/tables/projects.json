@@ -40,8 +40,8 @@
 	"drs_format": "era5/{}/{}/{}/{}"
     },
     "HYRAS": {
-	"components": "ci_name, horizontal_resolution, ci_timerange_index, realization",
-	"format": "{}_hyras_{}_{}_{}_de.nc",
+	"components": "ci_name, horizontal_resolution, realization, ci_frequency, ci_timerange_index",
+	"format": "{}_hyras_{}_{}_{}_de_{}.nc",
 	"icomponents": "variable_id, year, realization",
 	"iformat": "{}_hyras_{}_{}_{}_de.nc",
 	"drs_components": "ci_institute_id, realization, horizontal_resolution, ci_frequency, ci_name, ci_package_reference",
