@@ -162,8 +162,10 @@ class Processing:
         if "grid_mapping" in self.ds[self.var_name[0]].attrs:
             gm = self.ds[self.var_name[0]].attrs["grid_mapping"]
             array.attrs["grid_mapping"] = gm
-        data_vars[self.CIname] = array
         coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
+        for k, v in coords.items():
+            array[k] = v
+        data_vars[self.CIname] = array
         idx_ds = xr.Dataset(
             data_vars=data_vars,
             coords=coords,
