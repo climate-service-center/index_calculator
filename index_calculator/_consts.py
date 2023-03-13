@@ -36,3 +36,9 @@ _cf_names = {
     "tg": "tas",
     "tx": "tasmax",
 }
+
+_units = {
+    "pr": {
+        "mm": "mm day-1",
+    },
+}

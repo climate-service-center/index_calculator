@@ -1,7 +1,7 @@
 import pyhomogenize as pyh
 from pyhomogenize._consts import fmt as _fmt
 
-from ._consts import _bounds, _cf_names
+from ._consts import _bounds, _cf_names, _units
 from ._utils import get_time_range_as_str, kwargs_to_self
 
 
@@ -73,9 +73,14 @@ class PreProcessing:
         self.preproc = self._preprocessing()
 
     def _preprocessing(self):
-        for data_var in self.ds.data_vars:
-            if data_var in _cf_names.keys():
-                self.ds = self.ds.rename({data_var: _cf_names[data_var]})
+        for dvar in self.ds.data_vars:
+            if dvar in _cf_names.keys():
+                self.ds = self.ds.rename({dvar: _cf_names[dvar]})
+            if dvar in _units.keys() and hasattr(self.ds[dvar], "units"):
+                if self.ds[dvar].attrs["units"] in _units[dvar].keys():
+                    unit = "".join(_units[dvar].values())
+                    self.ds[dvar].attrs["units"] = unit
+
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
             self.var_name = time_control.name
