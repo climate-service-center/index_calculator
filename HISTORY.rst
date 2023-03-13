@@ -146,3 +146,4 @@ History
 ------------------
 
 * take coordinate attributes from input dataset
+* HYRAS file naming convention
