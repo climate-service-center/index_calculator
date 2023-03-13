@@ -140,4 +140,9 @@ History
 0.6.2 (2023-03-10)
 ------------------
 
-* component name adjusments with HYRA
+* component name adjusments with HYRAS
+
+0.6.3 (2023-03-13)
+------------------
+
+* take coordinate attributes from input dataset
