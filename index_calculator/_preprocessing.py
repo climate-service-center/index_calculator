@@ -75,7 +75,9 @@ class PreProcessing:
     def _preprocessing(self):
         for dvar in self.ds.data_vars:
             if dvar in _cf_names.keys():
-                self.ds = self.ds.rename({dvar: _cf_names[dvar]})
+                cf_var = _cf_names[dvar]
+                self.ds = self.ds.rename({dvar: cf_var})
+                dvar = cf_var
             if dvar in _units.keys() and hasattr(self.ds[dvar], "units"):
                 if self.ds[dvar].attrs["units"] in _units[dvar].keys():
                     unit = "".join(_units[dvar].values())
