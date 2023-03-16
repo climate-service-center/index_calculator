@@ -35,6 +35,7 @@ _cf_names = {
     "qq": "rsds",
     "tg": "tas",
     "tx": "tasmax",
+    "tn": "tasmin",
 }
 
 _units = {
