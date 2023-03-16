@@ -277,7 +277,7 @@
   },
   "SQI": {
     "standard_name": "days_with_air_temperature_above_threshold",
-    "long_name": "Number of uncomfortable sleep events (minimum temperature > {tresh} degC)",
+    "long_name": "Number of uncomfortable sleep events (minimum temperature > {thresh} degC)",
     "units": "days",
     "description": "count of days with daily minimum temperature above {thresh} degC"
   },
@@ -329,17 +329,17 @@
     "units": "days",
     "description": "count of days within periods of at least 6 consecutive days with maximum temperature above the 90th percentile"
   },
-  "CHD30": {
+  "CHDYY": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
-    "long_name": "Number of consecutive heat days (maximum temperature > 30 degC)",
+    "long_name": "Number of consecutive heat days (maximum temperature > {thresh} degC)",
     "units": "days",
-    "description": "count of consecutive days with daily maximum temperature above 30 degC"
+    "description": "count of consecutive days with daily maximum temperature above {thresh} degC"
   },
-  "CHD30x": {
+  "CHDYYx": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
-    "long_name": "Maximum number of consecutive heat days (maximum temperature > 30 degC)",
+    "long_name": "Maximum number of consecutive heat days (maximum temperature > {thresh} degC)",
     "units": "days",
-    "description": "maximum count of consecutive days with daily maximum temperature above 30 degC"
+    "description": "maximum count of consecutive days with daily maximum temperature above {thresh} degC"
   },
   "BVP": {
     "standard_name": "day_with_air_temperature_above_threshold",
