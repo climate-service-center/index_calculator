@@ -152,3 +152,10 @@ History
 
 * HYRAS file naming convention
 * convert precip units from mm to mm day-1
+
+
+0.6.5 (2023-03-16)
+------------------
+
+* rename variavle names to CF variable names
+* metadata with SQI CHDYY and CHDYYx
