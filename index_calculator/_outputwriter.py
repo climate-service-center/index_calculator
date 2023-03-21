@@ -72,7 +72,7 @@ class OutputWriter:
                 "'proc_obj=...'"
             )
         object_attrs_to_self(postproc_obj, self)
-        if isinstance(self.postproc, str):
+        if not isinstance(self.postproc, list):
             postprocs = [self.postproc]
         else:
             postprocs = self.postproc
@@ -143,6 +143,7 @@ class OutputWriter:
                     self.CIname: {"dtype": "float32"},
                 }
             },
+            unlimited_dims={self.unlimited_dims: True},
         )
         print(f"File written: {name}")
         return ds
