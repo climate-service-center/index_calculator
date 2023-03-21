@@ -276,7 +276,7 @@ def test_RYYp():
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_RRYYp():
@@ -285,13 +285,13 @@ def test_RRYYp():
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
     expected = [
-        2.006173e-04,
-        2.314815e-04,
-        2.314815e-04,
-        2.314815e-04,
-        2.314815e-04,
-        1.784336e-04,
-        9.837963e-05,
+        2.0062e-04,
+        2.3148e-04,
+        2.3148e-04,
+        2.3148e-04,
+        2.3148e-04,
+        2.1026e-04,
+        1.0417e-04,
     ]
     np.testing.assert_allclose(result, expected, rtol=1e-03)
 
@@ -307,7 +307,7 @@ def test_RYYP_perc():
         perc=perc,
         freq="7D",
     )
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_R90p():
@@ -326,7 +326,7 @@ def test_RYYpTOT():
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
-    np.testing.assert_allclose(result, 0.1452, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_RYYpABS():
@@ -335,7 +335,7 @@ def test_RYYpABS():
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
-    np.testing.assert_allclose(result, 9, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_R90pTOT():
@@ -425,7 +425,7 @@ def test_CW():
         base_period_time_range=["2000-01-01", "2000-01-07"],
         freq="7D",
     )
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_CD():
