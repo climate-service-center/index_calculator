@@ -159,3 +159,9 @@ History
 
 * rename variavle names to CF variable names
 * metadata with SQI CHDYY and CHDYYx
+
+0.6.6 (2023-03-21)
+------------------
+
+* filter out small values before calculating precipitation percentiles
+* raw percentile indicators (`RR95p`) has to time axis but a dayofyear axis
