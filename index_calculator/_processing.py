@@ -149,11 +149,6 @@ class Processing:
         params = self._adjust_params_to_ci()
         array = self.compute(**params)
         basics = pyh.basics()
-        date_range = basics.date_range(
-            start=self.preproc.time.values[0],
-            end=self.preproc.time.values[-1],
-            frequency=_tfreq[self.freq],
-        )
         data_vars = {
             k: v
             for k, v in dvars.items()
@@ -171,19 +166,44 @@ class Processing:
             coords=coords,
             attrs=self.preproc.attrs,
         )
-        idx_ds = idx_ds.assign_coords(
-            {"time": date_range},
-        )
-        time_encoding = self.ds.time.encoding
-        time_encoding["dtype"] = np.float64
-        idx_ds.time.encoding = time_encoding
-        idx_ds = (
-            pyh.time_control(idx_ds)
-            .add_time_bounds(
-                frequency=self.freq,
+        if "time" in array.coords:
+            date_range = basics.date_range(
+                start=self.preproc.time.values[0],
+                end=self.preproc.time.values[-1],
+                frequency=_tfreq[self.freq],
             )
-            .ds
-        )
+            idx_ds = idx_ds.assign_coords(
+                {"time": date_range},
+            )
+            time_encoding = self.ds.time.encoding
+            time_encoding["dtype"] = np.float64
+            idx_ds.time.encoding = time_encoding
+            idx_ds = (
+                pyh.time_control(idx_ds)
+                .add_time_bounds(
+                    frequency=self.freq,
+                )
+                .ds
+            )
+            self.unlimited_dims = "time"
+        else:
+            for dim in idx_ds[self.CIname].dims:
+                if dim not in self.preproc[self.var_name[0]].dims:
+                    self.unlimited_dims = dim
+                    break
+            idx_ds[self.unlimited_dims] = idx_ds[self.unlimited_dims].astype(
+                float,
+            )
+            transpose_list = list(
+                map(
+                    lambda x: x.replace("time", self.unlimited_dims),
+                    self.preproc[self.var_name[0]].dims,
+                ),
+            )
+            idx_ds[self.CIname] = idx_ds[self.CIname].transpose(
+                *transpose_list,
+            )
+
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
             idx_ds = idx_ds.rename({data_var: data_var_repl})

@@ -137,9 +137,13 @@ class PostProcessing:
         if self.split is False:
             output.attrs[trange] = self._get_time_borders(output.time.values)
             return output
-        olist = []
-        for name, ds in output.resample({"time": self.split}):
-            ds_ = ds.copy()
-            ds_.attrs[trange] = self._get_time_borders(ds.time.values)
-            olist.append(ds_)
-        return olist
+        elif "time" in output.dims:
+            olist = []
+            for name, ds in output.resample({"time": self.split}):
+                ds_ = ds.copy()
+                ds_.attrs[trange] = self._get_time_borders(ds.time.values)
+                olist.append(ds_)
+            return olist
+        if hasattr(output, "ci_reference_period"):
+            output.attrs[trange] = output.attrs["ci_reference_period"]
+        return output
