@@ -14,6 +14,11 @@ def _thresh_string(thresh, units):
         return "{} {}".format(str(thresh), units)
 
 
+def _filter_out_small_values(da, thresh, context=None):
+    thresh = convert_units_to(thresh, da, context=context)
+    return da.where(da > thresh)
+
+
 def _get_da(dictionary, var):
     if "ds" in dictionary.keys():
         return dictionary["ds"][var]
@@ -75,8 +80,13 @@ class CD:
                 base_period_time_range=base_period_time_range,
             )
         if perc_pr is None:
+            da_pr_f = _filter_out_small_values(
+                da_pr,
+                "1 mm/day",
+                context="hydro",
+            )
             perc_pr = _get_percentile(
-                da=da_pr,
+                da=da_pr_f,
                 perc=25,
                 base_period_time_range=base_period_time_range,
             )
@@ -245,8 +255,13 @@ class CW:
                 base_period_time_range=base_period_time_range,
             )
         if perc_pr is None:
+            da_pr_f = _filter_out_small_values(
+                da_pr,
+                "1 mm/day",
+                context="hydro",
+            )
             perc_pr = _get_percentile(
-                da=da_pr,
+                da=da_pr_f,
                 perc=75,
                 base_period_time_range=base_period_time_range,
             )
@@ -629,6 +644,7 @@ class RRYYp:
             Precip percentil value.
         """
         da = _get_da(params, "pr")
+        da = _filter_out_small_values(da, "1 mm/day", context="hydro")
         return _get_percentile(
             da=da,
             perc=perc,
@@ -660,8 +676,9 @@ class RYYp:
             Number of wet days over a given percentile.
         """
         da = _get_da(params, "pr")
+        da_pr = _filter_out_small_values(da, "1 mm/day", context="hydro")
         percentile = _get_percentile(
-            da=da,
+            da=da_pr,
             perc=perc,
             base_period_time_range=base_period_time_range,
         )
@@ -763,8 +780,9 @@ class RYYpABS:
             Precipitation fraction with precip > {perc}th percentile.
         """
         da = _get_da(params, "pr")
+        da_pr = _filter_out_small_values(da, "1 mm/day", context="hydro")
         pr_per = _get_percentile(
-            da=da,
+            da=da_pr,
             perc=perc,
             base_period_time_range=base_period_time_range,
         )
@@ -815,8 +833,9 @@ class RYYpTOT:
             Precipitation fraction with precip > {perc}th percentile.
         """
         da = _get_da(params, "pr")
+        da_pr = _filter_out_small_values(da, "1 mm/day", context="hydro")
         percentile = _get_percentile(
-            da=da,
+            da=da_pr,
             perc=perc,
             base_period_time_range=base_period_time_range,
         )
@@ -1309,8 +1328,13 @@ class WD:
                 base_period_time_range=base_period_time_range,
             )
         if perc_pr is None:
+            da_pr_f = _filter_out_small_values(
+                da_pr,
+                "1 mm/day",
+                context="hydro",
+            )
             perc_pr = _get_percentile(
-                da=da_pr,
+                da=da_pr_f,
                 perc=25,
                 base_period_time_range=base_period_time_range,
             )
@@ -1393,8 +1417,13 @@ class WW:
                 base_period_time_range=base_period_time_range,
             )
         if perc_pr is None:
+            da_pr_f = _filter_out_small_values(
+                da_pr,
+                "1 mm/day",
+                context="hydro",
+            )
             perc_pr = _get_percentile(
-                da=da_pr,
+                da=da_pr_f,
                 perc=75,
                 base_period_time_range=base_period_time_range,
             )
