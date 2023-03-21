@@ -1541,7 +1541,9 @@ class SD:
         da = convert_units_to(snd, "mm")
         da.attrs["units"] = "mm/day"
         da = da.rename("prsn")
-        params["ds"]["prsn"] = da
+        if "ds" in params.keys():
+            del params["ds"]
+        params["prsn"] = da
         return xc.atmos.days_with_snow(
             low=thresh,
             **params,
@@ -1618,7 +1620,9 @@ class Sfreq:
         da = convert_units_to(snd, "mm")
         da.attrs["units"] = "mm/day"
         da = da.rename("prsn")
-        params["ds"]["prsn"] = da
+        if "ds" in params.keys():
+            del params["ds"]
+        params["prsn"] = da
         sd = xc.atmos.days_with_snow(
             low=thresh,
             **params,
