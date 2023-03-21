@@ -1535,12 +1535,13 @@ class SD:
         """
         thresh = _thresh_string(thresh, "mm/day")
         da = _get_da(params, "prsn")
-        prsn = _convert_snow_mm_day(da)
-        prsn = prsn.assign_attrs(**da.attrs)
-        prsn.attrs["units"] = "kg m-2 s-1"
-        if "ds" in params.keys():
-            del params["ds"]
-        params["prsn"] = prsn
+        da = convert_units_to(da, "kg/(m**2*day)", context="hydro")
+        da.attrs["units"] = "kg/m**2"
+        snd = xc.land.snw_to_snd(snw=da)
+        da = convert_units_to(snd, "mm")
+        da.attrs["units"] = "mm/day"
+        da = da.rename("prsn")
+        params["ds"]["prsn"] = da
         return xc.atmos.days_with_snow(
             low=thresh,
             **params,
@@ -1611,12 +1612,13 @@ class Sfreq:
         """
         thresh = _thresh_string(1, "mm/day")
         da = _get_da(params, "prsn")
-        prsn = _convert_snow_mm_day(da)
-        prsn = prsn.assign_attrs(**da.attrs)
-        prsn.attrs["units"] = "kg m-2 s-1"
-        if "ds" in params.keys():
-            del params["ds"]
-        params["prsn"] = prsn
+        da = convert_units_to(da, "kg/(m**2*day)", context="hydro")
+        da.attrs["units"] = "kg/m**2"
+        snd = xc.land.snw_to_snd(snw=da)
+        da = convert_units_to(snd, "mm")
+        da.attrs["units"] = "mm/day"
+        da = da.rename("prsn")
+        params["ds"]["prsn"] = da
         sd = xc.atmos.days_with_snow(
             low=thresh,
             **params,
