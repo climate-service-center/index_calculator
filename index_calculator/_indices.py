@@ -40,8 +40,14 @@ def _get_percentile(da, perc, base_period_time_range):
     return per_doy_comp.sel(percentiles=perc)
 
 
-def _convert_snow_mm_day(da):
-    return da / 312 * 1000
+def _convert_prsn_to_mm_day(da):
+    da = convert_units_to(da, "kg/(m**2*day)", context="hydro")
+    da.attrs["units"] = "kg/m**2"
+    snd = xc.land.snw_to_snd(snw=da)
+    da = convert_units_to(snd, "mm")
+    da.attrs["units"] = "mm/day"
+    da = da.rename("prsn")
+    return da
 
 
 BASE_PERIOD = ["1971-01-01", "2000-12-31"]
@@ -682,11 +688,10 @@ class RYYp:
             perc=perc,
             base_period_time_range=base_period_time_range,
         )
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return xc.atmos.days_over_precip_doy_thresh(
-                pr_per=percentile,
-                **params,
-            )
+        return xc.atmos.days_over_precip_doy_thresh(
+            pr_per=percentile,
+            **params,
+        )
 
 
 class RYYmm:
@@ -1535,12 +1540,7 @@ class SD:
         """
         thresh = _thresh_string(thresh, "mm/day")
         da = _get_da(params, "prsn")
-        da = convert_units_to(da, "kg/(m**2*day)", context="hydro")
-        da.attrs["units"] = "kg/m**2"
-        snd = xc.land.snw_to_snd(snw=da)
-        da = convert_units_to(snd, "mm")
-        da.attrs["units"] = "mm/day"
-        da = da.rename("prsn")
+        da = _convert_prsn_to_mm_day(da)
         if "ds" in params.keys():
             del params["ds"]
         params["prsn"] = da
@@ -1568,7 +1568,7 @@ class SCD:
         Number of days with snow cover above {thresh} threshold.
         """
         thresh = _thresh_string(thresh, "cm")
-        return xc.land.snow_cover_duration(
+        return xc.land.snd_season_length(
             thresh=thresh,
             **params,
         )
@@ -1589,10 +1589,11 @@ class Sint:
         """
 
         da = _get_da(params, "prsn")
-        prsn = _convert_snow_mm_day(da) * 86400
+        da = _convert_prsn_to_mm_day(da)
         if "ds" in params.keys():
             del params["ds"]
-        masked = xr.where(prsn > 1, prsn, np.nan)
+        params["prsn"] = da
+        masked = xr.where(da > 1, da, np.nan)
         mean = masked.resample(time=params["freq"]).mean(dim="time")
         return xr.where(mean == np.nan, 0, mean)
 
@@ -1614,12 +1615,7 @@ class Sfreq:
         """
         thresh = _thresh_string(1, "mm/day")
         da = _get_da(params, "prsn")
-        da = convert_units_to(da, "kg/(m**2*day)", context="hydro")
-        da.attrs["units"] = "kg/m**2"
-        snd = xc.land.snw_to_snd(snw=da)
-        da = convert_units_to(snd, "mm")
-        da.attrs["units"] = "mm/day"
-        da = da.rename("prsn")
+        da = _convert_prsn_to_mm_day(da)
         if "ds" in params.keys():
             del params["ds"]
         params["prsn"] = da
