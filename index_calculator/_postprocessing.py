@@ -144,6 +144,13 @@ class PostProcessing:
                 ds_.attrs[trange] = self._get_time_borders(ds.time.values)
                 olist.append(ds_)
             return olist
+        elif "time" in output.coords:
+            time_values = [
+                output.time.values[()],
+                output.time.values[()],
+            ]
+            output.attrs[trange] = self._get_time_borders(time_values)
+            return output
         if hasattr(output, "ci_reference_period"):
             output.attrs[trange] = output.attrs["ci_reference_period"]
         return output
