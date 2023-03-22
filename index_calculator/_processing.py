@@ -160,6 +160,7 @@ class Processing:
         coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
         for k, v in coords.items():
             array[k] = v
+
         data_vars[self.CIname] = array
         idx_ds = xr.Dataset(
             data_vars=data_vars,
@@ -175,6 +176,7 @@ class Processing:
             idx_ds = idx_ds.assign_coords(
                 {"time": date_range},
             )
+            idx_ds = idx_ds.squeeze()
             time_encoding = self.ds.time.encoding
             time_encoding["dtype"] = np.float64
             idx_ds.time.encoding = time_encoding
