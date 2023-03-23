@@ -22,7 +22,7 @@ The official documentation is at https://index_calculator.readthedocs.io/
 
 Features
 --------
-* Calculate climate indices via xclim.
+* Calculate climate indices via xclim_.
 * Write standardized netCDF attributes.
 * Write on disk with a project-specific output file name.
 
@@ -88,6 +88,8 @@ Credits
 -------
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _xclim: https://xclim.readthedocs.io/en/latest/
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
