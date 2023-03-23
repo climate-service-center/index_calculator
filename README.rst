@@ -126,6 +126,6 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
         
 .. |coveralls| image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/ludwiglierhammer/index_calculator        
-        
+    :alt: Coveralls    
         
 
