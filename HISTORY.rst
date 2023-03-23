@@ -158,7 +158,7 @@ History
 ------------------
 
 * rename variavle names to CF variable names
-* metadata with SQI CHDYY and CHDYYx
+* metadata with SQI, CHDYY and CHDYYx
 
 0.6.6 (2023-03-21)
 ------------------
@@ -171,3 +171,4 @@ History
 
 * HYRAS file naming convention
 * delete blanks from output file name
+* calcualte indicators woth length of time axis is 1
