@@ -2,7 +2,7 @@
 
 __author__ = """Ludwig Lierhammer"""
 __email__ = "ludwig.lierhammer@hereon.de"
-__version__ = "0.6.6"
+__version__ = "0.6.7"
 
 from ._data import netcdf as test_netcdf  # noqa
 from ._outputwriter import OutputWriter as outputwriter

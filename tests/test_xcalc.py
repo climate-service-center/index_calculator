@@ -1,4 +1,4 @@
-import pytest  # noqa
+# import pytest  # noqa
 from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
@@ -65,3 +65,6 @@ def test_thresh_index_calculator():
         project="CORDEX",
         institution_id="TEST",
     )
+
+
+test_processing()
