@@ -172,3 +172,8 @@ History
 * HYRAS file naming convention
 * delete blanks from output file name
 * calcualte indicators woth length of time axis is 1
+
+0.7.0 (2023-03-22)
+------------------
+
+* published in zenodo
