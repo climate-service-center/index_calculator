@@ -165,3 +165,9 @@ History
 
 * filter out small values before calculating precipitation percentiles
 * raw percentile indicators (`RR95p`) has to time axis but a dayofyear axis
+
+0.6.7 (2023-03-22)
+------------------
+
+* HYRAS file naming convention
+* delete blanks from output file name
