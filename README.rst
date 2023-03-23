@@ -2,36 +2,43 @@
 index_calculator
 ================
 
-.. image:: https://github.com/ludwiglierhammer/index_calculator/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/ludwiglierhammer/index_calculator/actions/workflows/ci.yml
++----------------------------+-----------------------------------------------------+
+| Versions                   | |pypi|                                              |
++----------------------------+-----------------------------------------------------+
+| Documentation and Support  | |docs| |versions|                                   |
++----------------------------+-----------------------------------------------------+
+| Open Source                | |license|                                           |
++----------------------------+-----------------------------------------------------+
+| Coding Standards           | |black| |pre-commit|                                |
++----------------------------+-----------------------------------------------------+
+| Development Status         | |status| |build| |coveralls|                        |
++----------------------------+-----------------------------------------------------+
 
-.. image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/ludwiglierhammer/index_calculator
+Python index_calculator is an xclim wrapper to calculate climate indicators from CMORized netCDF files.
 
-.. image:: https://img.shields.io/pypi/v/index_calculator.svg
-    :target: https://pypi.python.org/pypi/index_calculator
-
-.. image:: https://readthedocs.org/projects/index_calculator/badge/?version=latest
-    :target: https://index-calculator.readthedocs.io/en/latest/?version=latest
-    :alt: Documentation Status
-
-.. image:: https://results.pre-commit.ci/badge/github/ludwiglierhammer/index_calculator/master.svg
-   :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/master
-   :alt: pre-commit.ci status
-
-Python index_calculator is an xclim wrapper to calculate climate indices from CMORized netCDF files.
-
-
-* Free software: MIT license
-* Documentation: https://index-calculator.readthedocs.io.
-
+Documentation
+-------------
+The official documentation is at https://index_calculator.readthedocs.io/
 
 Features
 --------
-
 * Calculate climate indices via xclim.
 * Write standardized netCDF attributes.
 * Write on disk with a project-specific output file name.
+
+Available projects
+------------------
+You can calculate climate indicators using index_calculator with the projects listed in the table below.
+
++--------------------+--------------+
+| CMIP               | CMIP5, CMIP6 |
++--------------------+--------------+
+| CORDEX             | CORDEX       |
++--------------------+--------------+
+| Observational data | E-OBS, HYRAS |
++--------------------+--------------+
+| Reanalysis data    | ERA5         |
++--------------------+--------------+
 
 Installation
 ------------
@@ -58,13 +65,17 @@ Requirements
 
 * python3.6 or higher
 
+* xclim
+
 * numpy
 
 * pandas
 
 * xarray
 
-* xclim
+* cf_xarray
+
+* cftime
 
 
 Contact
@@ -80,3 +91,41 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+.. |pypi| image:: https://img.shields.io/pypi/v/index_calculator.svg
+        :target: https://pypi.python.org/pypi/index_calculator
+        :alt: Python Package Index Build
+        
+.. |docs| image:: https://readthedocs.org/projects/index_calculator/badge/?version=latest
+        :target: https://index-calculator.readthedocs.io/en/latest/?version=latest
+        :alt: Documentation Status        
+        
+.. |versions| image:: https://img.shields.io/pypi/pyversions/index_calculator.svg
+        :target: https://pypi.python.org/pypi/index_calculator
+        :alt: Supported Python Versions      
+        
+.. |license| image:: https://img.shields.io/github/license/ludwiglierhammer/index_calculator.svg
+        :target: https://github.com/ludwiglierhammer/index_calculator/blob/master/LICENSE
+        :alt: License   
+        
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+        :target: https://github.com/psf/black
+        :alt: Python Black
+        
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/ludwiglierhammer/index_calculator/master.svg
+   :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/master
+   :alt: pre-commit.ci status     
+   
+.. |status| image:: https://www.repostatus.org/badges/latest/active.svg
+        :target: https://www.repostatus.org/#active
+        :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
+        
+.. |build| image:: https://github.com/ludwiglierhammer/index_calculator/actions/workflows/ci.yml/badge.svg
+        :target: https://github.com/ludwiglierhammer/index_calculator/actions/workflows/ci.yml        
+        :alt: Build Status
+        
+.. |coveralls| image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/ludwiglierhammer/index_calculator        
+        
+        
+
