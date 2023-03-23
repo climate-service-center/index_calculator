@@ -7,7 +7,7 @@ Calculate climate indicators with standardized project-specific attributes: inde
 +----------------------------+-----------------------------------------------------+
 | Documentation and Support  | |docs| |versions|                                   |
 +----------------------------+-----------------------------------------------------+
-| Open Source                | |license|                                           |
+| Open Source                | |license| |zenodo|                                  |
 +----------------------------+-----------------------------------------------------+
 | Coding Standards           | |black| |pre-commit|                                |
 +----------------------------+-----------------------------------------------------+
@@ -125,5 +125,9 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
         :alt: Build Status
 
 .. |coveralls| image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/ludwiglierhammer/index_calculator
-    :alt: Coveralls
+	:target: https://codecov.io/gh/ludwiglierhammer/index_calculator
+	:alt: Coveralls
+
+.. |zenodo| .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7762680.svg
+        :target: https://doi.org/10.5281/zenodo.7762680
+ 	:alt:   DOI
