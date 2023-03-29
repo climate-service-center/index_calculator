@@ -67,4 +67,23 @@ def test_thresh_index_calculator():
     )
 
 
-test_processing()
+def test_perc_index_calculator():
+    pr_ds = open_xrdataset(test_netcdf["pr"])
+    xcalc.index_calculator(
+        ds=pr_ds,
+        freq="week",
+        index="RR95p",
+        crop_time_axis=False,
+        project="CORDEX",
+        institution_id="TEST",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
+    xcalc.index_calculator(
+        ds=pr_ds,
+        freq="week",
+        index="R95p",
+        crop_time_axis=False,
+        project="CORDEX",
+        institution_id="TEST",
+        base_period_time_range=["2000-01-01", "2000-01-07"],
+    )
