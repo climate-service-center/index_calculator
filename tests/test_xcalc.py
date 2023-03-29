@@ -76,7 +76,7 @@ def test_perc_index_calculator():
         crop_time_axis=False,
         project="CORDEX",
         institution_id="TEST",
-        base_period_time_range=["2000-01-01", "2000-01-07"],
+        base_period_time_range=["2001-01-01", "2001-01-07"],
     )
     xcalc.index_calculator(
         ds=pr_ds,
@@ -85,5 +85,5 @@ def test_perc_index_calculator():
         crop_time_axis=False,
         project="CORDEX",
         institution_id="TEST",
-        base_period_time_range=["2000-01-01", "2000-01-07"],
+        base_period_time_range=["2001-01-01", "2001-01-07"],
     )

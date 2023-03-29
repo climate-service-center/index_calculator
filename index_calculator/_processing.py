@@ -126,7 +126,7 @@ class Processing:
             if k in defaults and k in self.kwargs.keys():
                 if "YY" in self.CIname:
                     self.CIname = self.CIname.replace("YY", str(v))
-                elif isinstance(numb_name, list):
+                elif isinstance(v, list):
                     continue
                 elif numb_name is not None:
                     self.CIname = self.CIname.replace(
