@@ -6,7 +6,7 @@ from xclim.core.calendar import percentile_doy, resample_doy
 from xclim.core.units import convert_units_to, rate2amount
 from xclim.indices.generic import compare
 
-from ._const import _base_period as BASE_PERIOD
+from ._consts import _base_period as BASE_PERIOD
 
 
 def _thresh_string(thresh, units):
