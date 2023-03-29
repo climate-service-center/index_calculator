@@ -43,3 +43,5 @@ _units = {
         "mm": "mm day-1",
     },
 }
+
+_base_period = ["1971", "2000"]
