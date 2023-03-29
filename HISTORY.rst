@@ -177,3 +177,8 @@ History
 ------------------
 
 * published in zenodo
+
+0.7.1 (2023-03-29)
+------------------
+
+* calculating percentile indices with non-standard calendar
