@@ -1815,3 +1815,135 @@ class FFE:
             window=window,
             **params,
         )
+
+
+class FG:
+    """Mean daily mean wind speed."""
+
+    def compute(**params):
+        """Calculate mean daily mean wind speed.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Mean daily mean wind speed.
+        """
+        sfcWind = params["sfcWind"]
+        return (
+            sfcWind.resample(time=params["freq"])
+            .mean(dim="time")
+            .assign_attrs(units=sfcWind.units)
+        )
+
+
+class FGn:
+    """Minimum daily mean wind speed."""
+
+    def compute(**params):
+        """Calculate minimum daily mean wind speed.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Minimum daily mean wind speed.
+        """
+        sfcWind = params["sfcWind"]
+        return (
+            sfcWind.resample(time=params["freq"])
+            .min(dim="time")
+            .assign_attrs(units=sfcWind.units)
+        )
+
+
+class FGx:
+    """Maximum daily mean wind speed."""
+
+    def compute(**params):
+        """Calculate maximum daily mean wind speed.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum daily mean wind speed.
+        """
+        sfcWind = params["sfcWind"]
+        return (
+            sfcWind.resample(time=params["freq"])
+            .max(dim="time")
+            .assign_attrs(units=sfcWind.units)
+        )
+
+
+class FX:
+    """Mean daily maximum wind speed."""
+
+    def compute(**params):
+        """Calculate mean daily maximum wind speed.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Mean daily maximum wind speed.
+        """
+        sfcWindmax = params["sfcWindmax"]
+        return (
+            sfcWindmax.resample(time=params["freq"])
+            .mean(dim="time")
+            .assign_attrs(units=sfcWindmax.units)
+        )
+
+
+class FXn:
+    """Minimum daily maximum wind speed."""
+
+    def compute(**params):
+        """Calculate minimum daily maximum wind speed.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Minimum daily maximum wind speed.
+        """
+        sfcWindmax = params["sfcWindmax"]
+        return (
+            sfcWindmax.resample(time=params["freq"])
+            .min(dim="time")
+            .assign_attrs(units=sfcWindmax.units)
+        )
+
+
+class FXx:
+    """Maximum daily maximum wind speed."""
+
+    def compute(**params):
+        """Calculate maximum daily maximum wind speed.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum daily maximum wind speed.
+        """
+        sfcWindmax = params["sfcWindmax"]
+        return (
+            sfcWindmax.resample(time=params["freq"])
+            .max(dim="time")
+            .assign_attrs(units=sfcWindmax.units)
+        )

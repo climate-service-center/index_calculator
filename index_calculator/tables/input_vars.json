@@ -63,5 +63,11 @@
     "GSS": "tas",
     "GSE": "tas",
     "FFS": "tasmin",
-    "FFE": "tasmin"
+    "FFE": "tasmin",
+    "FG": "sfcWind",
+    "FGx": "sfcWind",
+    "FGn": "sfcWind",
+    "FX": "sfcWind",
+    "FXx": "sfcWindmax",
+    "FXn": "sfcWindmax"
 }

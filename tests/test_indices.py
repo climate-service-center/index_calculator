@@ -604,7 +604,7 @@ def FG():
         sfcWind=sfcWind_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+    np.testing.assert_allclose(result, [9.429], rtol=1e-03)
 
 
 def FGn():
@@ -612,7 +612,7 @@ def FGn():
         sfcWind=sfcWind_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+    np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
 def FGx():
@@ -620,7 +620,7 @@ def FGx():
         sfcWind=sfcWind_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+    np.testing.assert_allclose(result, [23], rtol=1e-03)
 
 
 def FX():
@@ -628,7 +628,7 @@ def FX():
         sfcWindmax=sfcWind_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+    np.testing.assert_allclose(result, [9.429], rtol=1e-03)
 
 
 def FXn():
@@ -636,7 +636,7 @@ def FXn():
         sfcWindmax=sfcWind_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+    np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
 def FXx():
@@ -644,4 +644,4 @@ def FXx():
         sfcWindmax=sfcWind_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+    np.testing.assert_allclose(result, [23], rtol=1e-03)
