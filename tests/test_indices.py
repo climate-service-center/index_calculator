@@ -597,3 +597,51 @@ def test_RRm():
         freq="7D",
     )
     np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+
+
+def FG():
+    result = indices.FG.compute(
+        sfcWind=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+
+
+def FGn():
+    result = indices.FGn.compute(
+        sfcWind=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+
+
+def FGx():
+    result = indices.FGx.compute(
+        sfcWind=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+
+
+def FX():
+    result = indices.FG.compute(
+        sfcWindmax=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+
+
+def FXn():
+    result = indices.FGn.compute(
+        sfcWindmax=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
+
+
+def FXx():
+    result = indices.FGx.compute(
+        sfcWindmax=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [8.857], rtol=1e-03)
