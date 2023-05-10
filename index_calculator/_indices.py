@@ -1831,11 +1831,11 @@ class FG:
         xarray.DataArray
             Mean daily mean wind speed.
         """
-        sfcWind = params["sfcWind"]
+        da = _get_da(params, "sfcWind")
         return (
-            sfcWind.resample(time=params["freq"])
+            da.resample(time=params["freq"])
             .mean(dim="time")
-            .assign_attrs(units=sfcWind.units)
+            .assign_attrs(units=da.units)
         )
 
 
@@ -1853,11 +1853,11 @@ class FGn:
         xarray.DataArray
             Minimum daily mean wind speed.
         """
-        sfcWind = params["sfcWind"]
+        da = _get_da(params, "sfcWind")
         return (
-            sfcWind.resample(time=params["freq"])
+            da.resample(time=params["freq"])
             .min(dim="time")
-            .assign_attrs(units=sfcWind.units)
+            .assign_attrs(units=da.units)
         )
 
 
@@ -1875,11 +1875,11 @@ class FGx:
         xarray.DataArray
             Maximum daily mean wind speed.
         """
-        sfcWind = params["sfcWind"]
+        da = _get_da(params, "sfcWind")
         return (
-            sfcWind.resample(time=params["freq"])
+            da.resample(time=params["freq"])
             .max(dim="time")
-            .assign_attrs(units=sfcWind.units)
+            .assign_attrs(units=da.units)
         )
 
 
@@ -1897,11 +1897,11 @@ class FX:
         xarray.DataArray
             Mean daily maximum wind speed.
         """
-        sfcWindmax = params["sfcWindmax"]
+        da = _get_da(params, "sfcWindmax")
         return (
-            sfcWindmax.resample(time=params["freq"])
+            da.resample(time=params["freq"])
             .mean(dim="time")
-            .assign_attrs(units=sfcWindmax.units)
+            .assign_attrs(units=da.units)
         )
 
 
@@ -1919,11 +1919,11 @@ class FXn:
         xarray.DataArray
             Minimum daily maximum wind speed.
         """
-        sfcWindmax = params["sfcWindmax"]
+        da = _get_da(params, "sfcWindmax")
         return (
-            sfcWindmax.resample(time=params["freq"])
+            da.resample(time=params["freq"])
             .min(dim="time")
-            .assign_attrs(units=sfcWindmax.units)
+            .assign_attrs(units=da.units)
         )
 
 
@@ -1941,9 +1941,9 @@ class FXx:
         xarray.DataArray
             Maximum daily maximum wind speed.
         """
-        sfcWindmax = params["sfcWindmax"]
+        da = _get_da(params, "sfcWindmax")
         return (
-            sfcWindmax.resample(time=params["freq"])
+            da.resample(time=params["freq"])
             .max(dim="time")
-            .assign_attrs(units=sfcWindmax.units)
+            .assign_attrs(units=da.units)
         )
