@@ -182,3 +182,14 @@ History
 ------------------
 
 * calculating percentile indices with non-standard calendar
+
+0.7.2 (2023-05-10)
+------------------
+
+* new indicators implemented:
+  * FG (mean daily wind speed)
+  * FGn (minimum od mean daily wind speed)
+  * FGx (maximum of mean daily wind speed)
+  * FX (mean of maximum daily wind speed)
+  * FXn (minimum of daily maximum wind speed)
+  * FXx (maximum of daily maximum wind speed)
