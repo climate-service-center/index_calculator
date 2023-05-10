@@ -67,7 +67,7 @@
     "FG": "sfcWind",
     "FGx": "sfcWind",
     "FGn": "sfcWind",
-    "FX": "sfcWind",
+    "FX": "sfcWindmax",
     "FXx": "sfcWindmax",
     "FXn": "sfcWindmax"
 }
