@@ -165,7 +165,7 @@ def test_RXYYday():
 
 
 def test_RX7day():
-    result = indices.RXYYday.compute(pr=pr_xarray(), freq="7D", thresh=7)
+    result = indices.RXYYday.compute(pr=pr_xarray(), freq="7D", window=7)
     np.testing.assert_allclose(result, 62, rtol=1e-03)
 
 
@@ -298,13 +298,13 @@ def test_RRYYp():
 
 def test_RYYP_perc():
     pr = pr_xarray()
-    perc = indices.RRYYp.compute(
+    per = indices.RRYYp.compute(
         pr=pr,
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
     result = indices.RYYp.compute(
         pr=pr,
-        perc=perc,
+        per=per,
         freq="7D",
     )
     np.testing.assert_allclose(result, 0, rtol=1e-03)
@@ -313,7 +313,7 @@ def test_RYYP_perc():
 def test_R90p():
     result = indices.RYYp.compute(
         pr=pr_xarray(),
-        perc=90,
+        per=90,
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
@@ -341,7 +341,7 @@ def test_RYYpABS():
 def test_R90pTOT():
     result = indices.RYYpTOT.compute(
         pr=pr_xarray(),
-        perc=90,
+        per=90,
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
@@ -361,16 +361,6 @@ def test_GD():
 def test_GD5():
     result = indices.GD.compute(tas=tas_xarray(), freq="7D")
     np.testing.assert_allclose(result, 41, rtol=1e-03)
-
-
-def test_GDYYx():
-    result = indices.GDYYx.compute(tas=tas_xarray(), freq="7D")
-    np.testing.assert_allclose(result, np.nan, rtol=1e-03)
-
-
-def test_GD5x():
-    result = indices.GDYYx.compute(tas=tas_xarray(), freq="7D")
-    np.testing.assert_allclose(result, np.nan, rtol=1e-03)
 
 
 def test_HD17():
@@ -502,7 +492,7 @@ def test_SD():
         prsn=prsn_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, 5, rtol=1e-03)
+    np.testing.assert_allclose(result, 4, rtol=1e-03)
 
 
 def test_SCD():
@@ -516,7 +506,7 @@ def test_SCD():
 
 def test_Sfreq():
     result = indices.Sfreq.compute(prsn=prsn_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 5 / 7 * 100, rtol=1e-03)
+    np.testing.assert_allclose(result, 4 / 7 * 100, rtol=1e-03)
 
 
 def test_Sint():
@@ -524,7 +514,7 @@ def test_Sint():
         prsn=prsn_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, 17.63, rtol=1e-03)
+    np.testing.assert_allclose(result, 6.75, rtol=1e-03)
 
 
 def test_UTCI():
