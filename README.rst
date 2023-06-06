@@ -130,6 +130,6 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 	:target: https://codecov.io/gh/ludwiglierhammer/index_calculator
 	:alt: Coveralls
 
-.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7762680.svg
-        :target: https://doi.org/10.5281/zenodo.7762680
+.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7762679.svg
+        :target: https://doi.org/10.5281/zenodo.7762679
  	:alt:   DOI
