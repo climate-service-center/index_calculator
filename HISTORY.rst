@@ -193,3 +193,12 @@ History
   * FX (mean of maximum daily wind speed)
   * FXn (minimum of daily maximum wind speed)
   * FXx (maximum of daily maximum wind speed)
+
+0.7.3 (2023-06-06)
+------------------
+
+* rework metadata and make it more flexible regarding threshold values
+* more parameter information in cliamte indices docstrings
+* adjust parameter names to xclim
+* set threshold for dry day incides from 0.1 mm/day to 1 mm/day
+* set threshold from snowfall rate to liquid water equivalent snowfall rate with SD, Sint and Sfreq -> those changes are not implemented in xclim yet, PR will be accepted with xclim>=0.45
