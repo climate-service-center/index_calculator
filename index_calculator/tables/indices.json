@@ -465,25 +465,25 @@
 	"standard_name": "snow_days",
 	"long_name": "Number of days with snow above {thresh} mm",
 	"units": "days",
-	"description":"Number of days with solid precipitation flux above {thresh} mm."
+	"description":"Number of days with solid precipitation flux above {thresh} mm (liquid water equivalent)."
     },
     "SCD": {
 	"standard_name": "snow_cover_duration",
 	"long_name": "Number of days when the snow depth is greater than or equal to a {thresh} cm",
 	"units": "days",
-	"description": "Number of days with snow depth at or above threshold {thresh} cm."
+	"description": "Number of days with snow depth at or above {thresh} cm."
     },
     "Sint": {
 	"standard_name": "snowfall_intensity",
 	"long_name": "Mean snowfall during days with snowfall > {thresh} mm",
 	"units": "mm",
-	"description": "Mean snowfall flux above {thresh} mm."
+	"description": "Mean snowfall flux above {thresh} mm (liquid water equivalent)."
     },
     "Sfreq": {
 	"standard_name": "snowfall_frequency",
 	"long_name": "Percentage of days with snowfall flux > {thresh} mm/day",
 	"units": "%",
-	"description": "Snowfall intensity is derived by dividing the total number of days with snowfall > {thresh} mm by the total number of days within the analysed time period."
+	"description": "Snowfall intensity is derived by dividing the total number of days with snowfall > {thresh} mm (liquid water equivalent) by the total number of days within the analysed time period."
     },
     "UTCI": {
 	"standard_name": "universal_thermal_climate_index",
