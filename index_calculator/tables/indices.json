@@ -222,22 +222,16 @@
 	"description": "Number of days with daily minimum temperature above {thresh} degC."
     },
     "HD17": {
-	"standard_name": "days_with_air_temperature_below_threshold",
-	"long_name": "Number of heating degree days (mean temperature < 17 degC)",
+	"standard_name": "degree_days_for_days_with_air_temperature_below_threshold",
+	"long_name": "Cumulative heating degree days (mean temperature < 17 degC)",
 	"units": "degree_day",
-	"description": "Number of days with daily mean temperature below 17 degC."
+	"description": "Cumulative sum of temperature degrees for daily mean temperature below 17 degC."
     },
     "GD": {
-	"standard_name": "days_with_air_temperature_above_threshold",
+	"standard_name": "degree_days_for_days_with_air_temperature_above_threshold",
 	"long_name": "Number of growing degree days (mean temperature > {thresh} degC)",
 	"units": "days",
-	"description": "Number of days with daily mean temperature above {thresh} degC."
-    },
-    "GDYYx": {
-	"standard_name": "consecutive_days_with_air_temperature_above_threshold",
-	"long_name": "Maximum number of consecutive growing degree days (mean temperature > {thresh} degC)",
-	"units": "days",
-	"description": "Maximum count of consecutive days with daily mean temperature above {thresh} degC."
+	"description": "Cumulative sum of temperature degrees for daily mean temperature above {thresh} degC."
     },
     "CSDI": {
 	"standard_name": "consecutive_days_with_air_temperature_below_threshold",

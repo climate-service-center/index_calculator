@@ -485,12 +485,12 @@ class ID:
 
 
 class GD:
-    """Number of growing degree days (tas)."""
+    """Cumulative growing degree days (tas)."""
 
     thresh = 4
 
     def compute(thresh=thresh, **params):
-        """Calculate number of growing degree days (tas > thresh).
+        """Calculate cumulative growing degree days (tas > thresh).
 
         Parameters
         ----------
@@ -501,7 +501,7 @@ class GD:
         Returns
         -------
         xarray.DataArray
-            Number of growing degree days (tas > {thresh}).
+            Cumulative growing degree days (tas > {thresh}).
 
         Notes
         -----
@@ -516,15 +516,15 @@ class GD:
 
 
 class HD17:
-    """Number of heating degree days (tas)."""
+    """Cumulative heating degree days (tas)."""
 
     def compute(**params):
-        """Calculate number of heating degree days (tas < 17 degC).
+        """Calculate cumulative heating degree days (tas < 17 degC).
 
         Returns
         -------
         xarray.DataArray
-            Number of heating degree days (tas > 17 degC).
+            Cumulative heating degree days (tas > 17 degC).
 
         Notes
         -----
