@@ -65,17 +65,17 @@
 	"units": "days",
 	"description": "Maximum number of consecutive days with daily total precipitation equal or above {thresh} mm."
     },
-    "DSP": {
-	"standard_name": "dry_spells",
-	"long_name": "Number of dry spells (periods >= {window} consecutive days with precipitation < {thresh} mm)",
-	"units": "occurrence",
-	"description": "Number of occurrences of at least {window} consecutive days with daily total precipitation below {thresh} mm."
+    "DSf": {
+	"standard_name": "dry_spell_frequency",
+	"long_name": "Number of dry spells (precipitation < {thresh} mm/day)",
+	"units": "",
+	"description": "Total number of series of at least {window} consecutive days with precipitation below {thresh} mm/day."
     },
     "DSPx": {
-	"standard_name": "dry_spells",
-	"long_name": "Maximum lenght of dry spells (periods >= {window} consecutive days with precipitation < {thresh} mm)",
+	"standard_name": "dry_spell_duration",
+	"long_name": "Maximum lenght of dry spells (precipitation < {thresh} mm/day)",
 	"units": "days",
-	"description": "Maximum length of at least {window} consecutive days with daily total precipitation below {thresh} mm."
+	"description": "Longest series of at least {window} consecutive days with precipitation below {thresh} mm/day."
     },
     "WSP": {
 	"standard_name": "wet_spells",

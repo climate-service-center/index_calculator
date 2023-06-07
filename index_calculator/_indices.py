@@ -395,14 +395,14 @@ class DD:
         )
 
 
-class DSP:
-    """Number of dry spells of minimum {window} days (pr)."""
+class DSf:
+    """Number of dry spells (pr)."""
 
     thresh = 1
     window = 5
 
     def compute(thresh=thresh, window=window, **params):
-        """Calculate number of dry spells of minimum {window} days.
+        """Calculate number of dry spells.
 
         Parameters
         ----------
@@ -425,7 +425,49 @@ class DSP:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_frequency
         """
         thresh = _thresh_string(thresh, "mm/day")
-        return xc.atmos.dry_spell_frequency(window=window, **params)
+        return xc.atmos.dry_spell_frequency(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class DSx:
+    """Maximum length of dry spells (pr)."""
+
+    thresh = 1
+    window = 1
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate maximum length of dry spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold precipitation below which a day is considered
+            as a dry day (default: 1 mm/day).
+            If type of threshold is an integer the unit is set to mm/day.
+        window: int
+            Minimum number of days with precipitation below threshold
+            to qualify as a dry spell (default: 1).
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum length of dry spells of at least {window} consecutive days
+            with precipitation below {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_max_length
+        """
+        thresh = _thresh_string(thresh, "mm/day")
+        return xc.atmos.dry_spell_max_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
 
 
 class DTR:
@@ -1797,7 +1839,7 @@ class HSx:
             If type of threshold is an integer the unit is set to degC.
         window: int
             Minimum number of days with temperature above thresh
-            to qualify as a hot spell (default: 3).
+            to qualify as a hot spell (default: 1).
 
         Returns
         -------
@@ -2018,15 +2060,67 @@ class WI:
         )
 
 
-class HW:
+class HWf:
+    """Number of heat waves (tasmax, tasmin)."""
+
+    thresh_tasmin = 22
+    thresh_tasmax = 30
+    window = 3
+
+    def compute(
+        thresh_tasmin=thresh_tasmin,
+        thresh_tasmax=thresh_tasmax,
+        window=window,
+        **params,
+    ):
+        """Calculate number of heat waves.
+
+        Parameters
+        ----------
+        thresh_tasmin: int or string
+            Threshold minimum temperature above which a day is considered
+            as a heat day (default: 22 degC).
+            If type of threshold is an integer the unit is set to degC.
+        thresh_tasmax: int or string
+            Threshold maximum temperature above which a day is considered
+            as a winter day (default: 30 degC).
+            If type of threshold is an integer the unit is set to degC.
+        window: int
+            Minimum number of days with temperature above thresh
+            to qualify as a hot spell (default: 3).
+
+        Returns
+        -------
+        Number of heat waves of at least {window} consecutive days
+        with maximum temperature above {thresh_tasmax} and
+        minimum temperature above {thresh_tasmin}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_frequency
+        """
+        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
+        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
+        return xc.atmos.heat_wave_frequency(
+            thresh_tasmax=thresh_tasmax,
+            thresh_tasmin=thresh_tasmin,
+            window=window,
+            **params,
+        )
+
+
+class HWx:
     """Maximum length of heat waves (tasmax, tasmin)."""
 
     thresh_tasmin = 22
     thresh_tasmax = 30
+    window = 1
 
     def compute(
         thresh_tasmax=thresh_tasmax,
         thresh_tasmin=thresh_tasmin,
+        window=window,
         **params,
     ):
         """Calculate maximum number of heat waves.
@@ -2041,11 +2135,16 @@ class HW:
             Threshold maximum temperature above which a day is considered
             as a winter day (default: 30 degC).
             If type of threshold is an integer the unit is set to degC.
+        window: int
+            Minimum number of days with temperature above thresh
+            to qualify as a hot spell (default: 1).
 
         Returns
         -------
         xarray.DataArray
-            Maximum length of heat waves.
+            Maximum length of heat waves of at least {window} consecutive days
+            with maximum temperature above {thresh_tasmax} and
+            minimum temperature above {thresh_tasmin}.
 
         Notes
         -----
@@ -2057,6 +2156,7 @@ class HW:
         return xc.atmos.heat_wave_max_length(
             thresh_tasmax=thresh_tasmax,
             thresh_tasmin=thresh_tasmin,
+            window=window,
             **params,
         )
 
