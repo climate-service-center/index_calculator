@@ -265,8 +265,13 @@ def test_CSU():
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
-def test_DSP():
-    result = indices.DSP.compute(pr=pr_xarray(), freq="7D")
+def test_DSf():
+    result = indices.DSf.compute(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_DSx():
+    result = indices.DSx.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
@@ -487,6 +492,30 @@ def test_HSx():
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
+def test_HWx():
+    result = indices.HWx.compute(
+        tasmax=tasmax_xarray(),
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        thresh_tasmax=27,
+        thresh_tasmin=25,
+        window=1,
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_HWf():
+    result = indices.HWf.compute(
+        tasmax=tasmax_xarray(),
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        thresh_tasmax=27,
+        thresh_tasmin=25,
+        window=1,
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
 def test_SD():
     result = indices.SD.compute(
         prsn=prsn_xarray(),
@@ -533,16 +562,6 @@ def test_WI():
         freq="7D",
     )
     np.testing.assert_allclose(result, [3], rtol=1e-03)
-
-
-def test_HW():
-    result = indices.HW.compute(
-        tasmax=tasmax_xarray(),
-        tasmin=tasmin_xarray(),
-        window=1,
-        freq="7D",
-    )
-    np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
 def test_GSS():
