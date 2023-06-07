@@ -3,7 +3,7 @@ import warnings
 
 from . import _consts
 from ._ci_netcdfattrs import NetCDFglobalattrs
-from ._tables import ijson, xjson
+from ._tables import mjson, xjson
 from ._utils import (
     check_existance,
     get_time_range_as_str,
@@ -93,7 +93,7 @@ class PostProcessing:
         return "{}-{}".format(left, right)
 
     def _postprocessing(self):
-        _ijson = copy.deepcopy(ijson)
+        _mjson = copy.deepcopy(mjson)
         _xjson = copy.deepcopy(xjson)
 
         def adjust_attributes(dictionary, value):
@@ -106,7 +106,7 @@ class PostProcessing:
             return output
 
         json = {}
-        json[self.IDXname] = _ijson[self.IDXname]
+        json[self.IDXname] = _mjson[self.IDXname]
         json["global_att"] = _xjson["global_att"]
         try:
             json["global_att"].update(_xjson[self.project]["global_att"])
