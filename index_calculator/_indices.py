@@ -69,7 +69,8 @@ class CD:
 
         Returns
         -------
-        Number of days where cold and dry conditions coincide.
+        xarray.DataArray:
+            Number of days where cold and dry conditions coincide.
 
         Notes
         -----
@@ -143,7 +144,8 @@ class CFD:
 
         Returns
         -------
-        Maximum number of consecutive frost days (tasmin < 0 degC).
+        xarray.DataArray
+            Maximum number of consecutive frost days (tasmin < 0 degC).
 
         Notes
         -----
@@ -170,7 +172,8 @@ class CHDYYx:
 
         Returns
         -------
-        Maximum number of consecutive heat days (tasmax > {thresh}).
+        xarray.DataArray
+            Maximum number of consecutive heat days (tasmax > {thresh}).
 
         Notes
         -----
@@ -213,8 +216,9 @@ class CSDI:
 
         Returns
         -------
-        Number of days part of a 10th percentile cold spell.
-        At least {window} consecutive days.
+        xarray.DataArray
+            Number of days part of a 10th percentile cold spell.
+            At least {window} consecutive days.
 
         Notes
         -----
@@ -297,7 +301,8 @@ class CW:
 
         Returns
         -------
-        Number of days where cold and wet conditions coincide.
+        xarray.DataArray
+            Number of days where cold and wet conditions coincide.
 
         Notes
         -----
@@ -478,7 +483,8 @@ class DTR:
 
         Returns
         -------
-        Mean of daily temperature range.
+        xarray.DataArray
+            Mean of daily temperature range.
 
         Notes
         -----
@@ -595,7 +601,8 @@ class PRCPTOT:
 
         Returns
         -------
-        Total precipitation amount of wet days (precip > {thresh})
+        xarray.DataArray
+            Total precipitation amount of wet days (precip > {thresh})
 
         Notes
         -----
@@ -1600,7 +1607,8 @@ class WD:
 
         Returns
         -------
-        Number of days where warm and dry conditions coincide.
+        xarray.DataArray
+            Number of days where warm and dry conditions coincide.
 
         Notes
         -----
@@ -1663,8 +1671,9 @@ class WSDI:
 
         Returns
         -------
-        Number of days part of a 90th percentile warm spell.
-        At least {window} consecutive days.
+        xarray.DataArray
+            Number of days part of a 90th percentile warm spell.
+            At least {window} consecutive days.
 
         Notes
         -----
@@ -1714,7 +1723,8 @@ class WW:
 
         Returns
         -------
-        Number of days where warm and wet conditions coincide.
+        xarray.DataArray
+            Number of days where warm and wet conditions coincide.
 
         Notes
         -----
@@ -1769,8 +1779,9 @@ class CSf:
 
         Returns
         -------
-        Number of cold spells of at least {window} consecutive days
-        with temperature below {thresh}.
+        xarray.DataArray
+            Number of cold spells of at least {window} consecutive days
+            with temperature below {thresh}.
 
         Notes
         -----
@@ -1806,8 +1817,9 @@ class HSf:
 
         Returns
         -------
-        Number of hot spells of at least {window} consecutive days
-        with maximum temperature above {thresh}.
+        xarray.DataArray
+            Number of hot spells of at least {window} consecutive days
+            with maximum temperature above {thresh}.
 
         Notes
         -----
@@ -1843,8 +1855,9 @@ class HSx:
 
         Returns
         -------
-        Maximum length of hot spells of at least {window} consecutive days
-        with maximum temperature above {thresh}.
+        xarray.DataArray
+            Maximum length of hot spells of at least {window} consecutive days
+            with maximum temperature above {thresh}.
 
         Notes
         -----
@@ -1876,7 +1889,9 @@ class SD:
 
         Returns
         -------
-        Number of days with solid precipitation flux above {thresh} threshold.
+        xarray.DataArray
+            Number of days with solid precipitation flux
+            above {thresh} threshold.
 
         Notes
         -----
@@ -1907,7 +1922,8 @@ class SCD:
 
         Returns
         -------
-        Number of days with snow cover above {thresh} threshold.
+        xarray.DataArray
+            Number of days with snow cover above {thresh} threshold.
 
         Notes
         -----
@@ -1938,7 +1954,8 @@ class Sint:
 
         Returns
         -------
-        Mean daily snowfall during days with snowfall > {thresh}.
+        xarray.DataArray
+            Mean daily snowfall during days with snowfall > {thresh}.
 
         Notes
         -----
@@ -1969,7 +1986,8 @@ class Sfreq:
 
         Returns
         -------
-        Percentage of days with snowfall > {thresh}.
+        xarray.DataArray
+            Percentage of days with snowfall > {thresh}.
 
         Notes
         -----
@@ -2014,7 +2032,8 @@ class UTCI:
 
         Returns
         -------
-        Universal Thermal Climate Index.
+        xarray.DataArray
+            Universal Thermal Climate Index.
 
         Notes
         -----
@@ -2091,9 +2110,10 @@ class HWf:
 
         Returns
         -------
-        Number of heat waves of at least {window} consecutive days
-        with maximum temperature above {thresh_tasmax} and
-        minimum temperature above {thresh_tasmin}.
+        xarray.DataArray
+            Number of heat waves of at least {window} consecutive days
+            with maximum temperature above {thresh_tasmax} and
+            minimum temperature above {thresh_tasmin}.
 
         Notes
         -----
