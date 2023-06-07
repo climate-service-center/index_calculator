@@ -59,9 +59,11 @@ class CD:
         Parameters
         ----------
         tas_per: xr.DataArray, optional
-            Mean temperature 25th percentile reference value.
+            Mean temperature 25th percentile reference value below which
+            a day is considered as a cold day.
         pr_per: xr.DataArray, optional
-            Precipitation 25th percentile reference value.
+            Precipitation 25th percentile reference value below which
+            a day is considered as a dry day.
         base_period_time_range: list
             List with left bound is start year string and right bound
             is end year string for calculating `tas_per` and/or `pr_per`.
@@ -71,6 +73,10 @@ class CD:
         -------
         xarray.DataArray:
             Number of days where cold and dry conditions coincide.
+            If temperature is below {tas_per} a day is considered as a
+            cold day.
+            If precipitation is below {pr_per} a day is considered as a
+            dry day.
 
         Notes
         -----
@@ -290,19 +296,24 @@ class CW:
         Parameters
         ----------
         tas_per: xr.DataArray, optional
-            Mean temperature 25th percentile reference value.
+            Mean temperature 25th percentile reference value below which
+            a day is considered as a cold day.
         pr_per: xr.DataArray, optional
-            Precipitation 75th percentile reference value.
+            Precipitation 75th percentile reference value above which
+            a day is considered as a wet day.
         base_period_time_range: list
-            List with left bound is start year string
-            and right bound is end year string
-            for calculating `tas_per` and/or `pr_per`.
+            List with left bound is start year string and right bound
+            is end year string for calculating `tas_per` and/or `pr_per`.
             This will be used only if `tas_per` and/or `pr_per` is None.
 
         Returns
         -------
-        xarray.DataArray
+        xarray.DataArray:
             Number of days where cold and wet conditions coincide.
+            If temperature is below {tas_per} a day is considered as a
+            cold day.
+            If precipitation is above {pr_per} a day is considered as a
+            wet day.
 
         Notes
         -----
@@ -1597,9 +1608,11 @@ class WD:
         Parameters
         ----------
         tas_per: xr.DataArray, optional
-            Mean temperature 75th percentile reference value.
+            Mean temperature 75th percentile reference value above which
+            a day is considered as a warm day.
         pr_per: xr.DataArray, optional
-            Precipitation 25th percentile reference value.
+            Precipitation 25th percentile reference value below which
+            a day is considered as a dry day.
         base_period_time_range: list
             List with left bound is start year string and right bound
             is end year string for calculating `tas_per` and/or `pr_per`.
@@ -1607,8 +1620,12 @@ class WD:
 
         Returns
         -------
-        xarray.DataArray
+        xarray.DataArray:
             Number of days where warm and dry conditions coincide.
+            If temperature is above {tas_per} a day is considered as a
+            warm day.
+            If precipitation is below {pr_per} a day is considered as a
+            dry day.
 
         Notes
         -----
@@ -1713,9 +1730,11 @@ class WW:
         Parameters
         ----------
         tas_per: xr.DataArray, optional
-            Mean temperature 75th percentile reference value.
+            Mean temperature 75th percentile reference value above which
+            a day is considered as a warm day.
         pr_per: xr.DataArray, optional
-            Precipitation 75th percentile reference value.
+            Precipitation 75th percentile reference value above which
+            a day is considered as a wet day.
         base_period_time_range: list
             List with left bound is start year string and right bound
             is end year string for calculating `tas_per` and/or `pr_per`.
@@ -1723,8 +1742,12 @@ class WW:
 
         Returns
         -------
-        xarray.DataArray
+        xarray.DataArray:
             Number of days where warm and wet conditions coincide.
+            If temperature is above {tas_per} a day is considered as a
+            warm day.
+            If precipitation is above {pr_per} a day is considered as a
+            wet day.
 
         Notes
         -----
