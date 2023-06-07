@@ -11,12 +11,6 @@
 	"units": "mm day-1",
 	"description": "Mean of daily total precipitation amount."
     },
-    "RR100week": {
-	"standard_name": "weeks_with_precipitation_amount_above_or_equal_threshold",
-	"long_name": "Number of heavy precipitation weeks (precipitation >= 100 mm)",
-	"units": "weeks",
-	"description": "Number of weeks with weekly total precipitation equal or above 100 mm."
-    },
     "RR1": {
 	"standard_name": "days_with_precipitation_amount_above_or_equal_threshold",
 	"long_name": "Number of wet days (precipitation >= 1 mm)",
@@ -76,12 +70,6 @@
 	"long_name": "Maximum lenght of dry spells (precipitation < {thresh} mm/day)",
 	"units": "days",
 	"description": "Longest series of at least {window} consecutive days with precipitation below {thresh} mm/day."
-    },
-    "WSP": {
-	"standard_name": "wet_spells",
-	"long_name": "Number of wet spells (periods >= {window} consecutive days with precipitation >= {thresh} mm)",
-	"units": "occurence",
-	"description": "Number of occurrences of at least {window} consecutive days with daily total precipitation above or equal {thresh} mm."
     },
     "SDII": {
 	"standard_name": "simple_daily_intensity_index",
@@ -185,12 +173,6 @@
 	"units": "days",
 	"description": "Number of consecutive days with daily minimum temperature below 0 degC."
     },
-    "FDD": {
-	"standard_name": "days_with_air_temperature_below_threshold",
-	"long_name": "Number of delayed frost days (minimum temperature < 0 degC)",
-	"units": "days",
-	"description": "Number of days with daily minimum temperature below 0 degC during the months of April to June."
-    },
     "ID": {
 	"standard_name": "days_with_air_temperature_below_threshold",
 	"long_name": "Number of ice days (maximum temperature < 0 degC)",
@@ -245,29 +227,11 @@
 	"units": "days",
 	"description": "Number of days within periods of at least {window} consecutive days with maximum temperature above the 90th percentile."
     },
-    "CHDYY": {
-	"standard_name": "consecutive_days_with_air_temperature_above_threshold",
-	"long_name": "Number of consecutive heat days (maximum temperature > {thresh} degC)",
-	"units": "days",
-	"description": "Number of consecutive days with daily maximum temperature above {thresh} degC."
-    },
     "CHDYYx": {
 	"standard_name": "consecutive_days_with_air_temperature_above_threshold",
 	"long_name": "Maximum number of consecutive heat days (maximum temperature > {thresh} degC)",
 	"units": "days",
 	"description": "Maximum count of consecutive days with daily maximum temperature above {thresh} degC."
-    },
-    "BVP": {
-	"standard_name": "day_with_air_temperature_above_threshold",
-	"long_name": "Annual beginning of vegetation period (day when number of consecutive days with mean temperature > 0 degC is >= 200 days)",
-	"units": "day",
-	"description": "Calendar day at which the count of consecutive days with daily mean temperature above 0 degC is above or equal 200 days."
-    },
-    "WiMa": {
-	"standard_name": "days_with_air_temperature_within_range",
-	"long_name": "Number of days with {0} degC < mean temperature < {0} degC",
-	"units": "days",
-	"description": "Number of days with daily mean temperature above {0} degC and below {0} degC."
     },
     "TG90p": {
 	"standard_name": "days_with_air_temperature_above_threshold",
@@ -341,77 +305,29 @@
 	"units": "m s-1",
 	"description": "Minimum of daily maximum wind speed."
     },
-    "UFG": {
-	"standard_name": "eastward_wind",
-	"long_name": "Mean daily mean u-component of wind speed",
-	"units": "m s-1",
-	"description": "Mean of daily mean u-component wind speed."
-    },
-    "VFG": {
-	"standard_name": "northward_wind",
-	"long_name": "Mean daily mean v-component of wind speed",
-	"units": "m s-1",
-	"description": "Mean of daily mean v-component wind speed."
-    },
-    "FG8": {
-	"standard_name": "days_with_wind_speed_above_threshold",
-	"long_name": "Number of gale days (maximum wind speed > 8 Bft)",
-	"units": "days",
-	"description": "Number of days with daily maximum wind speed above 8 Bft."
-    },
-    "FG9": {
-	"standard_name": "days_with_wind_speed_above_threshold",
-	"long_name": "Number of severe gale days (maximum wind speed > 9 Bft)",
-	"units": "days",
-	"description": "Number of days with daily maximum wind speed above 9 Bft."
-    },
-    "FG99th": {
-	"standard_name": "days_with_wind_speed_above_threshold",
-	"long_name": "Number of days with daily maximum wind speed > 99th percentile",
-	"units": "days",
-	"description": "Number of days with daily maximum wind speed above the 99th percentile."
-    },
-    "FGD": {
-	"standard_name": "wind_direction",
-	"long_name": "Mean daily mean wind direction",
-	"units": "degN",
-	"description": "Mean of daily mean wind direction."
-    },
     "CW": {
 	"standard_name": "cold_and_wet_days",
-	"long_name": "Number of cold & wet days (mean temperature < 25th percentile & precipitation > 75th percentile)",
+	"long_name": "Number of cold and wet days",
 	"units": "days",
-	"description": "Number of days with daily mean temperature below the 25th percentile & total daily precipitation amount above the 75th percentile."
+	"description": "Number of days with daily mean temperature below the 25th percentile and total daily precipitation amount above the 75th percentile."
     },
     "CD": {
 	"standard_name": "cold_and_dry_days",
-	"long_name": "Number of cold & dry days (mean temperature < 25th percentile & precipitation < 25th percentile)",
+	"long_name": "Number of cold and dry days",
 	"units": "days",
-	"description": "Number of days with daily mean temperature below the 25th percentile & total daily precipitation amount below the 25th percentile."
+	"description": "Number of days with daily mean temperature below the 25th percentile and total daily precipitation amount below the 25th percentile."
     },
     "WW": {
 	"standard_name": "warm_and_wet_days",
-	"long_name": "Number of warm & wet days (mean temperature > 75th percentile & precipitation > 75th percentile)",
+	"long_name": "Number of warm & wet days",
 	"units": "days",
-	"description": "Number of days with daily mean temperature above the 75th percentile & total daily precipitation amount above the 75th percentile."
+	"description": "Number of days with daily mean temperature above the 75th percentile and total daily precipitation amount above the 75th percentile."
     },
     "WD": {
 	"standard_name": "warm_and_dry_days",
-	"long_name": "Number of warm & dry days (mean temperature > 75th percentile & precipitation < 25th percentile)",
+	"long_name": "Number of warm & dry days",
 	"units": "days",
-	"description": "Number of days with daily mean temperature above the 75th percentile & total daily precipitation amount below the 25th percentile."
-    },
-    "VPD": {
-	"standard_name": "vapour_pressure_deficit",
-	"long_name": "Vapour pressure deficit (difference between vapor pressure at saturation and ambient vapor pressure)",
-	"units": "Pa",
-	"description": "Vapour pressure deficit (difference between vapor pressure at saturation (derived from mean temperature and Magnus formulae) and ambient vapor pressure (derived from vapor pressure at saturation and relative humidity))."
-    },
-    "CWB": {
-	"standard_name": "climatic_water_balance",
-	"long_name": "Climatic water balance",
-	"units": "mm day-1",
-	"description": "Climatic water balance (difference between precipitation and evaporation (derived from latent heat flux and precipitation))."
+	"description": "Number of days with daily mean temperature above the 75th percentile and total daily precipitation amount below the 25th percentile."
     },
     "DTR": {
 	"standard_name": "air_temperature",
@@ -419,28 +335,10 @@
 	"units": "K",
 	"description": "Mean diurnal temperature range (difference between daily maximum temperature and daily minimum temperature)."
     },
-    "GSL": {
-	"standard_name": "growing_season_length",
-	"long_name": "Growing season length (number of days between first occurrence >= 6 consecutive days with mean temperature > 5 degC and first occurrence >= 6 consecutive days with mean temperature < 5 degC",
-	"units": "days",
-	"description": "Number of days between the first occurrence of at least 6 consecutive days with daily mean temperature above 5 degC and the first occurrence (within the last 6 month) of at least 6 consecutive days with daily mean temperature below 5 degC."
-    },
-    "CHDD30": {
-	"standard_name": "dry_heat_days",
-	"long_name": "Maximum number of consecutive dry heat days (maximum temperature > 30 degC & precipitation < 1 mm)",
-	"units": "days",
-	"description": "Maximum count of consecutive days with daily maximum temperature above 30 degC (hot days) and daily total precipitation below 1 mm (dry days)."
-    },
-    "HI": {
-	"standard_name": "hot_and_humid_days",
-	"long_name": "Number of hot & humid days (ambient vapor pressure > 18.8 hPa)",
-	"units": "days",
-	"description": "Number of days with ambient vapor pressure (derived from vapor pressure at saturation (derived from mean temperature and Magnus formulae) and relative humidity) above 18.8 hPa."
-    },
     "HSf": {
 	"standard_name": "hot_spell_frequency",
 	"long_name": "Number of hot spells (maximum temperature > {thresh} degC)",
-	"units": "days",
+	"units": "",
 	"description": "Total number of series of at least {window} consecutive days with maximum temperature above {thresh}."
   },
     "HSx": {
@@ -452,7 +350,7 @@
     "CSf": {
 	"standard_name": "cold_spell_frequency",
 	"long_name": "Number of cold spells (temperature < {thresh} degC)",
-	"units": "days",
+	"units": "",
 	"description": "Total number of series of at least {window} consecutive days with temperature below {thresh}."
   },
     "SD": {
@@ -463,7 +361,7 @@
     },
     "SCD": {
 	"standard_name": "snow_cover_duration",
-	"long_name": "Number of days when the snow depth is greater than or equal to a {thresh} cm",
+	"long_name": "Number of days when the snow depth is greater than or equal to {thresh} cm",
 	"units": "days",
 	"description": "Number of days with snow depth at or above {thresh} cm."
     },
@@ -491,34 +389,40 @@
 	"units": "days",
 	"description": "Number of days with daily temperature below {thresh} degC."
     },
-    "HW": {
-	"standard_name": "maximum_length_of_heat_waves",
-	"long_name": "Maximum length of heat waves (maximum temperature > {thresh_tasmax} degC), minimum temperature > {thresh_tasmin} degC)",
+    "HWf": {
+	"standard_name": "heat_wave_frequency",
+	"long_name": "Number of heat waves (maximum temperature > {thresh_tasmax} degC and minimum temperature > {thresh_tasmin} degC)",
+	"units": "",
+	"description": "Total number of serires of at least {window} consecutive days with maximum temperature above {thresh_tasmax} degC and minimum temperature above {thresh_tasmin} degC)."
+    },
+    "HWx": {
+	"standard_name": "heat_wave_duration",
+	"long_name": "Maximum length of heat waves (maximum temperature > {thresh_tasmax} degC and minimum temperature > {thresh_tasmin} degC)",
 	"units": "days",
-	"description": "Number days with daily maximum temperature above {thresh_tasmax} degC and minimum temperature above {thresh_tasmin} degC)."
+	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh_tasmax} degC and minimum temperature above {thresh_tasmin} degC)."
     },
     "GSS": {
-	"standard_name": "growing_season_start",
-	"long_name": "Growing season start (mean temperature >= {thresh} degC), window >= {window} days)",
-	"units": "day",
-	"description": "Calendar day of year, when minimum {window} of days with daily mean temperature above or equal {thresh} degC."
+	"standard_name": "day_of_year",
+	"long_name": "Growing season start (temperature >= {thresh} degC)",
+	"units": "",
+	"description": "Calendar day of year, when the temperature exceeds {thresh} degC for at least {window} consecutive days."
     },
     "GSE": {
-	"standard_name": "growing_season_end",
-	"long_name": "Growing season end (mean temperature < {thresh} degC), window >= {window} days)",
-	"units": "day",
-	"description": "Calendar day of year after mid date (07-01), when minimum {window} of days with daily mean temperature below {thresh} degC."
+	"standard_name": "day_of_year",
+	"long_name": "Growing season end (temperature < {thresh} degC)",
+	"units": "",
+	"description": "Calendar day of year, when the temperature is below {thresh} degC for at least {window} consecutive days."
     },
     "FFS": {
-	"standard_name": "frost_free_season_start",
-	"long_name": "Frost free season start (minimum temperature >= {thresh} degC), window >= {window} days)",
-	"units": "day",
-	"description": "Calendar day of the year, when for a minimum {window} of days the daily minimum temperature is consistently above or equal {thresh} degC."
+	"standard_name": "day_of_year",
+	"long_name": "Frost free season start (minimum temperature >= {thresh} degC)",
+	"units": "",
+	"description": "Calendar day of year, when the temperature exceeds {thresh} degC for at least {window} consecutive days."
     },
     "FFE": {
-	"standard_name": "frost_free_season_end",
-	"long_name": "Frost free season end (mean temperature < {thresh} degC), window >= {window} days)",
-	"units": "day",
-	"description": "Calendar day of the year after mid date (07-01), when for a minimum {window} of days the daily minimum temperature is consistently below {thresh} degC."
+	"standard_name": "day_of_year",
+	"long_name": "Frost free season end (mean temperature < {thresh} degC)",
+	"units": "",
+	"description": "Calendar day of year, when the temperature is below {thresh} degC for at least {window} consecutive days."
     }
 }
