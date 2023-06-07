@@ -65,11 +65,23 @@
 	"units": "",
 	"description": "Total number of series of at least {window} consecutive days with precipitation below {thresh} mm/day."
     },
-    "DSPx": {
+    "DSx": {
 	"standard_name": "dry_spell_duration",
 	"long_name": "Maximum lenght of dry spells (precipitation < {thresh} mm/day)",
 	"units": "days",
 	"description": "Longest series of at least {window} consecutive days with precipitation below {thresh} mm/day."
+    },
+    "WSf": {
+	"standard_name": "wet_spell_frequency",
+	"long_name": "Number of wet spells (precipitation >= {thresh} mm/day)",
+	"units": "",
+	"description": "Total number of series of at least {window} consecutive days with precipitation above {thresh} mm/day."
+    },
+    "WSx": {
+	"standard_name": "wet_spell_duration",
+	"long_name": "Maximum lenght of wet spells (precipitation >= {thresh} mm/day)",
+	"units": "days",
+	"description": "Longest series of at least {window} consecutive days with precipitation above {thresh} mm/day."
     },
     "SDII": {
 	"standard_name": "simple_daily_intensity_index",

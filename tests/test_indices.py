@@ -272,7 +272,17 @@ def test_DSf():
 
 def test_DSx():
     result = indices.DSx.compute(pr=pr_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_WSf():
+    result = indices.WSf.compute(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_WSx():
+    result = indices.WSx.compute(pr=pr_xarray(), freq="7D")
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_RYYp():

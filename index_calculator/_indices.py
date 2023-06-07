@@ -424,8 +424,8 @@ class DSf:
         ----------
         thresh: int or string
             Threshold precipitation below which a day is considered
-            as a dry day (default: 1 mm/day).
-            If type of threshold is an integer the unit is set to mm/day.
+            as a dry day (default: 1 mm).
+            If type of threshold is an integer the unit is set to mm.
         window: int
             Minimum number of days with precipitation below threshold
             to qualify as a dry spell (default: 5).
@@ -440,7 +440,7 @@ class DSf:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_frequency
         """
-        thresh = _thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm")
         return xc.atmos.dry_spell_frequency(
             thresh=thresh,
             window=window,
@@ -461,8 +461,8 @@ class DSx:
         ----------
         thresh: int or string
             Threshold precipitation below which a day is considered
-            as a dry day (default: 1 mm/day).
-            If type of threshold is an integer the unit is set to mm/day.
+            as a dry day (default: 1 mm).
+            If type of threshold is an integer the unit is set to mm.
         window: int
             Minimum number of days with precipitation below threshold
             to qualify as a dry spell (default: 1).
@@ -478,8 +478,83 @@ class DSx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_max_length
         """
-        thresh = _thresh_string(thresh, "mm/day")
+        thresh = _thresh_string(thresh, "mm")
         return xc.atmos.dry_spell_max_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class WSf:
+    """Number of wet spells (pr)."""
+
+    thresh = 1
+    window = 5
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate number of wet spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold precipitation above which a day is considered
+            as a wet day (default: 1 mm).
+            If type of threshold is an integer the unit is set to mm.
+        window: int
+            Minimum number of days with precipitation above threshold
+            to qualify as a wet spell (default: 5).
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of wet periods of minimum {window} days (pr >= {thresh}).
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_spell_frequency
+        """
+        thresh = _thresh_string(thresh, "mm")
+        return xc.atmos.wet_spell_frequency(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class WSx:
+    """Maximum length of wet spells (pr)."""
+
+    thresh = 1
+    window = 1
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate maximum length of wet spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold precipitation above which a day is considered
+            as a wet day (default: 1 mm).
+            If type of threshold is an integer the unit is set to mm.
+        window: int
+            Minimum number of days with precipitation above threshold
+            to qualify as a wet spell (default: 1).
+
+        Returns
+        -------
+        xarray.DataArray
+            Maximum length of wet spells of at least {window} consecutive days
+            with precipitation above {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_spell_max_length
+        """
+        thresh = _thresh_string(thresh, "mm")
+        return xc.atmos.wet_spell_max_length(
             thresh=thresh,
             window=window,
             **params,
@@ -1851,7 +1926,7 @@ class HSf:
         """
         thresh = _thresh_string(thresh, "degC")
         return xc.atmos.hot_spell_frequency(
-            thresh_tasmax=thresh,
+            thresh=thresh,
             window=window,
             **params,
         )
@@ -1889,7 +1964,7 @@ class HSx:
         """
         thresh = _thresh_string(thresh, "degC")
         return xc.atmos.hot_spell_max_length(
-            thresh_tasmax=thresh,
+            thresh=thresh,
             window=window,
             **params,
         )
