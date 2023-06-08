@@ -202,3 +202,14 @@ History
 * adjust parameter names to xclim
 * set threshold for dry day incides from 0.1 mm/day to 1 mm/day
 * set threshold from snowfall rate to liquid water equivalent snowfall rate with SD, Sint and Sfreq -> those changes are not implemented in xclim yet, PR will be accepted with xclim>=0.45
+
+0.7.4 (2023-06-08)
+------------------
+
+* rename DSP to DSf according to other spell indicators
+* rename HW to HWx according to other spell indicators
+* new indicator: DSx, HWf
+* rename tables/indices.json to tables/metadata.json
+* expand some docstrings and rework metadata
+* those changes are not implemented in xclim yet
+* as soon as this is done index_calculator goes v0.8.0
