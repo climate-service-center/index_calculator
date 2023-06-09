@@ -36,6 +36,8 @@ _cf_names = {
     "tg": "tas",
     "tx": "tasmax",
     "tn": "tasmin",
+    167: "tas",
+    "t2m": "tas",
 }
 
 _units = {
