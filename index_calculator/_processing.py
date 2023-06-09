@@ -178,7 +178,11 @@ class Processing:
             idx_ds = idx_ds.assign_coords(
                 {"time": date_range},
             )
-            idx_ds = idx_ds.squeeze()
+            dim_squeeze = []
+            for dim in idx_ds.dims:
+                if len(idx_ds[dim]) == 1 and dim != "time":
+                    dim_squeeze += [dim]
+            idx_ds = idx_ds.squeeze(dim=dim_squeeze)
             time_encoding = self.ds.time.encoding
             time_encoding["dtype"] = np.float64
             idx_ds.time.encoding = time_encoding
