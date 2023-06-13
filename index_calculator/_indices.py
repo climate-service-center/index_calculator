@@ -1240,6 +1240,7 @@ class TG:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg_mean
         """
+        print(params)
         return xc.atmos.tg_mean(**params)
 
 
@@ -2007,8 +2008,9 @@ class SCD:
     """Snow cover duration."""
 
     thresh = 1
+    water_equivalent = False
 
-    def compute(thresh=thresh, **params):
+    def compute(thresh=thresh, water_equivalent=water_equivalent, **params):
         """Calculate snow cover duration.
 
         Parameters
@@ -2028,6 +2030,11 @@ class SCD:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snow_cover_duration
         """
+        if water_equivalent is True:
+            snw = xc.indices.snd_to_snw(**params)
+            snd = convert_units_to(snw, "mm", context="hydro")
+            snd.attrs = params["snd"].attrs
+            params["snd"] = snd
         thresh = _thresh_string(thresh, "cm")
         return xc.land.snd_season_length(
             thresh=thresh,
@@ -2440,9 +2447,14 @@ class FG:
 
         Notes
         -----
+        If sfcWind is not provided in `ds` sfcWind could be computed
+        from `ds`.uas and `ds`.vas.
+
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_mean
         """
+        if "sfcWind" not in params["ds"]:
+            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(**params)
         return xc.atmos.sfcWind_mean(**params)
 
 
@@ -2459,9 +2471,14 @@ class FGn:
 
         Notes
         -----
+        If sfcWind is not provided in `ds` sfcWind could be computed
+        from `ds`.uas and `ds`.vas.
+
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_min
         """
+        if "sfcWind" not in params["ds"]:
+            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(**params)
         return xc.atmos.sfcWind_min(**params)
 
 
@@ -2478,9 +2495,14 @@ class FGx:
 
         Notes
         -----
+        If sfcWind is not provided in `ds` sfcWind could be computed
+        from `ds`.uas and `ds`.vas.
+
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_max
         """
+        if "sfcWind" not in params["ds"]:
+            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(**params)
         return xc.atmos.sfcWind_max
 
 
