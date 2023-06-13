@@ -2030,10 +2030,10 @@ class SCD:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snow_cover_duration
         """
         if water_equivalent is True:
-            snw = xc.indices.snd_to_snw(**params)
+            snw = xc.land.snd_to_snw(ds=params["ds"])
             snd = convert_units_to(snw, "mm", context="hydro")
-            snd.attrs = params["snd"].attrs
-            params["snd"] = snd
+            snd.attrs = params["ds"]["snd"].attrs
+            params["ds"]["snd"] = snd
         thresh = _thresh_string(thresh, "cm")
         return xc.land.snd_season_length(
             thresh=thresh,
