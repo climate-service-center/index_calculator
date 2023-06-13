@@ -10,6 +10,7 @@ from ._outputwriter import OutputWriter as outputwriter
 from ._postprocessing import PostProcessing as postprocessing
 from ._preprocessing import PreProcessing as preprocessing
 from ._processing import Processing as processing
+from ._tables import cfjson  # noqa
 from ._tables import mjson  # noqa
 from ._tables import pjson  # noqa
 from ._tables import vjson  # noqa

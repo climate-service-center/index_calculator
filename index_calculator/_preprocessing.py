@@ -1,7 +1,8 @@
 import pyhomogenize as pyh
 from pyhomogenize._consts import fmt as _fmt
 
-from ._consts import _bounds, _cf_names, _units
+from ._consts import _bounds
+from ._tables import cfjson
 from ._utils import get_time_range_as_str, kwargs_to_self
 
 
@@ -73,15 +74,11 @@ class PreProcessing:
         self.preproc = self._preprocessing()
 
     def _preprocessing(self):
-        for dvar in self.ds.data_vars:
-            if dvar in _cf_names.keys():
-                cf_var = _cf_names[dvar]
-                self.ds = self.ds.rename({dvar: cf_var})
-                dvar = cf_var
-            if dvar in _units.keys() and hasattr(self.ds[dvar], "units"):
-                if self.ds[dvar].attrs["units"] in _units[dvar].keys():
-                    unit = "".join(_units[dvar].values())
-                    self.ds[dvar].attrs["units"] = unit
+        if self.project in cfjson.keys():
+            var_names = cfjson[self.project]["var_names"]
+            for dvar in self.ds.data_vars:
+                if dvar in var_names.keys():
+                    self.ds = self.ds.rename({dvar: var_names[dvar]})
 
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
