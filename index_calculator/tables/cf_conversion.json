@@ -4,17 +4,18 @@
 	    "fg10": "sfcWindmax",
 	    "mn2t": "tasmin",
 	    "mx2t": "tasmax",
+	    "rsn": "snr",
+	    "sd": "snd",
+	    "sf": "prsn",
 	    "t2m": "tas",
 	    "tp": "pr",
-	    "rsn": "snr",
-	    "sf": "prsn",
-	    "snw": "snd",
 	    "u10": "uas",
 	    "v10": "vas"
 	},
 	"units": {
 	    "pr": "m day-1",
-	    "prsn": "m day-1"
+	    "prsn": "m day-1",
+	    "snd": "m"
 	}
     }
 }
