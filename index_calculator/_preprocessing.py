@@ -76,9 +76,13 @@ class PreProcessing:
     def _preprocessing(self):
         if self.project in cfjson.keys():
             var_names = cfjson[self.project]["var_names"]
+            units = cfjson[self.project]["units"]
             for dvar in self.ds.data_vars:
                 if dvar in var_names.keys():
                     self.ds = self.ds.rename({dvar: var_names[dvar]})
+                    dvar = var_names[dvar]
+                if dvar in units.keys():
+                    self.ds[dvar].attrs["units"] = units[dvar]
 
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
