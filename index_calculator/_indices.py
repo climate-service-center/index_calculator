@@ -1240,7 +1240,6 @@ class TG:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg_mean
         """
-        print(params)
         return xc.atmos.tg_mean(**params)
 
 
@@ -2454,7 +2453,9 @@ class FG:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_mean
         """
         if "sfcWind" not in params["ds"]:
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(**params)
+            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
+                ds=params["ds"],
+            )[0]
         return xc.atmos.sfcWind_mean(**params)
 
 
@@ -2478,7 +2479,9 @@ class FGn:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_min
         """
         if "sfcWind" not in params["ds"]:
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(**params)
+            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
+                ds=params["ds"],
+            )[0]
         return xc.atmos.sfcWind_min(**params)
 
 
@@ -2502,8 +2505,10 @@ class FGx:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_max
         """
         if "sfcWind" not in params["ds"]:
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(**params)
-        return xc.atmos.sfcWind_max
+            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
+                ds=params["ds"],
+            )[0]
+        return xc.atmos.sfcWind_max(**params)
 
 
 class FX:
