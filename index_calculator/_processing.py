@@ -148,14 +148,14 @@ class Processing:
     def _processing(self):
         """Calculate climate index."""
         dvars = self.preproc.data_vars
-        params = self._adjust_params_to_ci()
-        array = self.compute(**params)
-        basics = pyh.basics()
         data_vars = {
             k: v
             for k, v in dvars.items()
             if k not in self.var_name and "time" not in self.ds[k].coords
         }
+        params = self._adjust_params_to_ci()
+        array = self.compute(**params)
+        basics = pyh.basics()
         if "grid_mapping" in self.ds[self.var_name[0]].attrs:
             gm = self.ds[self.var_name[0]].attrs["grid_mapping"]
             array.attrs["grid_mapping"] = gm
