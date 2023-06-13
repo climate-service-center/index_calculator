@@ -128,6 +128,8 @@ class Processing:
                     self.CIname = self.CIname.replace("YY", str(v))
                 elif isinstance(v, list):
                     continue
+                elif isinstance(v, bool):
+                    continue
                 elif numb_name is not None:
                     self.CIname = self.CIname.replace(
                         numb_name,
