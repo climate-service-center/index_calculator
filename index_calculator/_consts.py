@@ -28,22 +28,4 @@ _split = {
     "year": "20A",
 }
 
-_cf_names = {
-    "fg": "sfcWind",
-    "hu": "hurs",
-    "rr": "pr",
-    "qq": "rsds",
-    "tg": "tas",
-    "tx": "tasmax",
-    "tn": "tasmin",
-    167: "tas",
-    "t2m": "tas",
-}
-
-_units = {
-    "pr": {
-        "mm": "mm day-1",
-    },
-}
-
 _base_period = ["1971", "2000"]
