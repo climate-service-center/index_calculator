@@ -1,8 +1,9 @@
 import pyhomogenize as pyh
+import xarray as xr
 from pyhomogenize._consts import fmt as _fmt
 
 from ._consts import _bounds
-from ._tables import cfjson
+from ._tables import cfjson, cjson
 from ._utils import get_time_range_as_str, kwargs_to_self
 
 
@@ -74,6 +75,21 @@ class PreProcessing:
         self.preproc = self._preprocessing()
 
     def _preprocessing(self):
+        def convert_to_daily_data(ds):
+            data_vars = {}
+            for dvar in ds.data_vars:
+                if dvar in cjson.keys():
+                    data_vars[dvar] = getattr(
+                        ds[dvar].resample(time="1D"),
+                        cjson[dvar],
+                    )(dim="time")
+                    coords = data_vars[dvar].coords
+            return xr.Dataset(
+                data_vars=data_vars,
+                coords=coords,
+                attrs=ds.attrs,
+            )
+
         if self.project in cfjson.keys():
             var_names = cfjson[self.project]["var_names"]
             units = cfjson[self.project]["units"]
@@ -102,4 +118,6 @@ class PreProcessing:
             time_control.check_timestamps(correct=True)
 
         self.ATimeRange = avail_time
+        if time_control.ds.attrs["frequency"] != "day":
+            return convert_to_daily_data(time_control.ds)
         return time_control.ds
