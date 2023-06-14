@@ -20,60 +20,60 @@ from .conftest import (
 )
 
 
-def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
-    return tas_series(np.array(series) + 273.15)
+def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
+    return tas_series(np.array(series) + 273.15, **kwargs)
 
 
-def tas_c_xarray(series=[-15, -11, 0, 26, -32, 17, -9]):
-    return tas_series(np.array(series) + 273.15)
+def tas_c_xarray(series=[-15, -11, 0, 26, -32, 17, -9], **kwargs):
+    return tas_series(np.array(series) + 273.15, **kwargs)
 
 
-def tasmin_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
-    return tasmin_series(np.array(series) + 273.15)
+def tasmin_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
+    return tasmin_series(np.array(series) + 273.15, **kwargs)
 
 
-def tasmax_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
-    return tasmax_series(np.array(series) + 273.15)
+def tasmax_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
+    return tasmax_series(np.array(series) + 273.15, **kwargs)
 
 
-def pr_xarray(series=[3, 4, 20, 20, 0, 6, 9]):
-    return pr_series(np.array(series) / 86400)
+def pr_xarray(series=[3, 4, 20, 20, 0, 6, 9], **kwargs):
+    return pr_series(np.array(series) / 86400, **kwargs)
 
 
-def prsn_xarray(series=[7, 0, 0.5, 10, 6, 0, 4]):
-    return prsn_series(np.array(series) / 86400)
+def prsn_xarray(series=[7, 0, 0.5, 10, 6, 0, 4], **kwargs):
+    return prsn_series(np.array(series) / 86400, **kwargs)
 
 
-def snd_xarray(series=[0, 20, 150, 340, 170, 90, 0]):
-    return snd_series(np.array(series) / 100)
+def snd_xarray(series=[0, 20, 150, 340, 170, 90, 0], **kwargs):
+    return snd_series(np.array(series) / 100, **kwargs)
 
 
-def hurs_xarray(series=[50, 75, 25, 90, 10, 60, 30]):
-    return hurs_series(np.array(series))
+def hurs_xarray(series=[50, 75, 25, 90, 10, 60, 30], **kwargs):
+    return hurs_series(np.array(series), **kwargs)
 
 
-def rsds_xarray(series=[200, 250, 300, 350, 270, 230, 180]):
-    return rsds_series(np.array(series))
+def rsds_xarray(series=[200, 250, 300, 350, 270, 230, 180], **kwargs):
+    return rsds_series(np.array(series), **kwargs)
 
 
-def rsus_xarray(series=[30, 50, 100, 150, 70, 30, 8]):
-    return rsus_series(np.array(series))
+def rsus_xarray(series=[30, 50, 100, 150, 70, 30, 8], **kwargs):
+    return rsus_series(np.array(series), **kwargs)
 
 
-def rlds_xarray(series=[200, 250, 300, 350, 270, 230, 180]):
-    return rlds_series(np.array(series))
+def rlds_xarray(series=[200, 250, 300, 350, 270, 230, 180], **kwargs):
+    return rlds_series(np.array(series), **kwargs)
 
 
-def rlus_xarray(series=[30, 50, 100, 150, 70, 30, 8]):
-    return rlus_series(np.array(series))
+def rlus_xarray(series=[30, 50, 100, 150, 70, 30, 8], **kwargs):
+    return rlus_series(np.array(series), **kwargs)
 
 
-def sfcWind_xarray(series=[2, 18, 5, 10, 23, 1, 7]):
-    return sfcWind_series(np.array(series))
+def sfcWind_xarray(series=[2, 18, 5, 10, 23, 1, 7], **kwargs):
+    return sfcWind_series(np.array(series), **kwargs)
 
 
-def mrt_xarray(series=[-1, -10, 0, 15, 32, 6, -8]):
-    return mrt_series(np.array(series))
+def mrt_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
+    return mrt_series(np.array(series), **kwargs)
 
 
 def test_TG():
