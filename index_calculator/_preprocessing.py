@@ -4,7 +4,7 @@ from pyhomogenize._consts import fmt as _fmt
 
 from ._consts import _bounds
 from ._tables import cfjson, cjson
-from ._utils import get_time_range_as_str, kwargs_to_self
+from ._utils import check_existance, get_time_range_as_str, kwargs_to_self
 
 
 class PreProcessing:
@@ -14,6 +14,9 @@ class PreProcessing:
     ----------
     ds : xr.Dataset
         xarray Dataset.
+    project: {"CORDEX", "CMIP5", "CMIP6", "EOBS", "ERA5", "N/A"}
+        (default: "N/A), optional
+        Project name
     var_name : str or list, optional
         CF variable(s) contained in `ds`.
         If None (default) `var_name` is read from `ds` with pyhomogenize.
@@ -52,6 +55,7 @@ class PreProcessing:
     def __init__(
         self,
         ds=None,
+        project="N/A",
         var_name=None,
         freq="year",
         ifreq="day",
@@ -64,6 +68,7 @@ class PreProcessing:
             raise ValueError("Please select an input xarray dataset. 'ds=...'")
         ds.attrs["frequency"] = ifreq
         self.ds = ds
+        self.project = check_existance({"project": project}, self)
         self.var_name = var_name
         self.freq = freq
         self.fmt = _fmt[freq].replace("-", "")

@@ -19,9 +19,6 @@ class PostProcessing:
     ----------
     proc_obj: index_calculator.processing
         ``index_calculator.processing`` object
-    project: {"CORDEX", "CMIP5", "CMIP6", "EOBS", "ERA5", "N/A"}
-        (default: "N/A), optional
-        Project name
     institution_id: str (default: "N/A"), optional
         Short name of the institution calculating the climate indicator.
     institution: str (default: "N/A"), optional
@@ -60,7 +57,6 @@ class PostProcessing:
     def __init__(
         self,
         proc_obj=None,
-        project="N/A",
         institution_id="N/A",
         institution="N/A",
         contact="N/A",
@@ -73,7 +69,6 @@ class PostProcessing:
             )
         object_attrs_to_self(proc_obj, self)
 
-        self.project = check_existance({"project": project}, self)
         self.institution_id = check_existance(
             {"institution_id": institution_id},
             self,
