@@ -16,5 +16,5 @@ def test_cli():
         "-inst_id TEST "
         "-contact test@test.de "
         "-freq week"
-    ).format(test_netcdf)
+    ).format(test_netcdf["tas"]["day"])
     os.system(s)

@@ -2,11 +2,19 @@ from pathlib import Path
 
 data_path = Path(__file__).parent
 
-nclist_tas = list((data_path / "data").glob("tas_*"))
-nclist_pr = list((data_path / "data").glob("pr_*"))
-netcdf_tas = [nc.as_posix() for nc in nclist_tas][0]
-netcdf_pr = [nc.as_posix() for nc in nclist_pr][0]
+nclist_tas_hour = list((data_path / "data").glob("tas_*1hr*"))
+nclist_tas_day = list((data_path / "data").glob("tas_*day*"))
+nclist_pr_day = list((data_path / "data").glob("pr_*day*"))
+
+netcdf_tas_hour = [nc.as_posix() for nc in nclist_tas_hour][0]
+netcdf_tas_day = [nc.as_posix() for nc in nclist_tas_day][0]
+netcdf_pr_day = [nc.as_posix() for nc in nclist_pr_day][0]
 netcdf = {
-    "tas": netcdf_tas,
-    "pr": netcdf_pr,
+    "tas": {
+        "1hr": netcdf_tas_hour,
+        "day": netcdf_tas_day,
+    },
+    "pr": {
+        "day": netcdf_pr_day,
+    },
 }
