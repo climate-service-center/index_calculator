@@ -1,13 +1,8 @@
-import numpy as np  # noqa
-import pyhomogenize as pyh  # noqa
 import pytest  # noqa
-import xarray as xr  # noqa
 from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
 from index_calculator import test_netcdf
-
-from .conftest import tas_series, tasmax_series, tasmin_series  # noqa
 
 
 def test_processing():
