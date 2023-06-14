@@ -66,12 +66,12 @@ class PreProcessing:
     ):
         if ds is None:
             raise ValueError("Please select an input xarray dataset. 'ds=...'")
-        if "frequency" not in ds.attrs:
-            ds.attrs["frequency"] = ifreq
+
         self.ds = ds
         self.project = check_existance({"project": project}, self)
         self.var_name = var_name
         self.freq = freq
+        self.ifreq = ifreq
         self.fmt = _fmt[freq].replace("-", "")
         self.afmt = _fmt[ifreq].replace("-", "")
         self.time_range = time_range
@@ -81,13 +81,19 @@ class PreProcessing:
         self.preproc = self._preprocessing()
 
     def _preprocessing(self):
-        def convert_to_daily_data(ds):
+        def convert_to_frequency(ds, freq):
             data_vars = {}
+            if freq not in cjson.keys():
+                raise ValueError(
+                    "Could not convert to frequency {}".format(freq),
+                    "Try one of {}.".format(cjson.keys()),
+                )
+            conv = cjson[freq]
             for dvar in ds.data_vars:
-                if dvar in cjson.keys():
+                if dvar in conv["var"].keys():
                     data_vars[dvar] = getattr(
-                        ds[dvar].resample(time="1D"),
-                        cjson[dvar],
+                        ds[dvar].resample(time=conv["freq"]),
+                        conv["var"][dvar],
                     )(dim="time")
                     coords = data_vars[dvar].coords
             ds = xr.Dataset(
@@ -95,26 +101,27 @@ class PreProcessing:
                 coords=coords,
                 attrs=ds.attrs,
             )
-            ds.attrs["frequency"] = "day"
             return ds
-
-        if self.ds.attrs["frequency"] != "day":
-            self.ds = convert_to_daily_data(self.ds)
-
-        if self.project in cfjson.keys():
-            var_names = cfjson[self.project]["var_names"]
-            units = cfjson[self.project]["units"]
-            for dvar in self.ds.data_vars:
-                if dvar in var_names.keys():
-                    self.ds = self.ds.rename({dvar: var_names[dvar]})
-                    dvar = var_names[dvar]
-                if dvar in units.keys():
-                    self.ds[dvar].attrs["units"] = units[dvar]
 
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
             self.var_name = time_control.name
 
+        ds_ = time_control.ds
+        if self.project in cfjson.keys():
+            var_names = cfjson[self.project]["var_names"]
+            units = cfjson[self.project]["units"]
+            for dvar in ds_.data_vars:
+                if dvar in var_names.keys():
+                    ds_ = ds_.rename({dvar: var_names[dvar]})
+                    dvar = var_names[dvar]
+                if dvar in units.keys():
+                    ds_[dvar].attrs["units"] = units[dvar]
+
+        if ds_.attrs["frequency"] != self.ifreq:
+            ds_ = convert_to_frequency(ds_, freq=self.ifreq)
+
+        time_control = pyh.time_control(ds_)
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
         if self.time_range:
