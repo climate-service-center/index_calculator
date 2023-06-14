@@ -2,9 +2,9 @@ import pandas as pd
 import xarray as xr
 
 
-def tas_series(values):
-    def _tas_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def tas_series(values, **kwargs):
+    def _tas_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -17,12 +17,12 @@ def tas_series(values):
             },
         )
 
-    return _tas_series(values)
+    return _tas_series(values, **kwargs)
 
 
-def pr_series(values):
-    def _pr_series(values, start="1/1/2000", units="kg m-2 s-1"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def pr_series(values, **kwargs):
+    def _pr_series(values, start="1/1/2000", units="kg m-2 s-1", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -35,12 +35,12 @@ def pr_series(values):
             },
         )
 
-    return _pr_series(values)
+    return _pr_series(values, **kwargs)
 
 
-def tasmin_series(values):
-    def _tasmin_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def tasmin_series(values, **kwargs):
+    def _tasmin_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -53,12 +53,12 @@ def tasmin_series(values):
             },
         )
 
-    return _tasmin_series(values)
+    return _tasmin_series(values, **kwargs)
 
 
-def tasmax_series(values):
-    def _tasmax_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def tasmax_series(values, **kwargs):
+    def _tasmax_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -71,12 +71,12 @@ def tasmax_series(values):
             },
         )
 
-    return _tasmax_series(values)
+    return _tasmax_series(values, **kwargs)
 
 
-def prsn_series(values):
-    def _prsn_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def prsn_series(values, **kwargs):
+    def _prsn_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -89,12 +89,12 @@ def prsn_series(values):
             },
         )
 
-    return _prsn_series(values)
+    return _prsn_series(values, **kwargs)
 
 
-def snd_series(values):
-    def _snd_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def snd_series(values, **kwargs):
+    def _snd_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -107,12 +107,12 @@ def snd_series(values):
             },
         )
 
-    return _snd_series(values)
+    return _snd_series(values, **kwargs)
 
 
-def hurs_series(values):
-    def _hurs_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def hurs_series(values, **kwargs):
+    def _hurs_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -125,12 +125,12 @@ def hurs_series(values):
             },
         )
 
-    return _hurs_series(values)
+    return _hurs_series(values, **kwargs)
 
 
-def rsds_series(values):
-    def _rsds_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def rsds_series(values, **kwargs):
+    def _rsds_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -143,12 +143,12 @@ def rsds_series(values):
             },
         )
 
-    return _rsds_series(values)
+    return _rsds_series(values, **kwargs)
 
 
-def rsus_series(values):
-    def _rsus_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def rsus_series(values, **kwargs):
+    def _rsus_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -161,12 +161,12 @@ def rsus_series(values):
             },
         )
 
-    return _rsus_series(values)
+    return _rsus_series(values, **kwargs)
 
 
-def rlds_series(values):
-    def _rlds_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def rlds_series(values, **kwargs):
+    def _rlds_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -179,12 +179,12 @@ def rlds_series(values):
             },
         )
 
-    return _rlds_series(values)
+    return _rlds_series(values, **kwargs)
 
 
-def rlus_series(values):
-    def _rlus_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def rlus_series(values, **kwargs):
+    def _rlus_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -197,12 +197,12 @@ def rlus_series(values):
             },
         )
 
-    return _rlus_series(values)
+    return _rlus_series(values, **kwargs)
 
 
-def sfcWind_series(values):
-    def _sfcWind_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def sfcWind_series(values, **kwargs):
+    def _sfcWind_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -215,12 +215,12 @@ def sfcWind_series(values):
             },
         )
 
-    return _sfcWind_series(values)
+    return _sfcWind_series(values, **kwargs)
 
 
-def mrt_series(values):
-    def _mrt_series(values, start="1/1/2000"):
-        coords = pd.date_range(start, periods=len(values), freq="D")
+def mrt_series(values, **kwargs):
+    def _mrt_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
@@ -233,4 +233,4 @@ def mrt_series(values):
             },
         )
 
-    return _mrt_series(values)
+    return _mrt_series(values, **kwargs)
