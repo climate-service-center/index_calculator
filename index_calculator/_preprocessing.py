@@ -66,7 +66,8 @@ class PreProcessing:
     ):
         if ds is None:
             raise ValueError("Please select an input xarray dataset. 'ds=...'")
-        ds.attrs["frequency"] = ifreq
+        if "frequency" not in ds.attrs:
+            ds.attrs["frequency"] = ifreq
         self.ds = ds
         self.project = check_existance({"project": project}, self)
         self.var_name = var_name
@@ -89,11 +90,16 @@ class PreProcessing:
                         cjson[dvar],
                     )(dim="time")
                     coords = data_vars[dvar].coords
-            return xr.Dataset(
+            ds = xr.Dataset(
                 data_vars=data_vars,
                 coords=coords,
                 attrs=ds.attrs,
             )
+            ds.attrs["frequency"] = "day"
+            return ds
+
+        if self.ds.attrs["frequency"] != "day":
+            self.ds = convert_to_daily_data(self.ds)
 
         if self.project in cfjson.keys():
             var_names = cfjson[self.project]["var_names"]
@@ -123,6 +129,4 @@ class PreProcessing:
             time_control.check_timestamps(correct=True)
 
         self.ATimeRange = avail_time
-        if time_control.ds.attrs["frequency"] != "day":
-            return convert_to_daily_data(time_control.ds)
         return time_control.ds
