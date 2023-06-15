@@ -128,6 +128,8 @@ class Processing:
                     self.CIname = self.CIname.replace("YY", str(v))
                 elif isinstance(v, list):
                     continue
+                elif isinstance(v, bool):
+                    continue
                 elif numb_name is not None:
                     self.CIname = self.CIname.replace(
                         numb_name,
@@ -148,14 +150,14 @@ class Processing:
     def _processing(self):
         """Calculate climate index."""
         dvars = self.preproc.data_vars
-        params = self._adjust_params_to_ci()
-        array = self.compute(**params)
-        basics = pyh.basics()
         data_vars = {
             k: v
             for k, v in dvars.items()
             if k not in self.var_name and "time" not in self.ds[k].coords
         }
+        params = self._adjust_params_to_ci()
+        array = self.compute(**params)
+        basics = pyh.basics()
         if "grid_mapping" in self.ds[self.var_name[0]].attrs:
             gm = self.ds[self.var_name[0]].attrs["grid_mapping"]
             array.attrs["grid_mapping"] = gm
@@ -178,7 +180,11 @@ class Processing:
             idx_ds = idx_ds.assign_coords(
                 {"time": date_range},
             )
-            idx_ds = idx_ds.squeeze()
+            dim_squeeze = []
+            for dim in idx_ds.dims:
+                if len(idx_ds[dim]) == 1 and dim != "time":
+                    dim_squeeze += [dim]
+            idx_ds = idx_ds.squeeze(dim=dim_squeeze)
             time_encoding = self.ds.time.encoding
             time_encoding["dtype"] = np.float64
             idx_ds.time.encoding = time_encoding
