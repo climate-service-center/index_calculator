@@ -28,7 +28,7 @@ def tas_c_xarray(series=[-15, -11, 0, 26, -32, 17, -9], **kwargs):
     return tas_series(np.array(series) + 273.15, **kwargs)
 
 
-def tasmin_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
+def tasmin_xarray(series=[-11, -26, -4, 1, 24, -3, -12], **kwargs):
     return tasmin_series(np.array(series) + 273.15, **kwargs)
 
 
@@ -181,7 +181,7 @@ def test_SQI():
 
 def test_FD():
     result = indices.FD.compute(tasmin=tasmin_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 3, rtol=1e-03)
+    np.testing.assert_allclose(result, 5, rtol=1e-03)
 
 
 def test_ID():
@@ -224,7 +224,7 @@ def test_TXx():
 
 def test_TN():
     result = indices.TN.compute(tasmin=tasmin_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 278, rtol=1e-03)
+    np.testing.assert_allclose(result, 268.72, rtol=1e-03)
 
 
 def test_TN10p():
@@ -247,12 +247,12 @@ def test_TN90p():
 
 def test_TNn():
     result = indices.TNn.compute(tasmin=tasmin_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 263.15, rtol=1e-03)
+    np.testing.assert_allclose(result, 247.15, rtol=1e-03)
 
 
 def test_TNx():
     result = indices.TNx.compute(tasmin=tasmin_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 305.15, rtol=1e-03)
+    np.testing.assert_allclose(result, 297.15, rtol=1e-03)
 
 
 def test_SU():
@@ -365,7 +365,7 @@ def test_R90pTOT():
 
 def test_CFD():
     result = indices.CFD.compute(tasmin=tasmin_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 2, rtol=1e-03)
+    np.testing.assert_allclose(result, 3, rtol=1e-03)
 
 
 def test_GD():
@@ -469,7 +469,7 @@ def test_DTR():
         tasmax=tasmax_xarray(),
         freq="7D",
     )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
+    np.testing.assert_allclose(result, 9.29, rtol=1e-03)
 
 
 def test_CSf():
@@ -511,7 +511,7 @@ def test_HWx():
         thresh_tasmin=25,
         window=1,
     )
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_HWf():
@@ -523,7 +523,7 @@ def test_HWf():
         thresh_tasmin=25,
         window=1,
     )
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_SD():
@@ -568,7 +568,7 @@ def test_UTCI():
 
 def test_WI():
     result = indices.WI.compute(
-        tas=tas_c_xarray(),
+        tasmin=tasmin_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [3], rtol=1e-03)
@@ -598,7 +598,7 @@ def test_FFS():
         window=1,
         freq="7D",
     )
-    np.testing.assert_allclose(result, [3], rtol=1e-03)
+    np.testing.assert_allclose(result, [4], rtol=1e-03)
 
 
 def test_FFE():

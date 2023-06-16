@@ -397,9 +397,9 @@
     },
     "WI": {
 	"standard_name": "days_with_air_temperature_below_or_equal_threshold",
-	"long_name": "Number of winter days (temperature < {thresh} degC)",
+	"long_name": "Number of winter days (minimum temperature < {thresh} degC)",
 	"units": "days",
-	"description": "Number of days with daily temperature below {thresh} degC."
+	"description": "Number of days with daily minimum temperature below {thresh} degC."
     },
     "HWf": {
 	"standard_name": "heat_wave_frequency",

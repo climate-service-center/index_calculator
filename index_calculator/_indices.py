@@ -2152,7 +2152,7 @@ class UTCI:
 
 
 class WI:
-    """Number of winter days (tas)."""
+    """Number of winter days (tasmin)."""
 
     thresh = -10
 
@@ -2162,7 +2162,7 @@ class WI:
         Parameters
         ----------
         thresh: int or string
-            Threshold temperature below which a day is considered
+            Threshold minimum temperature below which a day is considered
             as a winter day (default: -10 degC).
             If type of threshold is an integer the unit is set to degC.
 
@@ -2174,10 +2174,10 @@ class WI:
         Notes
         -----
         For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg_days_below
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_days_below
         """
         thresh = _thresh_string(thresh, "degC")
-        return xc.atmos.tg_days_below(
+        return xc.atmos.tn_days_below(
             thresh=thresh,
             **params,
         )
