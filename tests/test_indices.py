@@ -28,7 +28,7 @@ def tas_c_xarray(series=[-15, -11, 0, 26, -32, 17, -9], **kwargs):
     return tas_series(np.array(series) + 273.15, **kwargs)
 
 
-def tasmin_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
+def tasmin_xarray(series=[-11, -26, -4, 1, 24, -3, -12], **kwargs):
     return tasmin_series(np.array(series) + 273.15, **kwargs)
 
 
@@ -568,7 +568,7 @@ def test_UTCI():
 
 def test_WI():
     result = indices.WI.compute(
-        tas=tas_c_xarray(),
+        tasmin=tasmin_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [3], rtol=1e-03)
