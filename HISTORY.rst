@@ -221,3 +221,8 @@ History
 * adding hourly test data
 * calcualte climate indicators for ERA5 data
 * input variable for WI is tasmin not tas
+
+0.7.6 (2023-06-20)
+------------------
+
+* outsourcing test data to github repository https://github.com/ludwiglierhammer/test_data
