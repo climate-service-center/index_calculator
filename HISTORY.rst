@@ -213,3 +213,11 @@ History
 * expand some docstrings and rework metadata
 * those changes are not implemented in xclim yet
 * as soon as this is done index_calculator goes v0.8.0
+
+0.7.5 (2023-06-19)
+------------------
+
+* if dataset frequency is not equal input frequency, convert it
+* adding hourly test data
+* calcualte climate indicators for ERA5 data
+* input variable for WI is tasmin not tas
