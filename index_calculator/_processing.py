@@ -149,19 +149,22 @@ class Processing:
 
     def _processing(self):
         """Calculate climate index."""
-        dvars = self.preproc.data_vars
+        ds = self.preproc
+        dvars = ds.data_vars
         data_vars = {
             k: v
             for k, v in dvars.items()
-            if k not in self.var_name and "time" not in self.ds[k].coords
+            if k not in self.var_name and "time" not in ds[k].coords
         }
         params = self._adjust_params_to_ci()
         array = self.compute(**params)
         basics = pyh.basics()
-        if "grid_mapping" in self.ds[self.var_name[0]].attrs:
-            gm = self.ds[self.var_name[0]].attrs["grid_mapping"]
-            array.attrs["grid_mapping"] = gm
-        coords = {k: v for k, v in self.ds.coords.items() if "time" not in k}
+        for data_var in data_vars:
+            if "grid_mapping" in ds[data_var].attrs:
+                gm = ds[data_var].attrs["grid_mapping"]
+                array.attrs["grid_mapping"] = gm
+                break
+        coords = {k: v for k, v in ds.coords.items() if "time" not in k}
         for k, v in coords.items():
             array[k] = v
 
@@ -185,7 +188,7 @@ class Processing:
                 if len(idx_ds[dim]) == 1 and dim != "time":
                     dim_squeeze += [dim]
             idx_ds = idx_ds.squeeze(dim=dim_squeeze)
-            time_encoding = self.ds.time.encoding
+            time_encoding = ds.time.encoding
             time_encoding["dtype"] = np.float64
             idx_ds.time.encoding = time_encoding
             idx_ds = (
