@@ -2,11 +2,13 @@ import pytest  # noqa
 from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
-from index_calculator import test_netcdf
+
+from .conftest import pr_day_netcdf, tas_1hr_netcdf, tas_day_netcdf
 
 
 def test_processing():
-    tas_ds = open_xrdataset(test_netcdf["tas"]["day"])
+    data = tas_day_netcdf()
+    tas_ds = open_xrdataset(data)
     preproc = xcalc.preprocessing(
         tas_ds,
         freq="week",
@@ -24,7 +26,8 @@ def test_processing():
 
 
 def test_index_calculator():
-    tas_ds = open_xrdataset(test_netcdf["tas"]["day"])
+    data = tas_day_netcdf()
+    tas_ds = open_xrdataset(data)
     xcalc.index_calculator(
         ds=tas_ds,
         freq="week",
@@ -39,7 +42,8 @@ def test_index_calculator():
 
 
 def test_thresh_index_calculator():
-    pr_ds = open_xrdataset(test_netcdf["pr"]["day"])
+    data = pr_day_netcdf()
+    pr_ds = open_xrdataset(data)
     xcalc.index_calculator(
         ds=pr_ds,
         freq="week",
@@ -68,7 +72,8 @@ def test_thresh_index_calculator():
 
 
 def test_perc_index_calculator():
-    pr_ds = open_xrdataset(test_netcdf["pr"]["day"])
+    data = pr_day_netcdf()
+    pr_ds = open_xrdataset(data)
     xcalc.index_calculator(
         ds=pr_ds,
         freq="week",
@@ -90,7 +95,8 @@ def test_perc_index_calculator():
 
 
 def test_index_calculator_1hr():
-    tas_ds = open_xrdataset(test_netcdf["tas"]["1hr"])
+    data = tas_1hr_netcdf()
+    tas_ds = open_xrdataset(data)
     xcalc.index_calculator(
         ds=tas_ds,
         freq="week",

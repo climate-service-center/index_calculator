@@ -2,7 +2,7 @@ import os
 
 import pytest  # noqa
 
-from index_calculator import test_netcdf
+from .conftest import tas_day_netcdf
 
 
 def test_cli():
@@ -16,5 +16,5 @@ def test_cli():
         "-inst_id TEST "
         "-contact test@test.de "
         "-freq week"
-    ).format(test_netcdf["tas"]["day"])
+    ).format(tas_day_netcdf())
     os.system(s)

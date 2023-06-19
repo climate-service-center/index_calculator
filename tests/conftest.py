@@ -1,5 +1,42 @@
 import pandas as pd
+import pooch
 import xarray as xr
+
+url_base = "https://github.com/ludwiglierhammer/test_data/raw/main/"
+
+
+def _pooch_retrieve(url, known_hash=None):
+    return pooch.retrieve(url, known_hash=known_hash)
+
+
+def tas_day_netcdf():
+    url = (
+        url_base
+        + "/tas/day/tas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+    )
+    return _pooch_retrieve(url)
+
+
+def tas_1hr_netcdf():
+    url_1hr = url_base + "/tas/1hr/"
+    ifiles = [
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701010000-200701012300.nc",  # noqa
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701020000-200701022300.nc",  # noqa
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701030000-200701032300.nc",  # noqa
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701040000-200701042300.nc",  # noqa
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701050000-200701052300.nc",  # noqa
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701060000-200701062300.nc",  # noqa
+        "tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701070000-200701072300.nc",  # noqa
+    ]
+    return [_pooch_retrieve(url_1hr + ifile) for ifile in ifiles]
+
+
+def pr_day_netcdf():
+    url = (
+        url_base
+        + "/pr/day/pr_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+    )
+    return _pooch_retrieve(url)
 
 
 def tas_series(values, **kwargs):

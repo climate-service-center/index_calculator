@@ -4,7 +4,6 @@ __author__ = """Ludwig Lierhammer"""
 __email__ = "ludwig.lierhammer@hereon.de"
 __version__ = "0.7.5"
 
-from ._data import netcdf as test_netcdf  # noqa
 from ._outputwriter import OutputWriter as outputwriter
 from ._postprocessing import PostProcessing as postprocessing
 from ._preprocessing import PreProcessing as preprocessing
