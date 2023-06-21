@@ -486,6 +486,44 @@ class DSx:
         )
 
 
+class DSn:
+    """Total number of days in dry spells (pr)."""
+
+    thresh = 1
+    window = 5
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate total number of days in dry spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold precipitation below which a day is considered
+            as a dry day (default: 1 mm).
+            If type of threshold is an integer the unit is set to mm.
+        window: int
+            Minimum number of days with precipitation below threshold
+            to qualify as a dry spell (default: 5).
+
+        Returns
+        -------
+        xarray.DataArray
+            Total number of days in dry spells of at least {window}
+            consecutive days with precipitation below {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_total_length
+        """
+        thresh = _thresh_string(thresh, "mm")
+        return xc.atmos.dry_spell_total_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
 class WSf:
     """Number of wet spells (pr)."""
 
@@ -555,6 +593,44 @@ class WSx:
         """
         thresh = _thresh_string(thresh, "mm")
         return xc.atmos.wet_spell_max_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class WSn:
+    """Total number of days in wet spells (pr)."""
+
+    thresh = 1
+    window = 5
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate total number of days in wet spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold precipitation above which a day is considered
+            as a wet day (default: 1 mm).
+            If type of threshold is an integer the unit is set to mm.
+        window: int
+            Minimum number of days with precipitation above threshold
+            to qualify as a wet spell (default: 5).
+
+        Returns
+        -------
+        xarray.DataArray
+            Total numer of days in wet spells of at least {window}
+            consecutive days with precipitation above {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_spell_total_length
+        """
+        thresh = _thresh_string(thresh, "mm")
+        return xc.atmos.wet_spell_total_length(
             thresh=thresh,
             window=window,
             **params,
@@ -1894,6 +1970,82 @@ class CSf:
         )
 
 
+class CSx:
+    """Maximum length of cold spells (tas)."""
+
+    thresh = -10
+    window = 1
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate maximum length of cold spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold temperature below which a day is considered
+            as a cold day (default: -10 degC).
+            If type of threshold is an integer the unit is set to degC.
+        window: int
+            Minimum number of days with temperature below thresh
+            to qualify as a cold spell (default: 1).
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of cold spells of at least {window} consecutive days
+            with temperature below {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_max_length
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.cold_spell_max_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class CSn:
+    """Total number of days in cold spells (tas)."""
+
+    thresh = -10
+    window = 3
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate total number of days in cold spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold temperature below which a day is considered
+            as a cold day (default: -10 degC).
+            If type of threshold is an integer the unit is set to degC.
+        window: int
+            Minimum number of days with temperature below thresh
+            to qualify as a cold spell (default: 3).
+
+        Returns
+        -------
+        xarray.DataArray
+            Total number of days in cold spells of at least {window}
+            consecutive days with temperature below {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_total_length
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.cold_spell_total_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
 class HSf:
     """Number of hot spells (tasmax)."""
 
@@ -1954,8 +2106,8 @@ class HSx:
         Returns
         -------
         xarray.DataArray
-            Maximum length of hot spells of at least {window} consecutive days
-            with maximum temperature above {thresh}.
+            Maximum length of hot spells of at least {window}
+            consecutive days with maximum temperature above {thresh}.
 
         Notes
         -----
@@ -1964,6 +2116,44 @@ class HSx:
         """
         thresh = _thresh_string(thresh, "degC")
         return xc.atmos.hot_spell_max_length(
+            thresh=thresh,
+            window=window,
+            **params,
+        )
+
+
+class HSn:
+    """Total number of days in hot spells (tasmax)."""
+
+    thresh = 35
+    window = 3
+
+    def compute(thresh=thresh, window=window, **params):
+        """Calculate total number of days in hot spells.
+
+        Parameters
+        ----------
+        thresh: int or string
+            Threshold maximum temperature above which a day is considered
+            as a hot day (default: 35 degC).
+            If type of threshold is an integer the unit is set to degC.
+        window: int
+            Minimum number of days with temperature above thresh
+            to qualify as a hot spell (default: 3).
+
+        Returns
+        -------
+        xarray.DataArray
+            Total number of  days in hot spells of at least {window}
+            consecutive days with maximum temperature above {thresh}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_total_length
+        """
+        thresh = _thresh_string(thresh, "degC")
+        return xc.atmos.hot_spell_total_length(
             thresh=thresh,
             window=window,
             **params,
@@ -2278,6 +2468,57 @@ class HWx:
         thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
         thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
         return xc.atmos.heat_wave_max_length(
+            thresh_tasmax=thresh_tasmax,
+            thresh_tasmin=thresh_tasmin,
+            window=window,
+            **params,
+        )
+
+
+class HWn:
+    """Total number of days in heat waves (tasmax, tasmin)."""
+
+    thresh_tasmin = 22
+    thresh_tasmax = 30
+    window = 3
+
+    def compute(
+        thresh_tasmin=thresh_tasmin,
+        thresh_tasmax=thresh_tasmax,
+        window=window,
+        **params,
+    ):
+        """Calculate total number of days in heat waves.
+
+        Parameters
+        ----------
+        thresh_tasmin: int or string
+            Threshold minimum temperature above which a day is considered
+            as a heat day (default: 22 degC).
+            If type of threshold is an integer the unit is set to degC.
+        thresh_tasmax: int or string
+            Threshold maximum temperature above which a day is considered
+            as a winter day (default: 30 degC).
+            If type of threshold is an integer the unit is set to degC.
+        window: int
+            Minimum number of days with temperature above thresh
+            to qualify as a hot spell (default: 3).
+
+        Returns
+        -------
+        xarray.DataArray
+            Total number of days in heat waves of at least {window}
+            consecutive days with maximum temperature above {thresh_tasmax}
+            and minimum temperature above {thresh_tasmin}.
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_total_length
+        """
+        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
+        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
+        return xc.atmos.heat_wave_total_length(
             thresh_tasmax=thresh_tasmax,
             thresh_tasmin=thresh_tasmin,
             window=window,

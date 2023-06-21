@@ -65,6 +65,12 @@
 	"units": "",
 	"description": "Total number of series of at least {window} consecutive days with precipitation below {thresh} mm/day."
     },
+    "DSn": {
+	"standard_name": "dry_spell_days",
+	"long_name": "Total number of days in dry spells (precipitation < {thresh} mm/day)",
+	"units": "days",
+	"description": "Total number of days in series of at least {window} consecutive days with precipitation below {thresh} mm/day."
+    },
     "DSx": {
 	"standard_name": "dry_spell_duration",
 	"long_name": "Maximum lenght of dry spells (precipitation < {thresh} mm/day)",
@@ -82,6 +88,12 @@
 	"long_name": "Maximum lenght of wet spells (precipitation >= {thresh} mm/day)",
 	"units": "days",
 	"description": "Longest series of at least {window} consecutive days with precipitation above {thresh} mm/day."
+    },
+    "WSn": {
+	"standard_name": "wet_spell_days",
+	"long_name": "Total number of days in wet spells (precipitation >= {thresh} mm/day)",
+	"units": "days",
+	"description": "Total number of days in series of at least {window} consecutive days with precipitation above {thresh} mm/day."
     },
     "SDII": {
 	"standard_name": "simple_daily_intensity_index",
@@ -352,19 +364,37 @@
 	"long_name": "Number of hot spells (maximum temperature > {thresh} degC)",
 	"units": "",
 	"description": "Total number of series of at least {window} consecutive days with maximum temperature above {thresh}."
-  },
+    },
     "HSx": {
 	"standard_name": "hot_spell_duration",
 	"long_name": "Maximum length of hot spells (maximum temperature > {thresh} degC)",
 	"units": "days",
 	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh}."
     },
+    "HSn": {
+	"standard_name": "hot_spell_days",
+	"long_name": "Total number of days in hot spells (maximum temperature > {thresh} degC)",
+	"units": "days",
+	"description": "Total number of days in series of at least {window} consecutive days with maximum temperature above {thresh} degC."
+    },
     "CSf": {
 	"standard_name": "cold_spell_frequency",
 	"long_name": "Number of cold spells (temperature < {thresh} degC)",
 	"units": "",
 	"description": "Total number of series of at least {window} consecutive days with temperature below {thresh}."
-  },
+    },
+    "CSx": {
+	"standard_name": "cold_spell_duration",
+	"long_name": "Maximum length of cold spells (temperature < {thresh} degC)",
+	"units": "days",
+	"description": "Longest series of at least {window} consecutive days with temperature below {thresh}."
+    },
+    "CSn": {
+	"standard_name": "cold_spell_days",
+	"long_name": "Total number of days in cold spells (temperature < {thresh} degC)",
+	"units": "days",
+	"description": "Total number of days in series of at least {window} consecutive days with temperature below {thresh} degC."
+    },
     "SD": {
 	"standard_name": "snow_days",
 	"long_name": "Number of days with snow above {thresh} mm",
@@ -412,6 +442,12 @@
 	"long_name": "Maximum length of heat waves (maximum temperature > {thresh_tasmax} degC and minimum temperature > {thresh_tasmin} degC)",
 	"units": "days",
 	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh_tasmax} degC and minimum temperature above {thresh_tasmin} degC)."
+    },
+    "HWn": {
+	"standard_name": "heat_wave_days",
+	"long_name": "Total number of days in heat waves (maximum temperature > {thresh_tasmax} degC and minimum temperature > {thresh_tasmin} degC)",
+	"units": "days",
+	"description": "Total number of days in series of at least {window} consecutive days with maximum temperature above {thresh_tasmax} degC and minimum temperature above {thresh_tasmin} degC)."
     },
     "GSS": {
 	"standard_name": "day_of_year",
