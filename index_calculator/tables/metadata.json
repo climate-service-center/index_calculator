@@ -61,39 +61,39 @@
     },
     "DSf": {
 	"standard_name": "dry_spell_frequency",
-	"long_name": "Number of dry spells (precipitation < {thresh} mm/day)",
+	"long_name": "Number of dry spells (precipitation < {thresh} mm)",
 	"units": "",
-	"description": "Total number of series of at least {window} consecutive days with precipitation below {thresh} mm/day."
+	"description": "Total number of series of at least {window} consecutive days with precipitation below {thresh} mm."
     },
     "DSn": {
 	"standard_name": "dry_spell_days",
-	"long_name": "Total number of days in dry spells (precipitation < {thresh} mm/day)",
+	"long_name": "Total number of days in dry spells (precipitation < {thresh} mm)",
 	"units": "days",
-	"description": "Total number of days in series of at least {window} consecutive days with precipitation below {thresh} mm/day."
+	"description": "Total number of days in series of at least {window} consecutive days with precipitation below {thresh} mm."
     },
     "DSx": {
 	"standard_name": "dry_spell_duration",
-	"long_name": "Maximum lenght of dry spells (precipitation < {thresh} mm/day)",
+	"long_name": "Maximum lenght of dry spells (precipitation < {thresh} mm)",
 	"units": "days",
-	"description": "Longest series of at least {window} consecutive days with precipitation below {thresh} mm/day."
+	"description": "Longest series of at least {window} consecutive days with precipitation below {thresh} mm."
     },
     "WSf": {
 	"standard_name": "wet_spell_frequency",
-	"long_name": "Number of wet spells (precipitation >= {thresh} mm/day)",
+	"long_name": "Number of wet spells (precipitation >= {thresh} mm)",
 	"units": "",
-	"description": "Total number of series of at least {window} consecutive days with precipitation above {thresh} mm/day."
+	"description": "Total number of series of at least {window} consecutive days with precipitation above {thresh} mm."
     },
     "WSx": {
 	"standard_name": "wet_spell_duration",
-	"long_name": "Maximum lenght of wet spells (precipitation >= {thresh} mm/day)",
+	"long_name": "Maximum lenght of wet spells (precipitation >= {thresh} mm)",
 	"units": "days",
-	"description": "Longest series of at least {window} consecutive days with precipitation above {thresh} mm/day."
+	"description": "Longest series of at least {window} consecutive days with precipitation above {thresh} mm."
     },
     "WSn": {
 	"standard_name": "wet_spell_days",
-	"long_name": "Total number of days in wet spells (precipitation >= {thresh} mm/day)",
+	"long_name": "Total number of days in wet spells (precipitation >= {thresh} mm)",
 	"units": "days",
-	"description": "Total number of days in series of at least {window} consecutive days with precipitation above {thresh} mm/day."
+	"description": "Total number of days in series of at least {window} consecutive days with precipitation above {thresh} mm."
     },
     "SDII": {
 	"standard_name": "simple_daily_intensity_index",
@@ -211,9 +211,9 @@
     },
     "CSU": {
 	"standard_name": "consecutive_days_with_air_temperature_above_threshold",
-	"long_name": "Maximum number of consecutive summer days (maximum temperature > {threh} degC)",
+	"long_name": "Maximum number of consecutive summer days (maximum temperature > {thresh} degC)",
 	"units": "days",
-	"description": "Maximum count of consecutive days with daily maximum temperature above {tresh} degC."
+	"description": "Maximum count of consecutive days with daily maximum temperature above {thresh} degC."
     },
     "TR": {
 	"standard_name": "days_with_air_temperature_above_threshold",
@@ -363,13 +363,13 @@
 	"standard_name": "hot_spell_frequency",
 	"long_name": "Number of hot spells (maximum temperature > {thresh} degC)",
 	"units": "",
-	"description": "Total number of series of at least {window} consecutive days with maximum temperature above {thresh}."
+	"description": "Total number of series of at least {window} consecutive days with maximum temperature above {thresh} degC."
     },
     "HSx": {
 	"standard_name": "hot_spell_duration",
 	"long_name": "Maximum length of hot spells (maximum temperature > {thresh} degC)",
 	"units": "days",
-	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh}."
+	"description": "Longest series of at least {window} consecutive days with maximum temperature above {thresh} degC."
     },
     "HSn": {
 	"standard_name": "hot_spell_days",
@@ -381,13 +381,13 @@
 	"standard_name": "cold_spell_frequency",
 	"long_name": "Number of cold spells (temperature < {thresh} degC)",
 	"units": "",
-	"description": "Total number of series of at least {window} consecutive days with temperature below {thresh}."
+	"description": "Total number of series of at least {window} consecutive days with temperature below {thresh} degC."
     },
     "CSx": {
 	"standard_name": "cold_spell_duration",
 	"long_name": "Maximum length of cold spells (temperature < {thresh} degC)",
 	"units": "days",
-	"description": "Longest series of at least {window} consecutive days with temperature below {thresh}."
+	"description": "Longest series of at least {window} consecutive days with temperature below {thresh} degC."
     },
     "CSn": {
 	"standard_name": "cold_spell_days",
@@ -415,7 +415,7 @@
     },
     "Sfreq": {
 	"standard_name": "snowfall_frequency",
-	"long_name": "Percentage of days with snowfall flux > {thresh} mm/day",
+	"long_name": "Percentage of days with snowfall flux > {thresh} mm",
 	"units": "%",
 	"description": "Snowfall intensity is derived by dividing the total number of days with snowfall > {thresh} mm (liquid water equivalent) by the total number of days within the analysed time period."
     },
