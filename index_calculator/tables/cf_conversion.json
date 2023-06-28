@@ -1,7 +1,6 @@
 {
     "ERA5": {
 	"var_names": {
-	    "fg10": "sfcWindmax",
 	    "mn2t": "tasmin",
 	    "mx2t": "tasmax",
 	    "rsn": "snr",
@@ -10,12 +9,20 @@
 	    "t2m": "tas",
 	    "tp": "pr",
 	    "u10": "uas",
-	    "v10": "vas"
+	    "v10": "vas",
+	    "var033": "snr",
+	    "var141": "snd",
+	    "var144": "prsn",
+	    "var165": "uas",
+	    "var166": "vas",
+	    "var300": "sfcWindmax"
 	},
 	"units": {
 	    "pr": "m day-1",
 	    "prsn": "m day-1",
-	    "snd": "m"
+	    "snd": "m",
+	    "uas": "m s-1",
+	    "vas": "m s-1"
 	}
     }
 }
