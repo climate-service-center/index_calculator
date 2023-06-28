@@ -32,10 +32,10 @@
 	"drs_format": "eobs/{}/0.1deg/{}/{}/{}/{}"
     },
     "ERA5": {
-	"components": "era_id, level, ci_time_range_index, frequency, ci_name, ci_institute_id, ci_frequency",
-	"format": "{:02f}{}_{}_{}_{}_{}_{}.nc",
-	"icomponents": "era_id, level, validation_date, frequency, variable_id",
-	"iformat": "{:02f}{}_{}_{}_{}.nc",
+	"components": "ci_name, frequency, ci_institute_id, ci_frequency, ci_timerange_index",
+	"format": "{}_era5_{}_{}_{}_{}.nc",
+	"icomponents": "era_level, frequency, timerange, variable_id",
+	"iformat": "{}_{}_{}_{}.nc",
 	"drs_components": "ci_institute_id, ci_frequency, ci_name, ci_package_reference",
 	"drs_format": "era5/{}/{}/{}/{}"
     },
