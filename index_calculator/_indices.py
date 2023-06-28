@@ -670,9 +670,9 @@ class FD:
         Notes
         -----
         For information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.frost_days
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.late_frost_days
         """
-        return xc.atmos.frost_days(**params)
+        return xc.atmos.late_frost_days(**params)
 
 
 class ID:
@@ -2220,6 +2220,7 @@ class SCD:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snow_cover_duration
         """
         if water_equivalent is True:
+            print(params["ds"])
             snw = xc.land.snd_to_snw(ds=params["ds"])
             snd = convert_units_to(snw, "mm", context="hydro")
             snd.attrs = params["ds"]["snd"].attrs
