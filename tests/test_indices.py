@@ -184,6 +184,16 @@ def test_FD():
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
 
+def test_LFD():
+    result = indices.LFD.compute(
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        start_date="01-04",
+        end_date="01-07",
+    )
+    np.testing.assert_allclose(result, 2, rtol=1e-03)
+
+
 def test_ID():
     result = indices.ID.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 3, rtol=1e-03)
@@ -266,22 +276,32 @@ def test_CSU():
 
 
 def test_DSf():
-    result = indices.DSf.compute(pr=pr_xarray(), freq="7D")
+    result = indices.DSf.compute(pr=pr_xarray(), window=2, freq="7D")
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_DSx():
-    result = indices.DSx.compute(pr=pr_xarray(), freq="7D")
+    result = indices.DSx.compute(pr=pr_xarray(), window=1, freq="7D")
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_DSn():
+    result = indices.DSn.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_WSf():
-    result = indices.WSf.compute(pr=pr_xarray(), freq="7D")
-    np.testing.assert_allclose(result, 1, rtol=1e-03)
+    result = indices.WSf.compute(pr=pr_xarray(), window=1, freq="7D")
+    np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_WSx():
-    result = indices.WSx.compute(pr=pr_xarray(), freq="7D")
+    result = indices.WSx.compute(pr=pr_xarray(), window=1, freq="7D")
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_WSn():
+    result = indices.WSn.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
@@ -482,6 +502,25 @@ def test_CSf():
     np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
+def test_CSx():
+    result = indices.CSx.compute(
+        tas=tas_c_xarray(),
+        freq="7D",
+        thresh=-10,
+    )
+    np.testing.assert_allclose(result, 2, rtol=1e-03)
+
+
+def test_CSn():
+    result = indices.CSn.compute(
+        tas=tas_c_xarray(),
+        freq="7D",
+        thresh=-10,
+        window=1,
+    )
+    np.testing.assert_allclose(result, 3, rtol=1e-03)
+
+
 def test_HSf():
     result = indices.HSf.compute(
         tasmax=tasmax_xarray(),
@@ -497,6 +536,15 @@ def test_HSx():
         tasmax=tasmax_xarray(),
         freq="7D",
         thresh=27,
+    )
+    np.testing.assert_allclose(result, 1, rtol=1e-03)
+
+
+def test_HSn():
+    result = indices.HSn.compute(
+        tasmax=tasmax_xarray(),
+        freq="7D",
+        thresh=27,
         window=1,
     )
     np.testing.assert_allclose(result, 1, rtol=1e-03)
@@ -509,13 +557,24 @@ def test_HWx():
         freq="7D",
         thresh_tasmax=27,
         thresh_tasmin=25,
-        window=1,
     )
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_HWf():
     result = indices.HWf.compute(
+        tasmax=tasmax_xarray(),
+        tasmin=tasmin_xarray(),
+        freq="7D",
+        thresh_tasmax=27,
+        thresh_tasmin=25,
+        window=1,
+    )
+    np.testing.assert_allclose(result, 0, rtol=1e-03)
+
+
+def test_HWn():
+    result = indices.HWn.compute(
         tasmax=tasmax_xarray(),
         tasmin=tasmin_xarray(),
         freq="7D",
@@ -664,3 +723,6 @@ def FXx():
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
+
+
+test_LFD()

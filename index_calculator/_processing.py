@@ -103,6 +103,8 @@ class Processing:
             if isinstance(replacement[attr], list):
                 continue
             if isinstance(replacement[attr], str):
+                if not replacement[attr].isnumeric():
+                    continue
                 if replacement[attr][0] == "0":
                     replacement[attr] = float(
                         "{}.{}".format(
@@ -129,6 +131,8 @@ class Processing:
                 elif isinstance(v, list):
                     continue
                 elif isinstance(v, bool):
+                    continue
+                elif isinstance(v, str):
                     continue
                 elif numb_name is not None:
                     self.CIname = self.CIname.replace(
