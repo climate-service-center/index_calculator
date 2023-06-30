@@ -73,6 +73,7 @@ History
 ------------------
 
 * new indices:
+
   * CSf (Number of cold spells)
   * HSf (Number of hot spells)
   * HSx (Maximum length of hot spells)
@@ -122,6 +123,7 @@ History
 ------------------
 
 * new indices:
+
   * HW: maximum length of heat waves
   * GSS: start of growing season
   * GSE: end of growing season
@@ -129,6 +131,7 @@ History
   * FFE: end of frost-free season
   * RRm: mean daily precipitation
   * RRYYp: precipitation percentile value
+
 * rename RYYp to RYYpABS and RDYYP to RYYp according to ICCLIM
 * optional argument perc woth percentile indicators
 
@@ -187,6 +190,7 @@ History
 ------------------
 
 * new indicators implemented:
+
   * FG (mean daily wind speed)
   * FGn (minimum od mean daily wind speed)
   * FGx (maximum of mean daily wind speed)
@@ -232,6 +236,7 @@ History
 * optionally: calculate SCD with water equivalent input
 * replace '.' with '-' in directory structure and output file names
 * new climate indicators:
+
   * DSn: total number of days in dry spells
   * WSn: total number of days in wet spells
   * CSx: maximum length of cold spell
@@ -239,5 +244,6 @@ History
   * HSn: total number of days in hot spells
   * HWn: total number of days in heat waves
   * LFD: number of late frost days
+
 * metadata: set mm/day to mm
 * fixing v0.7.3 and v0.7.4 with xclim>=0.44
