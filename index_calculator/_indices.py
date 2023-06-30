@@ -674,12 +674,13 @@ class FD:
         """
         return xc.atmos.frost_days(**params)
 
+
 class LFD:
     """Number of late frost days (tasmin)."""
 
     start_date = "04-01"
     end_date = "06-30"
-    
+
     def compute(start_date=start_date, end_date=end_date, **params):
         """Calculate number of late frost days (tasmin < 0.0 degC, start_date < date < end_date).
 
