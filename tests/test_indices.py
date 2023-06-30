@@ -183,6 +183,7 @@ def test_FD():
     result = indices.FD.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
+
 def test_LFD():
     result = indices.LFD.compute(
         tasmin=tasmin_xarray(),
@@ -191,7 +192,8 @@ def test_LFD():
         end_date="01-07",
     )
     np.testing.assert_allclose(result, 2, rtol=1e-03)
-    
+
+
 def test_ID():
     result = indices.ID.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 3, rtol=1e-03)
@@ -721,4 +723,3 @@ def FXx():
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
-

@@ -706,7 +706,7 @@ class LFD:
             date_bounds=(start_date, end_date),
             **params,
         )
-        
+
 
 class ID:
     """Number of ice days (tasmax)."""
