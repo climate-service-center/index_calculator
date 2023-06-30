@@ -226,3 +226,18 @@ History
 ------------------
 
 * outsourcing test data to github repository https://github.com/ludwiglierhammer/test_data
+
+0.8.0 (not released yet)
+------------------------
+* optionally: calculate SCD with water equivalent input
+* replace '.' with '-' in directory structure and output file names
+* new climate indicators:
+  * DSn: total number of days in dry spells
+  * WSn: total number of days in wet spells
+  * CSx: maximum length of cold spell
+  * CSn: total number of days in cold spells
+  * HSn: total number of days in hot spells
+  * HWn: total number of days in heat waves
+  * LFD: number of late frost days
+* metadata: set mm/day to mm
+* fixing v0.7.3 and v0.7.4 with xclim>=0.44
