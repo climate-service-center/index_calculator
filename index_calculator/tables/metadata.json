@@ -197,6 +197,12 @@
 	"units": "days",
 	"description": "Number of consecutive days with daily minimum temperature below 0 degC."
     },
+    "LFD": {
+	"standard_name": "days_with_air_temperature_below_threshold",
+	"long_name": "Number of late frost days (minimum temperature < 0 degC)",
+	"units": "days",
+	"description": "Number of days with daily minimum temperature below 0 degC between {start_date} and {end_date}."
+    },
     "ID": {
 	"standard_name": "days_with_air_temperature_below_threshold",
 	"long_name": "Number of ice days (maximum temperature < 0 degC)",
