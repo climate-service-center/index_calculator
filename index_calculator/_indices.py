@@ -682,7 +682,7 @@ class LFD:
     end_date = "06-30"
 
     def compute(start_date=start_date, end_date=end_date, **params):
-        """Calculate number of late frost days (tasmin < 0.0 degC, start_date < date < end_date).
+        """Calculate number of late frost days (tasmin < 0.0 degC).
 
         Parameters
         ----------
@@ -694,14 +694,18 @@ class LFD:
         Returns
         -------
         xarray.DataArray
-            Number of late frost days (tasmin < 0.0 degC, start_date < date < end_date).
+            Number of frost days (tasmin < 0.0)
+            between {start_date} and {end_date}.
 
         Notes
         -----
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.late_frost_days
         """
-        return xc.atmos.late_frost_days(date_bounds=(start_date, end_date), **params)
+        return xc.atmos.late_frost_days(
+            date_bounds=(start_date, end_date),
+            **params,
+        )
 
 
 class ID:
