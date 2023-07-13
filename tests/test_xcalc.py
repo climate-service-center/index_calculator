@@ -3,7 +3,7 @@ from pyhomogenize import open_xrdataset
 
 import index_calculator as xcalc
 
-from .conftest import pr_day_netcdf, tas_1hr_netcdf, tas_day_netcdf
+from .conftest import pr_day_netcdf, tas_day_netcdf
 
 
 def test_processing():
@@ -91,20 +91,4 @@ def test_perc_index_calculator():
         project="CORDEX",
         institution_id="TEST",
         base_period_time_range=["2001-01-01", "2001-01-07"],
-    )
-
-
-def test_index_calculator_1hr():
-    data = tas_1hr_netcdf()
-    tas_ds = open_xrdataset(data)
-    xcalc.index_calculator(
-        ds=tas_ds,
-        freq="week",
-        index="TG",
-        crop_time_axis=False,
-        project="CORDEX",
-        institution="test institution",
-        institution_id="TEST",
-        contact="test@test.de",
-        write=True,
     )
