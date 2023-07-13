@@ -1,9 +1,7 @@
 import pyhomogenize as pyh
-import xarray as xr
 from pyhomogenize._consts import fmt as _fmt
 
 from ._consts import _bounds
-from ._tables import cfjson, cjson
 from ._utils import check_existance, get_time_range_as_str, kwargs_to_self
 
 
@@ -81,45 +79,19 @@ class PreProcessing:
         self.preproc = self._preprocessing()
 
     def _preprocessing(self):
-        def convert_to_frequency(ds, freq):
-            data_vars = {}
-            if freq not in cjson.keys():
-                raise ValueError(
-                    "Could not convert to frequency {}".format(freq),
-                    "Try one of {}.".format(cjson.keys()),
-                )
-            conv = cjson[freq]
-            for dvar in ds.data_vars:
-                if dvar in conv["var"].keys():
-                    data_vars[dvar] = getattr(
-                        ds[dvar].resample(time=conv["freq"]),
-                        conv["var"][dvar],
-                    )(dim="time")
-                    coords = data_vars[dvar].coords
-            ds = xr.Dataset(
-                data_vars=data_vars,
-                coords=coords,
-                attrs=ds.attrs,
-            )
-            return ds
-
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
             self.var_name = time_control.name
 
         ds_ = time_control.ds
-        if self.project in cfjson.keys():
-            var_names = cfjson[self.project]["var_names"]
-            units = cfjson[self.project]["units"]
-            for dvar in ds_.data_vars:
-                if dvar in var_names.keys():
-                    ds_ = ds_.rename({dvar: var_names[dvar]})
-                    dvar = var_names[dvar]
-                if dvar in units.keys():
-                    ds_[dvar].attrs["units"] = units[dvar]
 
         if ds_.attrs["frequency"] != self.ifreq:
-            ds_ = convert_to_frequency(ds_, freq=self.ifreq)
+            raise ValueError(
+                "Provided input frequency {} does not"
+                "match requested input frequency {}.".format(
+                    ds_.attrs["frequency"], self.ifreq
+                )
+            )
 
         time_control = pyh.time_control(ds_)
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
