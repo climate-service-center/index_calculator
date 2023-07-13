@@ -231,8 +231,8 @@ History
 
 * outsourcing test data to github repository https://github.com/ludwiglierhammer/test_data
 
-0.8.0 (not released yet)
-------------------------
+0.8.0 (2023-07-13)
+------------------
 * optionally: calculate SCD with water equivalent input
 * replace '.' with '-' in directory structure and output file names
 * new climate indicators:
