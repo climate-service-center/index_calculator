@@ -247,3 +247,4 @@ History
 
 * metadata: set mm/day to mm
 * fixing v0.7.3 and v0.7.4 with xclim>=0.44
+* redo v0.7.5 (if dataset frequency is not equal input frequency, convert it; adding hourly test data)
