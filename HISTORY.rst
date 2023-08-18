@@ -248,3 +248,8 @@ History
 * metadata: set mm/day to mm
 * fixing v0.7.3 and v0.7.4 with xclim>=0.44
 * redo v0.7.5 (if dataset frequency is not equal input frequency, convert it; adding hourly test data)
+
+0.8.1 (2023-08-18)
+------------------
+
+* new drs format and file naming convention for project E-OBS
