@@ -93,7 +93,6 @@ class PreProcessing:
                 )
             )
 
-        time_control = pyh.time_control(ds_)
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
         if self.time_range:

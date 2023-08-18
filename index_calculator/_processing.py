@@ -220,7 +220,6 @@ class Processing:
             idx_ds[self.CIname] = idx_ds[self.CIname].transpose(
                 *transpose_list,
             )
-
         for data_var in idx_ds.data_vars:
             data_var_repl = data_var.replace("bounds", "bnds")
             idx_ds = idx_ds.rename({data_var: data_var_repl})
