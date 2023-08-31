@@ -253,3 +253,8 @@ History
 ------------------
 
 * new drs format and file naming convention for project E-OBS
+
+0.8.2 (2023-08-31)
+------------------
+
+* calcualte iondices with neagtive thresholds

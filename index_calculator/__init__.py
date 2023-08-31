@@ -2,7 +2,7 @@
 
 __author__ = """Ludwig Lierhammer"""
 __email__ = "ludwig.lierhammer@hereon.de"
-__version__ = "0.8.1"
+__version__ = "0.8.2"
 
 from ._outputwriter import OutputWriter as outputwriter
 from ._postprocessing import PostProcessing as postprocessing
