@@ -87,5 +87,8 @@
 	"FG": ["uas", "vas"],
 	"FGn": ["uas", "vas"],
 	"FGx": ["uas", "vas"]
+    },
+    "CORDEX": {
+	"SCD": ["snw"]
     }
 }

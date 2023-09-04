@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import dask  # noqa
 import xarray as xr
 import xclim as xc
@@ -2231,8 +2233,14 @@ class SCD:
 
     thresh = 1
     water_equivalent = False
+    snow_density = "default"
 
-    def compute(thresh=thresh, water_equivalent=water_equivalent, **params):
+    def compute(
+        thresh=thresh,
+        water_equivalent=water_equivalent,
+        snow_density=snow_density,
+        **params,
+    ):
         """Calculate snow cover duration.
 
         Parameters
@@ -2242,6 +2250,15 @@ class SCD:
             as a snow day (default: 1 cm).
             If type of threshold is an integer the unit is set to cm.
 
+        water_equivalent: bool
+            If True convert snow thickness (snow-water-equivalent)
+            to snow thickness
+
+        snow_density: int or string
+            Constant snow density is only used if `params['ds']`
+            does not provide `snd` and `snr`.
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snw_to_snd
+
         Returns
         -------
         xarray.DataArray
@@ -2250,16 +2267,37 @@ class SCD:
         Notes
         -----
         For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snow_cover_duration
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snd_season_length
+
+        The default snow density value can be found here:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snw_to_snd
         """
-        if water_equivalent is True:
-            snw = xc.land.snd_to_snw(
-                snd=params["ds"]["snd"],
-                const="1000 kg m-3",
-            )
-            snd = xc.land.snw_to_snd(snw=snw, snr=params["ds"]["snr"])
-            params["ds"]["snd"] = snd
+        params = deepcopy(params)
         thresh = _thresh_string(thresh, "cm")
+        if "snd" in params["ds"].data_vars:
+            if water_equivalent is True:
+                params["ds"]["snw"] = xc.land.snd_to_snw(
+                    snd=params["ds"]["snd"],
+                    const="1000 kg m-3",
+                )
+                del params["ds"]["snd"]
+        data_vars = params["ds"].data_vars
+        if "snw" in data_vars and "snd" not in data_vars:
+            if "snr" in params["ds"].data_vars:
+                params["ds"]["snd"] = xc.land.snw_to_snd(
+                    snw=params["ds"]["snw"],
+                    snr=params["ds"]["snr"],
+                )
+            elif snow_density == "default":
+                params["ds"]["snd"] = xc.land.snw_to_snd(
+                    snw=params["ds"]["snw"],
+                )
+            else:
+                params["ds"]["snd"] = xc.land.snw_to_snd(
+                    snw=params["ds"]["snw"],
+                    const=_thresh_string(snow_density, "kg m-3"),
+                )
+            del params["ds"]["snw"]
         return xc.land.snd_season_length(
             thresh=thresh,
             **params,
@@ -2729,6 +2767,7 @@ class FG:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_mean
         """
         if "sfcWind" not in params["ds"]:
+            params = deepcopy(params)
             params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
                 ds=params["ds"],
             )[0]
@@ -2755,6 +2794,7 @@ class FGn:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_min
         """
         if "sfcWind" not in params["ds"]:
+            params = deepcopy(params)
             params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
                 ds=params["ds"],
             )[0]
@@ -2781,6 +2821,7 @@ class FGx:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_max
         """
         if "sfcWind" not in params["ds"]:
+            params = deepcopy(params)
             params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
                 ds=params["ds"],
             )[0]
