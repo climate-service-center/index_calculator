@@ -2231,7 +2231,7 @@ class SD:
 class SCD:
     """Snow cover duration."""
 
-    thresh = 1
+    thresh = 3
     water_equivalent = False
     snow_density = "default"
 
@@ -2247,7 +2247,7 @@ class SCD:
         ----------
         thresh: int or string
             Threshold snow thickness above which a day is considered
-            as a snow day (default: 1 cm).
+            as a snow day (default: 3 cm).
             If type of threshold is an integer the unit is set to cm.
 
         water_equivalent: bool
