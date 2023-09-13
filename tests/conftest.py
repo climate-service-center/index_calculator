@@ -115,22 +115,22 @@ def prsn_series(values, **kwargs):
     return _prsn_series(values, **kwargs)
 
 
-def snd_series(values, **kwargs):
-    def _snd_series(values, start="1/1/2000", freq="D"):
+def snw_series(values, **kwargs):
+    def _snw_series(values, start="1/1/2000", freq="D"):
         coords = pd.date_range(start, periods=len(values), freq=freq)
         return xr.DataArray(
             values,
             coords=[coords],
             dims="time",
-            name="snd",
+            name="snw",
             attrs={
-                "standard_name": "surface_snow_thickness",
+                "standard_name": "surface_snow_amount",
                 "cell_methods": "time: mean",
-                "units": "m",
+                "units": "kg m-2",
             },
         )
 
-    return _snd_series(values, **kwargs)
+    return _snw_series(values, **kwargs)
 
 
 def hurs_series(values, **kwargs):
