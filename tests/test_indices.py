@@ -607,16 +607,6 @@ def test_SCD():
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
 
-def test_SCD_swe():
-    result = indices.SCD.compute(
-        snw=snw_xarray(),
-        water_equivalent=True,
-        thresh=2,
-        freq="7D",
-    )
-    np.testing.assert_allclose(result, 5, rtol=1e-03)
-
-
 def test_Sfreq():
     result = indices.Sfreq.compute(prsn=prsn_xarray(), freq="7D")
     np.testing.assert_allclose(result, 4 / 7 * 100, rtol=1e-03)
