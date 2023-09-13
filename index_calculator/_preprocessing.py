@@ -103,6 +103,7 @@ class PreProcessing:
                 smonth=_bounds[self.freq]["start"],
                 emonth=_bounds[self.freq]["end"],
             )
+
         if self.check_time_axis:
             time_control.check_timestamps(correct=True)
 
