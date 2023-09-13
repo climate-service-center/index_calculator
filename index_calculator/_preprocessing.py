@@ -1,10 +1,11 @@
 import warnings
 
 import pyhomogenize as pyh
+import xarray as xr
 from pyhomogenize._consts import fmt as _fmt
 
 from ._consts import _bounds
-from ._tables import cfjson
+from ._tables import cfjson, fjson
 from ._utils import check_existance, get_time_range_as_str, kwargs_to_self
 
 
@@ -81,23 +82,7 @@ class PreProcessing:
         kwargs_to_self(kwargs, self)
         self.preproc = self._preprocessing()
 
-    def _rename_variable_names(
-        self,
-        ds,
-    ):
-        """Rename variable_names to CF standard.
-        Parameters
-        ----------
-        ds: xr.Dataset
-            Dataset containing multiple DataArrays
-        project: str
-            Project name for specific variable renaming
-        Returns
-        -------
-        xr.Dataset
-            Dataset contaiing multiple DataArrays
-            with CF standard variable names.
-        """
+    def _rename_variable_names(self, ds):
         if self.project not in cfjson.keys():
             warnings.warn(
                 "Project {} not know. Use one of {}".format(
@@ -116,20 +101,37 @@ class PreProcessing:
                 ds[dvar].attrs["units"] = units[dvar]
         return ds
 
+    def _convert_to_frequency(self, ds):
+        if self.ifreq not in fjson.keys():
+            raise ValueError(
+                "Could not convert to frequency {}".format(self.ifreq),
+                "Try one of {}.".format(fjson.keys()),
+            )
+        conv = fjson[self.ifreq]
+        if conv["freq"] == xr.infer_freq(ds.time):
+            return ds
+        data_vars = {}
+        for dvar in ds.data_vars:
+            if dvar in conv["var"].keys():
+                data_vars[dvar] = getattr(
+                    ds[dvar].resample(time=conv["freq"]),
+                    conv["var"][dvar],
+                )(dim="time")
+                coords = data_vars[dvar].coords
+        return xr.Dataset(
+            data_vars=data_vars,
+            coords=coords,
+            attrs=ds.attrs,
+        )
+
     def _preprocessing(self):
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
             self.var_name = time_control.name
 
         ds_ = time_control.ds
-
-        if ds_.attrs["frequency"] != self.ifreq:
-            raise ValueError(
-                "Provided input frequency {} does not"
-                "match requested input frequency {}.".format(
-                    ds_.attrs["frequency"], self.ifreq
-                )
-            )
+        ds_ = self.rename_variable_names(ds_)
+        ds_ = self.convert_to_frequency(ds_)
 
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
@@ -146,6 +148,4 @@ class PreProcessing:
             time_control.check_timestamps(correct=True)
 
         self.ATimeRange = avail_time
-        ds = time_control.ds
-        ds = self.rename_variable_names(ds)
-        return ds
+        return time_control.ds
