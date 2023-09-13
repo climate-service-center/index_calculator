@@ -158,7 +158,7 @@ class Processing:
         """Calculate climate index."""
         ds = self.preproc
         conv_vars = ConvertVariables(ds, **self.kwargs)
-        input_variables = vjson[self.CIname]
+        input_variables = vjson[self.IDXname]
         if isinstance(input_variables, str):
             input_variables = [input_variables]
         for input_variable in input_variables:
