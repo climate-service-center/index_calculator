@@ -7,6 +7,7 @@ from pyhomogenize._consts import freqs as _freq
 from pyhomogenize._consts import frequencies as _tfreq
 
 from . import _indices as indices
+from ._tables import vjson
 from ._utils import (
     check_existance,
     get_alpha_name,
@@ -15,6 +16,7 @@ from ._utils import (
     kwargs_to_self,
     object_attrs_to_self,
 )
+from ._variable_conversion import ConvertVariables
 
 
 class Processing:
@@ -155,6 +157,23 @@ class Processing:
     def _processing(self):
         """Calculate climate index."""
         ds = self.preproc
+        conv_vars = ConvertVariables(ds, **self.kwargs)
+        input_variables = vjson[self.CIname]
+        if isinstance(input_variables, str):
+            input_variables = [input_variables]
+        for input_variable in input_variables:
+            if input_variable in ds.data_vars:
+                continue
+            if not hasattr(conv_vars, input_variable):
+                raise ValueError(
+                    """Requested input variable {}
+                    is not provided and can not be calculated
+                    from provided input variables {}""".format(
+                        input_variable, ds.data_vars
+                    )
+                )
+            ds[input_variable] = getattr(conv_vars, input_variable)()
+
         dvars = ds.data_vars
         data_vars = {
             k: v
