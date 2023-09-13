@@ -63,7 +63,7 @@
 	"CSx": "tas",
 	"CSn": "tas",
 	"SD": "prsn",
-	"SCD": "snd",
+	"SCD": "snw",
 	"Sint": "prsn",
 	"Sfreq": "prsn",
 	"UTCI": ["tas", "hurs", "sfcWind", "rsds", "rsus", "rlds", "rlus"],
@@ -81,14 +81,5 @@
 	"FX": "sfcWindmax",
 	"FXx": "sfcWindmax",
 	"FXn": "sfcWindmax"
-    },
-    "ERA5": {
-	"SCD": ["snd", "snr"],
-	"FG": ["uas", "vas"],
-	"FGn": ["uas", "vas"],
-	"FGx": ["uas", "vas"]
-    },
-    "CORDEX": {
-	"SCD": ["snw"]
     }
 }
