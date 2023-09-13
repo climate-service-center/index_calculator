@@ -1,7 +1,10 @@
+import warnings
+
 import pyhomogenize as pyh
 from pyhomogenize._consts import fmt as _fmt
 
 from ._consts import _bounds
+from ._tables import cfjson
 from ._utils import check_existance, get_time_range_as_str, kwargs_to_self
 
 
@@ -78,6 +81,41 @@ class PreProcessing:
         kwargs_to_self(kwargs, self)
         self.preproc = self._preprocessing()
 
+    def _rename_variable_names(
+        self,
+        ds,
+    ):
+        """Rename variable_names to CF standard.
+        Parameters
+        ----------
+        ds: xr.Dataset
+            Dataset containing multiple DataArrays
+        project: str
+            Project name for specific variable renaming
+        Returns
+        -------
+        xr.Dataset
+            Dataset contaiing multiple DataArrays
+            with CF standard variable names.
+        """
+        if self.project not in cfjson.keys():
+            warnings.warn(
+                "Project {} not know. Use one of {}".format(
+                    self.project,
+                    cfjson.keys(),
+                )
+            )
+            return ds
+        var_names = cfjson[self.project]["variables"]
+        units = cfjson[self.project]["units"]
+        for dvar in ds.data_vars:
+            if dvar in var_names.keys():
+                ds = ds.rename({dvar: var_names[dvar]})
+                dvar = var_names[dvar]
+            if dvar in units.keys():
+                ds[dvar].attrs["units"] = units[dvar]
+        return ds
+
     def _preprocessing(self):
         time_control = pyh.time_control(self.ds)
         if not self.var_name:
@@ -108,4 +146,6 @@ class PreProcessing:
             time_control.check_timestamps(correct=True)
 
         self.ATimeRange = avail_time
-        return time_control.ds
+        ds = time_control.ds
+        ds = self.rename_variable_names(ds)
+        return ds
