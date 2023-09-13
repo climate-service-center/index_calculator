@@ -2766,11 +2766,6 @@ class FG:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_mean
         """
-        if "sfcWind" not in params["ds"]:
-            params = deepcopy(params)
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
-                ds=params["ds"],
-            )[0]
         return xc.atmos.sfcWind_mean(**params)
 
 
@@ -2793,11 +2788,6 @@ class FGn:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_min
         """
-        if "sfcWind" not in params["ds"]:
-            params = deepcopy(params)
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
-                ds=params["ds"],
-            )[0]
         return xc.atmos.sfcWind_min(**params)
 
 
@@ -2820,11 +2810,6 @@ class FGx:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_max
         """
-        if "sfcWind" not in params["ds"]:
-            params = deepcopy(params)
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
-                ds=params["ds"],
-            )[0]
         return xc.atmos.sfcWind_max(**params)
 
 
