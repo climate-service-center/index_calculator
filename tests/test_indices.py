@@ -13,6 +13,7 @@ from .conftest import (
     rsds_series,
     rsus_series,
     sfcWind_series,
+    snd_series,
     snw_series,
     tas_series,
     tasmax_series,
@@ -44,7 +45,11 @@ def prsn_xarray(series=[7, 0, 0.5, 10, 6, 0, 4], **kwargs):
     return prsn_series(np.array(series) / 86400, **kwargs)
 
 
-def snw_xarray(series=[0, 20, 150, 340, 170, 90, 0], **kwargs):
+def snd_xarray(series=[0, 20, 150, 340, 170, 90, 0], **kwargs):
+    return snd_series(np.array(series) / 100, **kwargs)
+
+
+def snw_xarray(series=[0, 6, 50, 110, 60, 30, 0], **kwargs):
     return snw_series(np.array(series) / 100, **kwargs)
 
 
@@ -595,7 +600,17 @@ def test_SD():
 
 def test_SCD():
     result = indices.SCD.compute(
+        snd=snd_xarray(),
+        thresh=2,
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, 5, rtol=1e-03)
+
+
+def test_SCD_swe():
+    result = indices.SCD.compute(
         snw=snw_xarray(),
+        water_equivalent=True,
         thresh=2,
         freq="7D",
     )
