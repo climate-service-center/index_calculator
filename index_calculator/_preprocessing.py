@@ -130,8 +130,8 @@ class PreProcessing:
             self.var_name = time_control.name
 
         ds_ = time_control.ds
-        ds_ = self.rename_variable_names(ds_)
-        ds_ = self.convert_to_frequency(ds_)
+        ds_ = self._rename_variable_names(ds_)
+        ds_ = self._convert_to_frequency(ds_)
 
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
