@@ -2230,8 +2230,6 @@ class SCD:
     """Snow cover duration."""
 
     thresh = 3
-    water_equivalent = False
-    snow_density = "default"
 
     def compute(
         thresh=thresh,
