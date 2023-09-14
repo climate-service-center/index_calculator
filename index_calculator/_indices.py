@@ -2229,36 +2229,26 @@ class SD:
 class SCD:
     """Snow cover duration."""
 
-    thresh = 1
-    water_equivalent = False
+    thresh = 3
 
-    def compute(thresh=thresh, water_equivalent=water_equivalent, **params):
+    def compute(
+        thresh=thresh,
+        **params,
+    ):
         """Calculate snow cover duration.
 
         Parameters
         ----------
         thresh: int or string
             Threshold snow thickness above which a day is considered
-            as a snow day (default: 1 cm).
+            as a snow day (default: 3 cm).
             If type of threshold is an integer the unit is set to cm.
 
         Returns
         -------
         xarray.DataArray
             Number of days with snow cover above {thresh} threshold.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.land.snow_cover_duration
         """
-        if water_equivalent is True:
-            snw = xc.land.snd_to_snw(
-                snd=params["ds"]["snd"],
-                const="1000 kg m-3",
-            )
-            snd = xc.land.snw_to_snd(snw=snw, snr=params["ds"]["snr"])
-            params["ds"]["snd"] = snd
         thresh = _thresh_string(thresh, "cm")
         return xc.land.snd_season_length(
             thresh=thresh,
@@ -2728,10 +2718,6 @@ class FG:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_mean
         """
-        if "sfcWind" not in params["ds"]:
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
-                ds=params["ds"],
-            )[0]
         return xc.atmos.sfcWind_mean(**params)
 
 
@@ -2754,10 +2740,6 @@ class FGn:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_min
         """
-        if "sfcWind" not in params["ds"]:
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
-                ds=params["ds"],
-            )[0]
         return xc.atmos.sfcWind_min(**params)
 
 
@@ -2780,10 +2762,6 @@ class FGx:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_max
         """
-        if "sfcWind" not in params["ds"]:
-            params["ds"]["sfcWind"] = xc.atmos.wind_speed_from_vector(
-                ds=params["ds"],
-            )[0]
         return xc.atmos.sfcWind_max(**params)
 
 

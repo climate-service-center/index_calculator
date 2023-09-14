@@ -1,0 +1,22 @@
+{
+    "day": {
+	"var": {
+	    "hurs": "mean",
+	    "pr": "mean",
+	    "prsn": "mean",
+	    "rlds": "mean",
+	    "rlus": "mean",
+	    "rsds": "mean",
+	    "rsus": "mean",
+	    "sfcWind": "mean",
+	    "sfcWindmax": "max",
+	    "snd": "mean",
+	    "tas": "mean",
+	    "tasmax": "max",
+	    "tasmin": "min",
+	    "uas": "mean",
+	    "vas": "mean"
+	},
+	"freq": "D"
+    }
+}

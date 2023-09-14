@@ -3,3 +3,4 @@ dask>=2021.10.0
 xclim>=0.34.0
 pyhomogenize>=0.5.1
 pint>=0.10
+pooch

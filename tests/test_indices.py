@@ -14,6 +14,7 @@ from .conftest import (
     rsus_series,
     sfcWind_series,
     snd_series,
+    snw_series,
     tas_series,
     tasmax_series,
     tasmin_series,
@@ -46,6 +47,10 @@ def prsn_xarray(series=[7, 0, 0.5, 10, 6, 0, 4], **kwargs):
 
 def snd_xarray(series=[0, 20, 150, 340, 170, 90, 0], **kwargs):
     return snd_series(np.array(series) / 100, **kwargs)
+
+
+def snw_xarray(series=[0, 6, 50, 110, 60, 30, 0], **kwargs):
+    return snw_series(np.array(series) / 100, **kwargs)
 
 
 def hurs_xarray(series=[50, 75, 25, 90, 10, 60, 30], **kwargs):
