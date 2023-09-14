@@ -120,13 +120,7 @@ class PreProcessing:
         )
 
     def _preprocessing(self):
-        # time_control = pyh.time_control(self.ds)
-        # if not self.var_name:
-        #    self.var_name = time_control.name
-
-        # ds_ = time_control.ds
-        ds_ = self._rename_variable_names(self.ds)
-        ds_ = self._convert_to_frequency(ds_)
+        ds_ = self._convert_to_frequency(self.ds)
 
         time_control = pyh.time_control(ds_)
         if not self.var_name:
@@ -147,4 +141,5 @@ class PreProcessing:
             time_control.check_timestamps(correct=True)
 
         self.ATimeRange = avail_time
-        return time_control.ds
+        ds = time_control.ds
+        return self._rename_variable_names(ds)

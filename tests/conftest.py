@@ -60,6 +60,13 @@ def tas_1hr_netcdf():
     ]
 
 
+def tas_eobs_day_netcdf():
+    url = (
+        url_base + "/tas/day/tg_ens_mean_0.1deg_reg_v27.0e_20010101-20010107.nc"  # noqa
+    )
+    return _pooch_retrieve(url)
+
+
 def pr_day_netcdf():
     url = (
         url_base

@@ -8,6 +8,7 @@ from .conftest import (
     snw_day_netcdf,
     tas_1hr_netcdf,
     tas_day_netcdf,
+    tas_eobs_day_netcdf,
     uas_day_netcdf,
     vas_day_netcdf,
 )
@@ -32,7 +33,7 @@ def test_processing():
     xcalc.outputwriter(postproc_obj=postproc)
 
 
-def test_index_calculator():
+def test_time_range_index_calculator():
     data = tas_day_netcdf()
     tas_ds = open_xrdataset(data)
     xcalc.index_calculator(
@@ -45,6 +46,7 @@ def test_index_calculator():
         institution_id="TEST",
         contact="test@test.de",
         write=True,
+        time_range=["2001-01-01", "2001-01-07"],
     )
 
 
@@ -160,6 +162,22 @@ def test_1hr_index_calculator():
         index="TG",
         crop_time_axis=False,
         project="CORDEX",
+        institution="test institution",
+        institution_id="TEST",
+        contact="test@test.de",
+        write=True,
+    )
+
+
+def test_eobs_index_calculator():
+    data = tas_eobs_day_netcdf()
+    tas_ds = open_xrdataset(data)
+    xcalc.index_calculator(
+        ds=tas_ds,
+        freq="week",
+        index="TG",
+        crop_time_axis=False,
+        project="EOBS",
         institution="test institution",
         institution_id="TEST",
         contact="test@test.de",
