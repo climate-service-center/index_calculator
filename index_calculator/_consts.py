@@ -17,6 +17,7 @@ _bounds = {
     },
     "sem": {"start": [3, 6, 9, 12], "end": [2, 5, 8, 11]},
     "year": {"start": [1], "end": [12]},
+    "yearAC": {"start": [7], "end": [6]},
 }
 
 _split = {
