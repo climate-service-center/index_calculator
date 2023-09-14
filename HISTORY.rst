@@ -257,4 +257,12 @@ History
 0.8.2 (2023-08-31)
 ------------------
 
-* calcualte iondices with neagtive thresholds
+* calculate indices with neagtive thresholds
+
+0.9.0 (unpublished)
+-------------------
+
+* convert time frequencies to requested time frequency
+* rename variable name(s) to requested variable name(s)
+* convert input variable(s) to requested input variable(s): sfcWind, snd
+* SCD: set default threshold to `3mm day-1`
