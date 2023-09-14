@@ -266,3 +266,4 @@ History
 * rename variable name(s) to requested variable name(s)
 * convert input variable(s) to requested input variable(s): sfcWind, snd
 * SCD: set default threshold to `3mm day-1`
+* set left and right bounds for `yearAC` (yyyy1-07-01 to yyyy2-06-30) and for `yearHydro` (yyyy1-09-01 to yyyy2-08-31)
