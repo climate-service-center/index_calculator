@@ -62,7 +62,7 @@
     "CSx": "tas",
     "CSn": "tas",
     "SD": "prsn",
-    "SCD": "snw",
+    "SCD": "snd",
     "Sint": "prsn",
     "Sfreq": "prsn",
     "UTCI": ["tas", "hurs", "sfcWind", "rsds", "rsus", "rlds", "rlus"],
