@@ -1,5 +1,3 @@
-import warnings
-
 import pyhomogenize as pyh
 import xarray as xr
 from pyhomogenize._consts import fmt as _fmt
@@ -84,12 +82,6 @@ class PreProcessing:
 
     def _rename_variable_names(self, ds):
         if self.project not in cfjson.keys():
-            warnings.warn(
-                "Project {} not know. Use one of {}".format(
-                    self.project,
-                    cfjson.keys(),
-                )
-            )
             return ds
         var_names = cfjson[self.project]["variables"]
         units = cfjson[self.project]["units"]
@@ -117,6 +109,9 @@ class PreProcessing:
                     ds[dvar].resample(time=conv["freq"]),
                     conv["var"][dvar],
                 )(dim="time")
+                data_vars[dvar].attrs["cell_methods"] = "time: {}".format(
+                    conv["var"][dvar]
+                )
                 coords = data_vars[dvar].coords
         return xr.Dataset(
             data_vars=data_vars,
@@ -125,13 +120,17 @@ class PreProcessing:
         )
 
     def _preprocessing(self):
-        time_control = pyh.time_control(self.ds)
+        # time_control = pyh.time_control(self.ds)
+        # if not self.var_name:
+        #    self.var_name = time_control.name
+
+        # ds_ = time_control.ds
+        ds_ = self._rename_variable_names(self.ds)
+        ds_ = self._convert_to_frequency(ds_)
+
+        time_control = pyh.time_control(ds_)
         if not self.var_name:
             self.var_name = time_control.name
-
-        ds_ = time_control.ds
-        ds_ = self._rename_variable_names(ds_)
-        ds_ = self._convert_to_frequency(ds_)
 
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
