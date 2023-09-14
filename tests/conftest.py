@@ -17,10 +17,77 @@ def tas_day_netcdf():
     return _pooch_retrieve(url)
 
 
+def tas_1hr_netcdf():
+    url1 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701010000-200701012300.nc"  # noqa
+    )
+    url2 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701020000-200701022300.nc"  # noqa
+    )
+    url3 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701030000-200701032300.nc"  # noqa
+    )
+    url4 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701040000-200701042300.nc"  # noqa
+    )
+    url5 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701050000-200701052300.nc"  # noqa
+    )
+    url6 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701060000-200701062300.nc"  # noqa
+    )
+    url7 = (
+        url_base
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701070000-200701072300.nc"  # noqa
+    )
+    return [
+        _pooch_retrieve(url)
+        for url in [
+            url1,
+            url2,
+            url3,
+            url4,
+            url5,
+            url6,
+            url7,
+        ]
+    ]
+
+
 def pr_day_netcdf():
     url = (
         url_base
         + "/pr/day/pr_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+    )
+    return _pooch_retrieve(url)
+
+
+def snw_day_netcdf():
+    url = (
+        url_base
+        + "/snw/day/snw_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+    )
+    return _pooch_retrieve(url)
+
+
+def uas_day_netcdf():
+    url = (
+        url_base
+        + "/uas/day/uas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+    )
+    return _pooch_retrieve(url)
+
+
+def vas_day_netcdf():
+    url = (
+        url_base
+        + "/vas/day/vas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
     )
     return _pooch_retrieve(url)
 
