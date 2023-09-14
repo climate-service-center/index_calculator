@@ -18,6 +18,7 @@ _bounds = {
     "sem": {"start": [3, 6, 9, 12], "end": [2, 5, 8, 11]},
     "year": {"start": [1], "end": [12]},
     "yearAC": {"start": [7], "end": [6]},
+    "yearHydro": {"start": [9], "end": [8]},
 }
 
 _split = {
@@ -27,6 +28,8 @@ _split = {
     "mon": "10A",
     "sem": "10A",
     "year": "20A",
+    "yearAC": "20A",
+    "yearHydro": "20A",
 }
 
 _base_period = ["1971", "2000"]
