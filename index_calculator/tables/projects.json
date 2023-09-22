@@ -32,12 +32,12 @@
 	"drs_format": "eobs/{}/0-1deg/{}/{}/{}/{}"
     },
     "ERA5": {
-	"components": "ci_name, frequency, ci_institute_id, ci_frequency, ci_timerange_index",
-	"format": "{}_era5_{}_{}_{}_{}.nc",
-	"icomponents": "era_level, frequency, timerange, variable_id",
-	"iformat": "{}_{}_{}_{}.nc",
-	"drs_components": "ci_institute_id, ci_frequency, ci_name, ci_package_reference",
-	"drs_format": "era5/{}/{}/{}/{}"
+	"components": "ci_name, frequency, product_id, member_id, ci_institute_id, ci_frequency, ci_timerange_index",
+	"format": "{}_{}_{}_era5_{}_{}_{}_{}.nc",
+	"icomponents": "variable_id, frequency, product_id, member_id, timerange",
+	"iformat": "{}_{}_{}_era5_{}_{}.nc",
+	"drs_components": "ci_institute_id, ci_frequency, ci_name, member_id, ci_package_reference",
+	"drs_format": "era5/{}/ECMWF/IFS/ERA5/{}/atmos/{}/{}/{}"
     },
     "HYRAS": {
 	"components": "ci_name, horizontal_resolution, realization, ci_frequency, ci_timerange_index",
