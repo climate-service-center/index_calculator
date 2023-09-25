@@ -32,16 +32,16 @@ test_requirements = []
 setup(
     author="Ludwig Lierhammer",
     author_email="ludwig.lierhammer@hereon.de",
-    python_requires=">=3.6",
+    python_requires=">=3.9",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     description="Python index-calculator is an xclim wrapper"
     "to calculate climate indices from CMORized netCDF files.",
