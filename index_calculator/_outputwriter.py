@@ -117,7 +117,7 @@ class OutputWriter:
 
         try:
             output_fmt = pjson[self.project]["format"]
-            output_comps = pjson[self.project]["components"].split(", ")
+            output_comps = pjson[self.project]["components"]
         except ValueError:
             warnings.warn(f"Project {self.project} not known")
             return
@@ -127,7 +127,7 @@ class OutputWriter:
         """Set project-specific directory structure."""
         try:
             output_fmt = pjson[self.project]["drs_format"]
-            output_comps = pjson[self.project]["drs_components"].split(", ")
+            output_comps = pjson[self.project]["drs_components"]
         except ValueError:
             warnings.warn(f"Project {self.project} not known")
             return
