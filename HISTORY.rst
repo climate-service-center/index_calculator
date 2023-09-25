@@ -259,8 +259,8 @@ History
 
 * calculate indices with neagtive thresholds
 
-0.9.0 (unpublished)
--------------------
+0.9.0 (2023-09-25)
+------------------
 
 * convert time frequencies to requested time frequency
 * rename variable name(s) to requested variable name(s)
