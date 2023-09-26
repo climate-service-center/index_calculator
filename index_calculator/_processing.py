@@ -137,10 +137,10 @@ class Processing:
                     continue
                 elif isinstance(v, str):
                     continue
-                elif numb_name is not None:
+                elif numb_name:
                     self.CIname = self.CIname.replace(
                         numb_name,
-                        v,
+                        str(v),
                     )
                 elif str(v) not in self.CIname:
                     self.CIname = "{}{}".format(self.CIname, str(v))
