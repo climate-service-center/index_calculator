@@ -46,5 +46,13 @@
 	"iformat": "{}_hyras_{}_{}_{}_de.nc",
 	"drs_components": ["ci_institute_id", "realization", "horizontal_resolution", "ci_frequency", "ci_name", "ci_package_reference"],
 	"drs_format": "hyras/{}/{}/{}/{}/{}/{}"
+    },
+    "MSWEP": {
+	"components": ["ci_name", "ci_institute_id", "ci_frequency", "ci_timerange_index"],
+	"format": "{}_mswep_0-05deg_{}_{}_{}.nc",
+	"icomponents": ["date", "hour"],
+	"iformat": "{}.{}.nc",
+	"drs_components": ["ci_institute_id", "ci_frequency", "ci_name", "ci_package_reference"],
+	"drs_format": "mswep/{}/0-05deg/{}/{}/{}"
     }
 }

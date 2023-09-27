@@ -13,5 +13,13 @@
 	"units": {
 	    "pr": "mm day-1"
 	}
+    },
+    "MSWEP": {
+	"variables": {
+	    "precipitation": "pr"
+	},
+	"units": {
+	    "pr": "mm 3h-1"
+	}
     }
 }

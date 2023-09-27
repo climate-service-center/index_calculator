@@ -43,5 +43,10 @@
     "global_att": {
       "ci_product": "observational_derived"
     }
+  },
+  "MSWEP": {
+    "global_att": {
+      "ci_product": "observational_derived"
+    }
   }
 }
