@@ -80,7 +80,7 @@ class Processing:
             self.IDXname = replace_name
         else:
             raise NameError("{} not defined.".format(self.CIname))
-        return numb_name, idx_object
+        return numb_name, idx_object()
 
     def _get_replacement(self, obj, numb_name):
         replacement = {}
