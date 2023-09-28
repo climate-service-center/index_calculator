@@ -270,7 +270,8 @@ History
 * new ERA5 DRS structure and file naming convention
 * type of components in `pjson` from `str` to `list`
 
-0.9.1 (unpublished)
+0.10.0 (unpublished)
 -------------------
 
 * correct CIname
+* make indices classe callable
