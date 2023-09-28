@@ -271,6 +271,8 @@ class CSDI:
         """
         if base_period_time_range is None:
             base_period_time_range = self.base_period_time_range
+        if window is None:
+            window = self.window
         if tasmin_per is None:
             da = _get_da(params, "tasmin")
             tasmin_per = _get_percentile(
@@ -441,7 +443,7 @@ class CWD:
 class DD:
     """Number of dry days (pr)."""
 
-    def __init_(self):
+    def __init__(self):
         self.thresh = 1
         self.func = xc.atmos.dry_days
 
@@ -619,7 +621,7 @@ class WSf:
     def __init__(self):
         self.thresh = 1
         self.window = 5
-        self.func = xc.atmos.wet_spell_frequenc
+        self.func = xc.atmos.wet_spell_frequency
 
     def compute(self, thresh=None, window=None, **params):
         """Calculate number of wet spells.
@@ -1155,7 +1157,6 @@ class RRYYp:
         thresh = _thresh_string(thresh, "mm/day")
         da = _get_da(params, "pr")
         da = _filter_out_small_values(da, thresh, context="hydro")
-
         params = _clean_up_params(params=params, func=self.func)
         return self.func(
             da=da,
@@ -1209,7 +1210,7 @@ class RYYp:
         if per is None:
             per = self.per
         if thresh is None:
-            thresh is self.thresh
+            thresh = self.thresh
         if base_period_time_range is None:
             base_period_time_range = self.base_period_time_range
         thresh = _thresh_string(thresh, "mm/day")
@@ -2203,6 +2204,8 @@ class WSDI:
         """
         if base_period_time_range is None:
             base_period_time_range = self.base_period_time_range
+        if window is None:
+            window = self.window
         if tasmax_per is None:
             da = _get_da(params, "tasmax")
             tasmax_per = _get_percentile(
@@ -2807,7 +2810,7 @@ class WI:
             thresh = self.thresh
         thresh = _thresh_string(thresh, "degC")
 
-        params = _clean_up_params(parmas=params, func=self.func)
+        params = _clean_up_params(params=params, func=self.func)
         return self.func(
             thresh=thresh,
             **params,
