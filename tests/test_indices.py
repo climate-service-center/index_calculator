@@ -1,6 +1,9 @@
 import numpy as np
 import pytest  # noqa
-from conftest import (
+
+import index_calculator._indices as indices
+
+from .conftest import (
     hurs_series,
     mrt_series,
     pr_series,
@@ -16,8 +19,6 @@ from conftest import (
     tasmax_series,
     tasmin_series,
 )
-
-import index_calculator._indices as indices
 
 
 def tas_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
@@ -805,10 +806,3 @@ def FXx():
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
-
-
-test_CD()
-test_CDD()
-test_CFD()
-test_CHDYYx()
-test_CSDI()
