@@ -1,143 +1,200 @@
 from inspect import signature
 from warnings import warn
 
-import dask  # noqa
-import xarray as xr
+# import xarray as xr
 import xclim as xc
-from xclim.core.calendar import percentile_doy, resample_doy
-from xclim.core.units import convert_units_to
-from xclim.indices.generic import compare
 
-from ._consts import _base_period as BASE_PERIOD
+# import dask
 
 
-def _thresh_string(thresh, units):
-    if isinstance(thresh, str):
-        return thresh
-    else:
-        return "{} {}".format(str(thresh), units)
+# from xclim.core.calendar import percentile_doy, resample_doy
+# from xclim.core.units import convert_units_to
+# from xclim.indices.generic import compare
+
+# from ._consts import _base_period as BASE_PERIOD
 
 
-def _filter_out_small_values(da, thresh, context=None):
-    thresh = convert_units_to(thresh, da, context=context)
-    return da.where(da > thresh)
-
-
-def _get_da(dictionary, var):
-    if "ds" in dictionary.keys():
-        return dictionary["ds"][var]
-    elif var in dictionary.keys():
-        return dictionary[var]
-    raise ValueError("Variable {} not found!")
-
-
-def _get_percentile(da, per, base_period_time_range):
-    if isinstance(per, xr.Dataset):
-        return per["per"]
-    elif isinstance(per, xr.DataArray):
-        return per
-    tslice = slice(base_period_time_range[0], base_period_time_range[1])
-    base_period = da.sel(time=tslice)
-    with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-        per_doy = percentile_doy(base_period, per=per)
-        per_doy_comp = per_doy.compute()
-    return per_doy_comp.sel(percentiles=per)
-
-
-def _clean_up_params(params, func):
-    del_list = []
-    for param in params.keys():
-        if param not in signature(func).parameters.keys():
-            warn(
-                "Function {} does not provide parameter {}\n"
-                "The parameter will be deleted \n"
-                "from parameter list".format(func, param)
-            )
-            del_list.append(param)
-    for param in del_list:
-        del params[param]
-    return params
-
-
-class CD:
-    """Number of cold and dry days (tas, pr)."""
-
+class ClimateIndicator:
     def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.cold_and_dry_days
+        self.units = {}
 
-    def compute(
-        self,
-        base_period_time_range=None,
-        tas_per=None,
-        pr_per=None,
-        **params,
-    ):
-        """Calculate number of cold and dry days.
+    def _thresh_string(self, thresh, units):
+        if isinstance(thresh, str):
+            return thresh
+        else:
+            return "{} {}".format(str(thresh), units)
 
-        Parameters
-        ----------
-        tas_per: xr.DataArray, optional
-            Mean temperature 25th percentile reference value below which
-            a day is considered as a cold day.
-        pr_per: xr.DataArray, optional
-            Precipitation 25th percentile reference value below which
-            a day is considered as a dry day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tas_per` and/or `pr_per`.
-            This will be used only if `tas_per` and/or `pr_per` is None.
+    def _get_da(self, dictionary, var):
+        if "ds" in dictionary.keys():
+            return dictionary["ds"][var]
+        elif var in dictionary.keys():
+            return dictionary[var]
+        raise ValueError("Variable {} not found!")
 
-        Returns
-        -------
-        xarray.DataArray:
-            Number of days where cold and dry conditions coincide.
-            If temperature is below {tas_per} a day is considered as a
-            cold day.
-            If precipitation is below {pr_per} a day is considered as a
-            dry day.
+    def _clean_up_params(self, params, func):
+        del_list = []
+        for param in params.keys():
+            if param not in signature(func).parameters.keys():
+                warn(
+                    "Function {} does not provide parameter {}\n"
+                    "The parameter will be deleted \n"
+                    "from parameter list".format(func, param)
+                )
+                del_list.append(param)
+        for param in del_list:
+            del params[param]
+        return params
 
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_and_dry_days
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tas_per is None:
-            da_tas = _get_da(params, "tas")
-            tas_per = _get_percentile(
-                da=da_tas,
-                per=25,
-                base_period_time_range=base_period_time_range,
-            )
-        if pr_per is None:
-            da_pr = _get_da(params, "pr")
-            da_pr_f = _filter_out_small_values(
-                da_pr,
-                "1 mm/day",
-                context="hydro",
-            )
-            pr_per = _get_percentile(
-                da=da_pr_f,
-                per=25,
-                base_period_time_range=base_period_time_range,
-            )
+    def _set_default_if_None(self, params):
+        params_ = {}
+        for k, v in params.items():
+            if v is None and hasattr(self, k):
+                v = getattr(self, k)
+            params_[k] = v
+        return params_
 
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tas_per=tas_per,
-                pr_per=pr_per,
-                **params,
-            )
+    def _add_units(self, params):
+        params_ = {}
+        for k, v in params.items():
+            if k in self.units.keys():
+                v = self._thresh_string(v, self.units[k])
+            params_[k] = v
+        return params_
+
+    def _adjust_params_and_kwargs(self, params, **kwargs):
+        kwargs = self._set_default_if_None(kwargs)
+        kwargs = self._add_units(kwargs)
+        params = self._clean_up_params(params=params, func=self.func)
+        return params, kwargs
+
+    def compute_climate_indicator(self, params, **kwargs):
+        parmas, kwargs = self._adjust_params_and_kwargs(params, **kwargs)
+        return self.func(**params, **kwargs)
 
 
-class CDD:
+# class ClimateIndicatorPerc(ClimateIndicator):
+#
+#    def __init__(self):
+#        super().__init__()
+#        self.base_period_time_range = BASE_PERIOD
+#
+#    def _filter_out_small_values(self, da, thresh, context=None):
+#        thresh = convert_units_to(thresh, da, context=context)
+#        return da.where(da > thresh)
+#
+#    def _get_percentile(self, da, per, base_period_time_range):
+#        if isinstance(per, xr.Dataset):
+#            return per["per"]
+#        elif isinstance(per, xr.DataArray):
+#            return per
+#        tslice = slice(base_period_time_range[0], base_period_time_range[1])
+#        base_period = da.sel(time=tslice)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            per_doy = percentile_doy(base_period, per=per)
+#            per_doy_comp = per_doy.compute()
+#        return per_doy_comp.sel(percentiles=per)
+#
+#    def _preprocessing(self, da, preproc_dict):
+#        func = preproc_dict["func"]
+#        args = preproc_dict["args"]
+#        if "kwargs" in preproc_dict.keys():
+#            kwargs = preproc_dict["kwargs"]
+#        else:
+#            kwargs = {}
+#        return func(da, args, **kwargs)
+#
+#    def compute_climate_indicator_perc(
+#        self,
+#        params,
+#        percentiles,
+#        base_period_time_range,
+#        **kwargs,
+#        ):
+#        for k,v in percentiles.items():
+#            perc_dict = percentiles[k]
+#            da = self._get_da(params, perc_dict["variable"])
+#            if "preprocessing" in perc_dict.keys():
+#                da = self._preprocessing(da, perc_dict["preprocessing"])
+#            params[k] = self._get_percentile(
+#                da=da,
+#                per=perc_dict["per"],
+#                base_period_time_range=base_period_time_range,
+#            )
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.compute_climate_indicator(params, **kwargs)
+
+# class CD(ClimateIndicatorPerc):
+#    """Number of cold and dry days (tas, pr)."""
+#
+#    def __init__(self):
+#        super().__init__()
+#        self.func = xc.atmos.cold_and_dry_days
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tas_per=None,
+#        pr_per=None,
+#        **params,
+#    ):
+#        """Calculate number of cold and dry days.
+#
+#        Parameters
+#        ----------
+#        tas_per: xr.DataArray, optional
+#            Mean temperature 25th percentile reference value below which
+#            a day is considered as a cold day.
+#        pr_per: xr.DataArray, optional
+#            Precipitation 25th percentile reference value below which
+#            a day is considered as a dry day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tas_per` and/or `pr_per`.
+#            This will be used only if `tas_per` and/or `pr_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray:
+#            Number of days where cold and dry conditions coincide.
+#            If temperature is below {tas_per} a day is considered as a
+#            cold day.
+#            If precipitation is below {pr_per} a day is considered as a
+#            dry day.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_and_dry_days
+#        """
+#        percentiles = {
+#            "tas_per": {
+#                "variable": "tas",
+#                "per": 25,
+#            },
+#            "pr_per": {
+#                "variable": "pr",
+#                "per": 25,
+#                "preprocessing": {
+#                    "func": self._filter_out_small_values,
+#                    "args": "1mm/day",
+#                    "kwargs": {"context": "hydro"},
+#                },
+#            },
+#        }
+#        return self.compute_climate_indicator_perc(
+#            params=params,
+#            percentiles=percentiles,
+#            base_period_time_range=base_period_time_range,
+#        )
+
+
+class CDD(ClimateIndicator):
     """Maximum consecutive dry days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.maximum_consecutive_dry_days
 
     def compute(self, thresh=None, **params):
@@ -160,21 +217,14 @@ class CDD:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.maximum_consecutive_dry_days
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class CFD:
+class CFD(ClimateIndicator):
     """Maximum number of consecutive frost days (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.consecutive_frost_days
 
     def compute(self, **params):
@@ -190,15 +240,16 @@ class CFD:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.consecutive_frost_days
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class CHDYYx:
+class CHDYYx(ClimateIndicator):
     """Maximum number of consecutive heat days (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 30
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.maximum_consecutive_warm_days
 
     def compute(self, thresh=None, **params):
@@ -221,80 +272,73 @@ class CHDYYx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.maximum_consecutive_warm_days
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(thresh=thresh, **params)
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class CSDI:
-    """Cold spell duration index (tasmin)."""
-
-    def __init__(self):
-        self.window = 6
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.cold_spell_duration_index
-
-    def compute(
-        self,
-        window=None,
-        base_period_time_range=None,
-        tasmin_per=None,
-        **params,
-    ):
-        """Calculate cold spell duration index.
-
-        Parameters
-        ----------
-        window: int, optional
-            Minimum number of days with temperature below `tasmin_per`
-            to qualify as a cold spell (default: 6).
-        tasmin_per: xr.DataArray, optional
-            Minimum temperature 10th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tasmin_per`.
-            This will be used only if `tasmin_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of days part of a 10th percentile cold spell.
-            At least {window} consecutive days.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_duration_index
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if window is None:
-            window = self.window
-        if tasmin_per is None:
-            da = _get_da(params, "tasmin")
-            tasmin_per = _get_percentile(
-                da=da,
-                per=10,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tasmin_per=tasmin_per,
-                window=window,
-                **params,
-            )
+# class CSDI(ClimateIndicatorPerc):
+#    """Cold spell duration index (tasmin)."""
+#
+#    def __init__(self):
+#        super().__init__()
+#        self.window = 6
+#        self.func = xc.atmos.cold_spell_duration_index
+#
+#    def compute(
+#        self,
+#        window=None,
+#        base_period_time_range=None,
+#        tasmin_per=None,
+#        **params,
+#    ):
+#        """Calculate cold spell duration index.
+#
+#        Parameters
+#        ----------
+#        window: int, optional
+#            Minimum number of days with temperature below `tasmin_per`
+#            to qualify as a cold spell (default: 6).
+#        tasmin_per: xr.DataArray, optional
+#            Minimum temperature 10th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tasmin_per`.
+#            This will be used only if `tasmin_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Number of days part of a 10th percentile cold spell.
+#            At least {window} consecutive days.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_duration_index
+#        """
+#        if tasmin_per is None:
+#            da = _get_da(params, "tasmin")
+#            tasmin_per = _get_percentile(
+#                da=da,
+#                per=10,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        return self.compute_climate_indicator_perc(
+#            params=params,
+#            window=window,
+#            base_period_time_range=base_period_time_range,
+#            **params,
+#        )
 
 
-class CSU:
+class CSU(ClimateIndicator):
     """Maximum consecutive summer days (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 25
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.maximum_consecutive_warm_days
 
     def compute(self, thresh=None, **params):
@@ -317,96 +361,90 @@ class CSU:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.maximum_consecutive_warm_days
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class CW:
-    """Number of cold and wet days (tas, pr)."""
+# class CW:
+#    """Number of cold and wet days (tas, pr)."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.cold_and_wet_days
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tas_per=None,
+#        pr_per=None,
+#        **params,
+#    ):
+#        """Calculate number of cold and wet days.
+#
+#        Parameters
+#        ----------
+#        tas_per: xr.DataArray, optional
+#            Mean temperature 25th percentile reference value below which
+#            a day is considered as a cold day.
+#        pr_per: xr.DataArray, optional
+#            Precipitation 75th percentile reference value above which
+#            a day is considered as a wet day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tas_per` and/or `pr_per`.
+#            This will be used only if `tas_per` and/or `pr_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray:
+#            Number of days where cold and wet conditions coincide.
+#            If temperature is below {tas_per} a day is considered as a
+#            cold day.
+#            If precipitation is above {pr_per} a day is considered as a
+#            wet day.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_and_wet_days
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tas_per is None:
+#            da_tas = _get_da(params, "tas")
+#            tas_per = _get_percentile(
+#                da=da_tas,
+#                per=25,
+#                base_period_time_range=base_period_time_range,
+#            )
+#        if pr_per is None:
+#            da_pr = _get_da(params, "pr")
+#            da_pr_f = _filter_out_small_values(
+#                da_pr,
+#                "1 mm/day",
+#                context="hydro",
+#            )
+#            pr_per = _get_percentile(
+#                da=da_pr_f,
+#                per=75,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tas_per=tas_per,
+#                pr_per=pr_per,
+#                **params,
+#            )
 
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.cold_and_wet_days
 
-    def compute(
-        self,
-        base_period_time_range=None,
-        tas_per=None,
-        pr_per=None,
-        **params,
-    ):
-        """Calculate number of cold and wet days.
-
-        Parameters
-        ----------
-        tas_per: xr.DataArray, optional
-            Mean temperature 25th percentile reference value below which
-            a day is considered as a cold day.
-        pr_per: xr.DataArray, optional
-            Precipitation 75th percentile reference value above which
-            a day is considered as a wet day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tas_per` and/or `pr_per`.
-            This will be used only if `tas_per` and/or `pr_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray:
-            Number of days where cold and wet conditions coincide.
-            If temperature is below {tas_per} a day is considered as a
-            cold day.
-            If precipitation is above {pr_per} a day is considered as a
-            wet day.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_and_wet_days
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tas_per is None:
-            da_tas = _get_da(params, "tas")
-            tas_per = _get_percentile(
-                da=da_tas,
-                per=25,
-                base_period_time_range=base_period_time_range,
-            )
-        if pr_per is None:
-            da_pr = _get_da(params, "pr")
-            da_pr_f = _filter_out_small_values(
-                da_pr,
-                "1 mm/day",
-                context="hydro",
-            )
-            pr_per = _get_percentile(
-                da=da_pr_f,
-                per=75,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tas_per=tas_per,
-                pr_per=pr_per,
-                **params,
-            )
-
-
-class CWD:
+class CWD(ClimateIndicator):
     """Consecutive wet days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.maximum_consecutive_wet_days
 
     def compute(self, thresh=None, **params):
@@ -429,22 +467,16 @@ class CWD:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.maximum_consecutive_wet_days
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class DD:
+class DD(ClimateIndicator):
     """Number of dry days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.dry_days
 
     def compute(self, thresh=None, **params):
@@ -467,23 +499,17 @@ class DD:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_days
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class DSf:
+class DSf(ClimateIndicator):
     """Number of dry spells (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
         self.window = 5
+        self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_frequency
 
     def compute(self, thresh=None, window=None, **params):
@@ -509,26 +535,19 @@ class DSf:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_frequency
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "mm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class DSx:
+class DSx(ClimateIndicator):
     """Maximum length of dry spells (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
         self.window = 1
+        self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_max_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -555,26 +574,19 @@ class DSx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_max_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "mm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class DSn:
+class DSn(ClimateIndicator):
     """Total number of days in dry spells (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
         self.window = 5
+        self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_total_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -601,26 +613,19 @@ class DSn:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.dry_spell_total_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "mm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class WSf:
+class WSf(ClimateIndicator):
     """Number of wet spells (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
         self.window = 5
+        self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_frequency
 
     def compute(self, thresh=None, window=None, **params):
@@ -646,26 +651,19 @@ class WSf:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_spell_frequency
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "mm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class WSx:
+class WSx(ClimateIndicator):
     """Maximum length of wet spells (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
         self.window = 1
+        self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_max_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -692,26 +690,19 @@ class WSx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_spell_max_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            thresh = self.window
-        thresh = _thresh_string(thresh, "mm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class WSn:
+class WSn(ClimateIndicator):
     """Total number of days in wet spells (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
         self.window = 5
+        self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_total_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -738,24 +729,16 @@ class WSn:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_spell_total_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "mm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class DTR:
+class DTR(ClimateIndicator):
     """Mean temperature rnage (tasmax, tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.daily_temperature_range
 
     def compute(self, **params):
@@ -771,14 +754,14 @@ class DTR:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.daily_temperature_range
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class FD:
+class FD(ClimateIndicator):
     """Number of frost days (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.frost_days
 
     def compute(self, **params):
@@ -794,14 +777,14 @@ class FD:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.frost_days
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class LFD:
+class LFD(ClimateIndicator):
     """Number of late frost days (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.start_date = "04-01"
         self.end_date = "06-30"
         self.func = xc.atmos.late_frost_days
@@ -827,22 +810,16 @@ class LFD:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.late_frost_days
         """
-        if start_date is None:
-            start_date = self.start_date
-        if end_date is None:
-            end_date = self.end_date
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            date_bounds=(start_date, end_date),
-            **params,
+        return self.compute_climate_indicator(
+            params=params, date_bounds=(start_date, end_date)
         )
 
 
-class ID:
+class ID(ClimateIndicator):
     """Number of ice days (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.ice_days
 
     def compute(self, **params):
@@ -858,15 +835,16 @@ class ID:
         xarray.DataArray
             Number of ice days (tasmax < 0.0 degC).
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class GD:
+class GD(ClimateIndicator):
     """Cumulative growing degree days (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 4
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.growing_degree_days
 
     def compute(self, thresh=None, **params):
@@ -888,21 +866,14 @@ class GD:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.growing_degree_days
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class HD17:
+class HD17(ClimateIndicator):
     """Cumulative heating degree days (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.heating_degree_days
 
     def compute(self, **params):
@@ -918,15 +889,16 @@ class HD17:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.heating_degree_days
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class PRCPTOT:
+class PRCPTOT(ClimateIndicator):
     """Total precipitation amount (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.wet_precip_accumulation
 
     def compute(self, thresh=None, **params):
@@ -949,21 +921,14 @@ class PRCPTOT:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wet_precip_accumulation
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class RR:
+class RR(ClimateIndicator):
     """Total precipitation (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.precip_accumulation
 
     def compute(self, **params):
@@ -979,14 +944,14 @@ class RR:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.precip_accumulation
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class RRm:
+class RRm(ClimateIndicator):
     """Mean daily precipitation (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.precip_average
 
     def compute(self, **params):
@@ -1002,14 +967,14 @@ class RRm:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.precip_average
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class RR1:
+class RR1(ClimateIndicator):
     """Number of wet days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.wetdays
 
     def compute(self, **params):
@@ -1025,17 +990,14 @@ class RR1:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wetdays
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh="1 mm/day",
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh="1 mm/day")
 
 
-class R10mm:
+class R10mm(ClimateIndicator):
     """Number of heavy precipitation days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.wetdays
 
     def compute(self, **params):
@@ -1051,17 +1013,17 @@ class R10mm:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wetdays
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
+        return self.compute_climate_indicator(
+            params=params,
             thresh="10 mm/day",
-            **params,
         )
 
 
-class R20mm:
+class R20mm(ClimateIndicator):
     """Number of very heavy precipitation days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.wetdays
 
     def compute(self, **params):
@@ -1077,17 +1039,17 @@ class R20mm:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wetdays
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
+        return self.compute_climate_indicator(
+            params=params,
             thresh="20 mm/day",
-            **params,
         )
 
 
-class R25mm:
+class R25mm(ClimateIndicator):
     """Number of super heavy precipitation days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.wetdays
 
     def compute(self, **params):
@@ -1103,137 +1065,138 @@ class R25mm:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wetdays
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
+        return self.compute_climate_indicator(
+            params=params,
             thresh="25 mm/day",
-            **params,
         )
 
 
-class RRYYp:
-    """Precip percentil value for wet days (pr)."""
-
-    def __init__(self):
-        self.per = 75
-        self.thresh = 1
-        self.base_period_time_range = BASE_PERIOD
-        self.func = _get_percentile
-
-    def compute(
-        self,
-        per=None,
-        thresh=None,
-        base_period_time_range=None,
-        **params,
-    ):
-        """Calculate precip percentile reference value
-        for wet days (pr > thresh).
-
-        Parameters
-        ----------
-        per: int, optional
-            Percentile value.
-        thresh: int or string, optional
-            Threshold precipitation above which a day is considered
-            as a wet day (default: 1 mm/day).
-            If type of threshold is an integer the unit is set to mm/day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating the precip percentile
-            reference value.
-
-        Returns
-        -------
-        xarray.DataArray
-            Precip {per}th percentil reference value
-            for wet days (pr > {thresh}).
-        """
-        if per is None:
-            per = self.per
-        if thresh is None:
-            thresh = self.thresh
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        thresh = _thresh_string(thresh, "mm/day")
-        da = _get_da(params, "pr")
-        da = _filter_out_small_values(da, thresh, context="hydro")
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            da=da,
-            per=per,
-            base_period_time_range=base_period_time_range,
-        )
-
-
-class RYYp:
-    """Number of wet days with precip over a given percentile (pr)."""
-
-    def __init__(self):
-        self.per = 75
-        self.thresh = 1
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.days_over_precip_doy_thresh
-
-    def compute(
-        self,
-        per=None,
-        thresh=None,
-        base_period_time_range=None,
-        **params,
-    ):
-        """Calculate number of wet days (pr > thresh)
-        with precip over a given percentile.
-
-        Parameters
-        ----------
-        per: int, optional
-            Precipitation percentile value.
-        thresh: int or string, optional
-            Threshold precipitation above which a day is considered
-            as a wet day (default: 1 mm/day).
-            If type of threshold is an integer the unit is set to mm/day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating the precip
-            percentile reference value.
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of wet days (pyr > {thresh}) over a {per}th percentile.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.days_over_precip_doy_thresh
-        """
-        if per is None:
-            per = self.per
-        if thresh is None:
-            thresh = self.thresh
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        thresh = _thresh_string(thresh, "mm/day")
-        da = _get_da(params, "pr")
-        da_pr = _filter_out_small_values(da, thresh, context="hydro")
-        pr_per = _get_percentile(
-            da=da_pr,
-            per=per,
-            base_period_time_range=base_period_time_range,
-        )
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            pr_per=pr_per,
-            **params,
-        )
+# class RRYYp:
+#    """Precip percentil value for wet days (pr)."""
+#
+#    def __init__(self):
+#        self.per = 75
+#        self.thresh = 1
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = _get_percentile
+#
+#    def compute(
+#        self,
+#        per=None,
+#        thresh=None,
+#        base_period_time_range=None,
+#        **params,
+#    ):
+#        """Calculate precip percentile reference value
+#        for wet days (pr > thresh).
+#
+#        Parameters
+#        ----------
+#        per: int, optional
+#            Percentile value.
+#        thresh: int or string, optional
+#            Threshold precipitation above which a day is considered
+#            as a wet day (default: 1 mm/day).
+#            If type of threshold is an integer the unit is set to mm/day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating the precip percentile
+#            reference value.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Precip {per}th percentil reference value
+#            for wet days (pr > {thresh}).
+#        """
+#        if per is None:
+#            per = self.per
+#        if thresh is None:
+#            thresh = self.thresh
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        thresh = _thresh_string(thresh, "mm/day")
+#        da = _get_da(params, "pr")
+#        da = _filter_out_small_values(da, thresh, context="hydro")
+#        params = _clean_up_params(params=params, func=self.func)
+#        return self.func(
+#            da=da,
+#            per=per,
+#            base_period_time_range=base_period_time_range,
+#        )
 
 
-class RYYmm:
+# class RYYp:
+#    """Number of wet days with precip over a given percentile (pr)."""
+#
+#    def __init__(self):
+#        self.per = 75
+#        self.thresh = 1
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.days_over_precip_doy_thresh
+#
+#    def compute(
+#        self,
+#        per=None,
+#        thresh=None,
+#        base_period_time_range=None,
+#        **params,
+#    ):
+#        """Calculate number of wet days (pr > thresh)
+#        with precip over a given percentile.
+#
+#        Parameters
+#        ----------
+#        per: int, optional
+#            Precipitation percentile value.
+#        thresh: int or string, optional
+#            Threshold precipitation above which a day is considered
+#            as a wet day (default: 1 mm/day).
+#            If type of threshold is an integer the unit is set to mm/day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating the precip
+#            percentile reference value.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Number of wet days (pyr > {thresh}) over a {per}th percentile.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.days_over_precip_doy_thresh
+#        """
+#        if per is None:
+#            per = self.per
+#        if thresh is None:
+#            thresh = self.thresh
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        thresh = _thresh_string(thresh, "mm/day")
+#        da = _get_da(params, "pr")
+#        da_pr = _filter_out_small_values(da, thresh, context="hydro")
+#        pr_per = _get_percentile(
+#            da=da_pr,
+#            per=per,
+#            base_period_time_range=base_period_time_range,
+#        )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        return self.func(
+#            pr_per=pr_per,
+#            **params,
+#        )
+
+
+class RYYmm(ClimateIndicator):
     """Number of days with precip over threshold (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 25
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.wetdays
 
     def compute(self, thresh=None, **params):
@@ -1256,21 +1219,14 @@ class RYYmm:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.wetdays
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class RX1day:
+class RX1day(ClimateIndicator):
     """Maximum 1-day total precipitation (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.max_1day_precipitation_amount
 
     def compute(self, **params):
@@ -1286,14 +1242,14 @@ class RX1day:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.max_1day_precipitation_amount
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class RXYYday:
+class RXYYday(ClimateIndicator):
     """Maximum n-day total precipitation (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.window = 5
         self.func = xc.atmos.max_n_day_precipitation_amount
 
@@ -1315,159 +1271,82 @@ class RXYYday:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.max_n_day_precipitation_amount
         """
-        if window is None:
-            window = self.window
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(window=window, **params)
+        return self.compute_climate_indicator(params=params, window=window)
 
 
-class RYYpABS:
-    """Total precipitation amount with precip above percentile
-    on wet days (pr)."""
-
-    def __init__(self):
-        self.per = 75
-        self.thresh = 1
-        self.base_period_time_range = BASE_PERIOD
-
-    def compute(
-        self,
-        per=None,
-        thresh=None,
-        base_period_time_range=None,
-        **params,
-    ):
-        """Calculate total precipitation amount with
-        precip > {perc}th percentile on wet days (pr > thresh).
-
-        Parameters
-        ----------
-        per: int, optional
-            Percentile value.
-        thresh: int or string, optional
-            Threshold precipitation above which a day is considered
-            as a wet day (default: 1 mm/day).
-            If type of threshold is an integer the unit is set to mm/day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calulating the precip percentile
-            reference value.
-
-        Returns
-        -------
-        xarray.DataArray
-            Precipitation fraction with precip > {perc}th percentile
-            on wet days (pr > {thresh}).
-        """
-        if per is None:
-            per = self.per
-        if thresh is None:
-            thresh = self.thresh
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        thresh = _thresh_string(thresh, "mm/day")
-        da = _get_da(params, "pr")
-        da_pr = _filter_out_small_values(da, thresh, context="hydro")
-        pr_per = _get_percentile(
-            da=da_pr,
-            per=per,
-            base_period_time_range=base_period_time_range,
-        )
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            pr_per = convert_units_to(pr_per, da, context="hydro")
-            thresh = convert_units_to(thresh, da, context="hydro")
-
-            tp = pr_per.where(pr_per > thresh, thresh)
-            if "dayofyear" in pr_per.coords:
-                # Create time series out of doy values.
-                tp = resample_doy(tp, da)
-
-            constrain = (">", ">=")
-
-            # Compute the days when precip is both over the wet day threshold
-            # and the percentile threshold.
-            over = (
-                da.where(compare(da, ">", tp, constrain))
-                .resample(time=params["freq"])
-                .sum(dim="time")
-            )
-            out = convert_units_to(over, "mm/day")
-            out.attrs["units"] = "mm"
-            return out
+# class RYYpTOT:
+#    """Precipitation fraction with precip above percentile on wet days (pr)"""
+#
+#    def __init__(self):
+#        self.per = 75
+#        self.thresh = 1
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.fraction_over_precip_thresh
+#
+#    def compute(
+#        self,
+#        per=None,
+#        thresh=None,
+#        base_period_time_range=None,
+#        **params,
+#    ):
+#        """Calculate precipitation fraction with precip above percentile
+#        on wet days (pr > thresh).
+#
+#        Parameters
+#        ----------
+#        per: int, optional
+#            Percentile value.
+#        thresh: int or string, optional
+#            Threshold precipitation above which a day is considered
+#            as a wet day (default: 1 mm/day).
+#            If type of threshold is an integer the unit is set to mm/day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calulating the precip percentile
+#            reference value.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Precipitation fraction with precip > {perc}th percentile
+#            on wet days (pr > {thresh}).
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.fraction_over_precip_thresh
+#        """
+#        if per is None:
+#            per = self.per
+#        if thresh is None:
+#            thresh = self.thresh
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        thresh = _thresh_string(thresh, "mm/day")
+#        da = _get_da(params, "pr")
+#        da_pr = _filter_out_small_values(da, thresh, context="hydro")
+#        pr_per = _get_percentile(
+#            da=da_pr,
+#            per=per,
+#            base_period_time_range=base_period_time_range,
+#        )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                pr_per=pr_per,
+#                **params,
+#            )
 
 
-class RYYpTOT:
-    """Precipitation fraction with precip above percentile on wet days (pr)."""
-
-    def __init__(self):
-        self.per = 75
-        self.thresh = 1
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.fraction_over_precip_thresh
-
-    def compute(
-        self,
-        per=None,
-        thresh=None,
-        base_period_time_range=None,
-        **params,
-    ):
-        """Calculate precipitation fraction with precip above percentile
-        on wet days (pr > thresh).
-
-        Parameters
-        ----------
-        per: int, optional
-            Percentile value.
-        thresh: int or string, optional
-            Threshold precipitation above which a day is considered
-            as a wet day (default: 1 mm/day).
-            If type of threshold is an integer the unit is set to mm/day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calulating the precip percentile
-            reference value.
-
-        Returns
-        -------
-        xarray.DataArray
-            Precipitation fraction with precip > {perc}th percentile
-            on wet days (pr > {thresh}).
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.fraction_over_precip_thresh
-        """
-        if per is None:
-            per = self.per
-        if thresh is None:
-            thresh = self.thresh
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        thresh = _thresh_string(thresh, "mm/day")
-        da = _get_da(params, "pr")
-        da_pr = _filter_out_small_values(da, thresh, context="hydro")
-        pr_per = _get_percentile(
-            da=da_pr,
-            per=per,
-            base_period_time_range=base_period_time_range,
-        )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                pr_per=pr_per,
-                **params,
-            )
-
-
-class SDII:
+class SDII(ClimateIndicator):
     """Average precipitation during wet days (pr)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.daily_pr_intensity
 
     def compute(self, thresh=None, **params):
@@ -1490,22 +1369,16 @@ class SDII:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.daily_pr_intensity
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(1, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class SU:
+class SU(ClimateIndicator):
     """Number of summer days (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 25
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.tx_days_above
 
     def compute(self, thresh=None, **params):
@@ -1528,21 +1401,16 @@ class SU:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx_days_above
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class SQI:
+class SQI(ClimateIndicator):
     """Number of uncomfortable sleep events (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 18
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.tn_days_above
 
     def compute(self, thresh=None, **params):
@@ -1565,22 +1433,15 @@ class SQI:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_days_above
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class TG:
+class TG(ClimateIndicator):
     """Mean mean temperature (tas)."""
 
     def __init__(self):
         self.func = xc.atmos.tg_mean
+        super().__init__()
 
     def compute(self, **params):
         """Calculate mean daily mean temperature.
@@ -1595,120 +1456,121 @@ class TG:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg_mean
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class TG10p:
-    """Fraction of days with mean temperature < 10th percentile (tas)."""
-
-    def __init__(self):
-        self.tas_per = None
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.tg10p
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tas_per=None,
-        **params,
-    ):
-        """Calculate fraction of days with mean temperature < 10th percentile.
-
-        Parameters
-        ----------
-        tas_per: xr.DataArray, optional
-            Temperature 10th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound is
-            end year string for calculating `tas_per`.
-            This will be used only if `tas_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Fraction of days with mean temperature < 10th percentile".
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg10p
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tas_per is None:
-            da = _get_da(params, "tas")
-            tas_per = _get_percentile(
-                da=da,
-                per=10,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tas_per=tas_per,
-                **params,
-            )
-
-
-class TG90p:
-    """Fraction of days with mean temperature > 90th percentile (tas)."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.tg90p
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tas_per=None,
-        **params,
-    ):
-        """Calculate fraction of days with mean temperature > 90th percentile".
-
-        Parameters
-        ----------
-        tas_per: xr.DataArray, optional
-            Temperature 90th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tas_per`.
-            This will be used only if `tas_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Fraction of days with mean temperature > 90th percentile".
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg90p
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tas_per is None:
-            da = _get_da(params, "tas")
-            tas_per = _get_percentile(
-                da=da,
-                per=90,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tas_per=tas_per,
-                **params,
-            )
+# class TG10p:
+#    """Fraction of days with mean temperature < 10th percentile (tas)."""
+#
+#    def __init__(self):
+#        self.tas_per = None
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.tg10p
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tas_per=None,
+#        **params,
+#    ):
+#        """Calculate fraction of days with mean temperature < 10th percentile.
+#
+#        Parameters
+#        ----------
+#        tas_per: xr.DataArray, optional
+#            Temperature 10th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound is
+#            end year string for calculating `tas_per`.
+#            This will be used only if `tas_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Fraction of days with mean temperature < 10th percentile".
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg10p
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tas_per is None:
+#            da = _get_da(params, "tas")
+#            tas_per = _get_percentile(
+#                da=da,
+#                per=10,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tas_per=tas_per,
+#                **params,
+#            )
 
 
-class TR:
+# class TG90p:
+#    """Fraction of days with mean temperature > 90th percentile (tas)."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.tg90p
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tas_per=None,
+#        **params,
+#    ):
+#        """Calculate fraction of days with mean temperature > 90th percentile.
+#
+#        Parameters
+#        ----------
+#        tas_per: xr.DataArray, optional
+#            Temperature 90th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tas_per`.
+#            This will be used only if `tas_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Fraction of days with mean temperature > 90th percentile".
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tg90p
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tas_per is None:
+#            da = _get_da(params, "tas")
+#            tas_per = _get_percentile(
+#                da=da,
+#                per=90,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tas_per=tas_per,
+#                **params,
+#            )
+
+
+class TR(ClimateIndicator):
     """Number of tropical nights (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 20
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.tn_days_above
 
     def compute(self, thresh=None, **params):
@@ -1731,21 +1593,14 @@ class TR:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_days_above
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class TX:
+class TX(ClimateIndicator):
     """Mean maximum temperature (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.tx_mean
 
     def compute(self, **params):
@@ -1761,118 +1616,118 @@ class TX:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx_mean
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class TX10p:
-    """Fraction of days with max temperature < 10th percentile (tasmax)."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.tx10p
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tasmax_per=None,
-        **params,
-    ):
-        """Calculate fraction of days with max temperature < 10th percentile.
-
-        Parameters
-        ----------
-        tasmax_per: xr.DataArray, optional
-            Maximum temperature 10th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tasmax_per`.
-            This will be used only if `tasmax_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Fraction of days with maximum temperature < 10th percentile".
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx10p
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tasmax_per is None:
-            da = _get_da(params, "tasmax")
-            tasmax_per = _get_percentile(
-                da=da,
-                per=10,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tasmax_per=tasmax_per,
-                **params,
-            )
-
-
-class TX90p:
-    """Fraction of days with max temperature > 90th percentile (tasmax)."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.tx90p
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tasmax_per=None,
-        **params,
-    ):
-        """Calculate fraction of days with max temperature > 90th percentile.
-
-        Parameters
-        ----------
-        tasmax_per: xr.DataArray, optional
-            Maximum temperature 90th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tasmax_per`.
-            This will be used only if `tasmax_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Fraction of days with maximum temperature > 90th percentile".
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx90p
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tasmax_per is None:
-            da = _get_da(params, "tasmax")
-            tasmax_per = _get_percentile(
-                da=da,
-                per=90,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tasmax_per=tasmax_per,
-                **params,
-            )
+# class TX10p:
+#    """Fraction of days with max temperature < 10th percentile (tasmax)."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.tx10p
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tasmax_per=None,
+#        **params,
+#    ):
+#        """Calculate fraction of days with max temperature < 10th percentile.
+#
+#        Parameters
+#        ----------
+#        tasmax_per: xr.DataArray, optional
+#            Maximum temperature 10th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tasmax_per`.
+#            This will be used only if `tasmax_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Fraction of days with maximum temperature < 10th percentile".
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx10p
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tasmax_per is None:
+#            da = _get_da(params, "tasmax")
+#            tasmax_per = _get_percentile(
+#                da=da,
+#                per=10,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tasmax_per=tasmax_per,
+#                **params,
+#            )
 
 
-class TXn:
+# class TX90p:
+#    """Fraction of days with max temperature > 90th percentile (tasmax)."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.tx90p
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tasmax_per=None,
+#        **params,
+#    ):
+#        """Calculate fraction of days with max temperature > 90th percentile.
+#
+#        Parameters
+#        ----------
+#        tasmax_per: xr.DataArray, optional
+#            Maximum temperature 90th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tasmax_per`.
+#            This will be used only if `tasmax_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Fraction of days with maximum temperature > 90th percentile".
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx90p
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tasmax_per is None:
+#            da = _get_da(params, "tasmax")
+#            tasmax_per = _get_percentile(
+#                da=da,
+#                per=90,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tasmax_per=tasmax_per,
+#                **params,
+#            )
+
+
+class TXn(ClimateIndicator):
     """Minimum maximum temperature (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.tx_min
 
     def compute(self, **params):
@@ -1888,14 +1743,14 @@ class TXn:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx_min
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class TXx:
+class TXx(ClimateIndicator):
     """Maximum maximum temperature (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.tx_max
 
     def compute(self, **params):
@@ -1911,14 +1766,14 @@ class TXx:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx_max
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class TN:
+class TN(ClimateIndicator):
     """Mean minimum temperature (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.tn_mean
 
     def compute(self, **params):
@@ -1934,118 +1789,118 @@ class TN:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_mean
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class TN10p:
-    """Fraction of days with min temperature < 10th percentile."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.tn10p
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tasmin_per=None,
-        **params,
-    ):
-        """Calculate fraction of days with min temperature < 10th percentile.
-
-        Parameters
-        ----------
-        tasmin_per: xr.DataArray, optional
-            Minimum temperature 10th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tasmin_per`.
-            This will be used only if `tasmin_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Fraction of days with minimum temperature < 10th percentile".
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn10p
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tasmin_per is None:
-            da = _get_da(params, "tasmin")
-            tasmin_per = _get_percentile(
-                da=da,
-                per=10,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tasmin_per=tasmin_per,
-                **params,
-            )
-
-
-class TN90p:
-    """Fraction of days with min temperature > 90th percentile."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.tn90p
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tasmin_per=None,
-        **params,
-    ):
-        """Calculate fraction of days with min temperature > 90th percentile.
-
-        Parameters
-        ----------
-        tasmin_per: xr.DataArray, optional
-            Minimum temperature 90th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tasmin_per`.
-            This will be used only if `tasmin_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Fraction of days with minimum temperature > 90th percentile".
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx90p
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tasmin_per is None:
-            da = _get_da(params, "tasmin")
-            tasmin_per = _get_percentile(
-                da=da,
-                per=90,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tasmin_per=tasmin_per,
-                **params,
-            )
+# class TN10p:
+#    """Fraction of days with min temperature < 10th percentile."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.tn10p
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tasmin_per=None,
+#        **params,
+#    ):
+#        """Calculate fraction of days with min temperature < 10th percentile.
+#
+#        Parameters
+#        ----------
+#        tasmin_per: xr.DataArray, optional
+#            Minimum temperature 10th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tasmin_per`.
+#            This will be used only if `tasmin_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Fraction of days with minimum temperature < 10th percentile".
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn10p
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tasmin_per is None:
+#            da = _get_da(params, "tasmin")
+#            tasmin_per = _get_percentile(
+#                da=da,
+#                per=10,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tasmin_per=tasmin_per,
+#                **params,
+#            )
 
 
-class TNn:
+# class TN90p:
+#    """Fraction of days with min temperature > 90th percentile."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.tn90p
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tasmin_per=None,
+#        **params,
+#    ):
+#        """Calculate fraction of days with min temperature > 90th percentile.
+#
+#        Parameters
+#        ----------
+#        tasmin_per: xr.DataArray, optional
+#            Minimum temperature 90th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tasmin_per`.
+#            This will be used only if `tasmin_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Fraction of days with minimum temperature > 90th percentile".
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tx90p
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tasmin_per is None:
+#            da = _get_da(params, "tasmin")
+#            tasmin_per = _get_percentile(
+#                da=da,
+#                per=90,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tasmin_per=tasmin_per,
+#                **params,
+#            )
+
+
+class TNn(ClimateIndicator):
     """Minimum minimum temperature (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.tn_min
 
     def compute(self, **params):
@@ -2061,14 +1916,14 @@ class TNn:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_min
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class TNx:
+class TNx(ClimateIndicator):
     """Maximum minimum temperature (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.tn_max
 
     def compute(self, **params):
@@ -2084,225 +1939,226 @@ class TNx:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_max
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class WD:
-    """Number of warm and dry days (tas, pr)."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.warm_and_dry_days
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tas_per=None,
-        pr_per=None,
-        **params,
-    ):
-        """Calculate number of warm and dry days.
-
-        Parameters
-        ----------
-        tas_per: xr.DataArray, optional
-            Mean temperature 75th percentile reference value above which
-            a day is considered as a warm day.
-        pr_per: xr.DataArray, optional
-            Precipitation 25th percentile reference value below which
-            a day is considered as a dry day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tas_per` and/or `pr_per`.
-            This will be used only if `tas_per` and/or `pr_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray:
-            Number of days where warm and dry conditions coincide.
-            If temperature is above {tas_per} a day is considered as a
-            warm day.
-            If precipitation is below {pr_per} a day is considered as a
-            dry day.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.warm_and_dry_days
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tas_per is None:
-            da_tas = _get_da(params, "tas")
-            tas_per = _get_percentile(
-                da=da_tas,
-                per=75,
-                base_period_time_range=base_period_time_range,
-            )
-        if pr_per is None:
-            da_pr = _get_da(params, "pr")
-            da_pr_f = _filter_out_small_values(
-                da_pr,
-                "1 mm/day",
-                context="hydro",
-            )
-            pr_per = _get_percentile(
-                da=da_pr_f,
-                per=25,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tas_per=tas_per,
-                pr_per=pr_per,
-                **params,
-            )
-
-
-class WSDI:
-    """Warm spell duration index (tasmax)."""
-
-    def __init__(self):
-        self.window = 6
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.warm_spell_duration_index
-
-    def compute(
-        self,
-        window=None,
-        base_period_time_range=None,
-        tasmax_per=None,
-        **params,
-    ):
-        """Calculate warm spell duration index.
-
-        Parameters
-        ----------
-        window: int, optional
-            Minimum number of days with temperature above `tasmax_per`
-            to qualify as a warm spell (default: 6).
-        tasmin_per: xr.DataArray, optional
-            Maximum temperature 90th percentile reference value.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tasmax_per`.
-            This will be used only if `tasmax_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray
-            Number of days part of a 90th percentile warm spell.
-            At least {window} consecutive days.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.warm_spell_duration_index
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if window is None:
-            window = self.window
-        if tasmax_per is None:
-            da = _get_da(params, "tasmax")
-            tasmax_per = _get_percentile(
-                da=da,
-                per=90,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tasmax_per=tasmax_per,
-                window=window,
-                **params,
-            )
+# class WD:
+#    """Number of warm and dry days (tas, pr)."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.warm_and_dry_days
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tas_per=None,
+#        pr_per=None,
+#        **params,
+#    ):
+#        """Calculate number of warm and dry days.
+#
+#        Parameters
+#        ----------
+#        tas_per: xr.DataArray, optional
+#            Mean temperature 75th percentile reference value above which
+#            a day is considered as a warm day.
+#        pr_per: xr.DataArray, optional
+#            Precipitation 25th percentile reference value below which
+#            a day is considered as a dry day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tas_per` and/or `pr_per`.
+#            This will be used only if `tas_per` and/or `pr_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray:
+#            Number of days where warm and dry conditions coincide.
+#            If temperature is above {tas_per} a day is considered as a
+#            warm day.
+#            If precipitation is below {pr_per} a day is considered as a
+#            dry day.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.warm_and_dry_days
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tas_per is None:
+#            da_tas = _get_da(params, "tas")
+#            tas_per = _get_percentile(
+#                da=da_tas,
+#                per=75,
+#                base_period_time_range=base_period_time_range,
+#            )
+#        if pr_per is None:
+#            da_pr = _get_da(params, "pr")
+#            da_pr_f = _filter_out_small_values(
+#                da_pr,
+#                "1 mm/day",
+#                context="hydro",
+#            )
+#            pr_per = _get_percentile(
+#                da=da_pr_f,
+#                per=25,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tas_per=tas_per,
+#                pr_per=pr_per,
+#                **params,
+#            )
 
 
-class WW:
-    """Number of warm and wet days (tas, pr)."""
-
-    def __init__(self):
-        self.base_period_time_range = BASE_PERIOD
-        self.func = xc.atmos.warm_and_wet_days
-
-    def compute(
-        self,
-        base_period_time_range=None,
-        tas_per=None,
-        pr_per=None,
-        **params,
-    ):
-        """Calculate number of warm and wet days.
-
-        Parameters
-        ----------
-        tas_per: xr.DataArray, optional
-            Mean temperature 75th percentile reference value above which
-            a day is considered as a warm day.
-        pr_per: xr.DataArray, optional
-            Precipitation 75th percentile reference value above which
-            a day is considered as a wet day.
-        base_period_time_range: list, optional
-            List with left bound is start year string and right bound
-            is end year string for calculating `tas_per` and/or `pr_per`.
-            This will be used only if `tas_per` and/or `pr_per` is None.
-
-        Returns
-        -------
-        xarray.DataArray:
-            Number of days where warm and wet conditions coincide.
-            If temperature is above {tas_per} a day is considered as a
-            warm day.
-            If precipitation is above {pr_per} a day is considered as a
-            wet day.
-
-        Notes
-        -----
-        For more information on the input parameters see:
-            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.warm_and_wet_days
-        """
-        if base_period_time_range is None:
-            base_period_time_range = self.base_period_time_range
-        if tas_per is None:
-            da_tas = _get_da(params, "tas")
-            tas_per = _get_percentile(
-                da=da_tas,
-                per=75,
-                base_period_time_range=base_period_time_range,
-            )
-        if pr_per is None:
-            da_pr = _get_da(params, "pr")
-            da_pr_f = _filter_out_small_values(
-                da_pr,
-                "1 mm/day",
-                context="hydro",
-            )
-            pr_per = _get_percentile(
-                da=da_pr_f,
-                per=75,
-                base_period_time_range=base_period_time_range,
-            )
-
-        params = _clean_up_params(params=params, func=self.func)
-        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
-            return self.func(
-                tas_per=tas_per,
-                pr_per=pr_per,
-                **params,
-            )
+# class WSDI:
+#    """Warm spell duration index (tasmax)."""
+#
+#    def __init__(self):
+#        self.window = 6
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.warm_spell_duration_index
+#
+#    def compute(
+#        self,
+#        window=None,
+#        base_period_time_range=None,
+#        tasmax_per=None,
+#        **params,
+#    ):
+#        """Calculate warm spell duration index.
+#
+#        Parameters
+#        ----------
+#        window: int, optional
+#            Minimum number of days with temperature above `tasmax_per`
+#            to qualify as a warm spell (default: 6).
+#        tasmin_per: xr.DataArray, optional
+#            Maximum temperature 90th percentile reference value.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tasmax_per`.
+#            This will be used only if `tasmax_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray
+#            Number of days part of a 90th percentile warm spell.
+#            At least {window} consecutive days.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.warm_spell_duration_index
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if window is None:
+#            window = self.window
+#        if tasmax_per is None:
+#            da = _get_da(params, "tasmax")
+#            tasmax_per = _get_percentile(
+#                da=da,
+#                per=90,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tasmax_per=tasmax_per,
+#                window=window,
+#                **params,
+#            )
 
 
-class CSf:
+# class WW:
+#    """Number of warm and wet days (tas, pr)."""
+#
+#    def __init__(self):
+#        self.base_period_time_range = BASE_PERIOD
+#        self.func = xc.atmos.warm_and_wet_days
+#
+#    def compute(
+#        self,
+#        base_period_time_range=None,
+#        tas_per=None,
+#        pr_per=None,
+#        **params,
+#    ):
+#        """Calculate number of warm and wet days.
+#
+#        Parameters
+#        ----------
+#        tas_per: xr.DataArray, optional
+#            Mean temperature 75th percentile reference value above which
+#            a day is considered as a warm day.
+#        pr_per: xr.DataArray, optional
+#            Precipitation 75th percentile reference value above which
+#            a day is considered as a wet day.
+#        base_period_time_range: list, optional
+#            List with left bound is start year string and right bound
+#            is end year string for calculating `tas_per` and/or `pr_per`.
+#            This will be used only if `tas_per` and/or `pr_per` is None.
+#
+#        Returns
+#        -------
+#        xarray.DataArray:
+#            Number of days where warm and wet conditions coincide.
+#            If temperature is above {tas_per} a day is considered as a
+#            warm day.
+#            If precipitation is above {pr_per} a day is considered as a
+#            wet day.
+#
+#        Notes
+#        -----
+#        For more information on the input parameters see:
+#            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.warm_and_wet_days
+#        """
+#        if base_period_time_range is None:
+#            base_period_time_range = self.base_period_time_range
+#        if tas_per is None:
+#            da_tas = _get_da(params, "tas")
+#            tas_per = _get_percentile(
+#                da=da_tas,
+#                per=75,
+#                base_period_time_range=base_period_time_range,
+#            )
+#        if pr_per is None:
+#            da_pr = _get_da(params, "pr")
+#            da_pr_f = _filter_out_small_values(
+#                da_pr,
+#                "1 mm/day",
+#                context="hydro",
+#            )
+#            pr_per = _get_percentile(
+#                da=da_pr_f,
+#                per=75,
+#                base_period_time_range=base_period_time_range,
+#            )
+#
+#        params = _clean_up_params(params=params, func=self.func)
+#        with dask.config.set(**{"array.slicing.split_large_chunks": False}):
+#            return self.func(
+#                tas_per=tas_per,
+#                pr_per=pr_per,
+#                **params,
+#            )
+
+
+class CSf(ClimateIndicator):
     """Number of cold spells (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = -10
         self.window = 3
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.cold_spell_frequency
 
     def compute(self, thresh=None, window=None, **params):
@@ -2329,26 +2185,19 @@ class CSf:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_frequency
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class CSx:
+class CSx(ClimateIndicator):
     """Maximum length of cold spells (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = -10
         self.window = 1
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.cold_spell_max_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -2375,26 +2224,19 @@ class CSx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_max_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class CSn:
+class CSn(ClimateIndicator):
     """Total number of days in cold spells (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = -10
         self.window = 3
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.cold_spell_total_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -2421,26 +2263,19 @@ class CSn:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.cold_spell_total_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class HSf:
+class HSf(ClimateIndicator):
     """Number of hot spells (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 35
         self.window = 3
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.hot_spell_frequency
 
     def compute(self, thresh=None, window=None, **params):
@@ -2467,26 +2302,19 @@ class HSf:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_frequency
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class HSx:
+class HSx(ClimateIndicator):
     """Maximum lenght of hot spells (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 35
         self.window = 1
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.hot_spell_max_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -2513,26 +2341,19 @@ class HSx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_max_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class HSn:
+class HSn(ClimateIndicator):
     """Total number of days in hot spells (tasmax)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 35
         self.window = 3
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.hot_spell_total_length
 
     def compute(self, thresh=None, window=None, **params):
@@ -2559,25 +2380,18 @@ class HSn:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_total_length
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class SD:
+class SD(ClimateIndicator):
     """Number of snow days."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.days_with_snow
 
     def compute(self, thresh=None, **params):
@@ -2601,22 +2415,16 @@ class SD:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.days_with_snow
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            low=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class SCD:
+class SCD(ClimateIndicator):
     """Snow cover duration."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 3
+        self.units = {"thresh": "cm"}
         self.func = xc.land.snd_season_length
 
     def compute(
@@ -2638,22 +2446,16 @@ class SCD:
         xarray.DataArray
             Number of days with snow cover above {thresh} threshold.
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "cm")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class Sint:
+class Sint(ClimateIndicator):
     """Snowfall intensity."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.snowfall_intensity
 
     def compute(self, thresh=None, **params):
@@ -2676,22 +2478,16 @@ class Sint:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.snowfall_intensity
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class Sfreq:
+class Sfreq(ClimateIndicator):
     """Snowfall frequency."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.snowfall_frequency
 
     def compute(self, thresh=None, **params):
@@ -2714,21 +2510,14 @@ class Sfreq:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.snowfall_frequency
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "mm/day")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class UTCI:
+class UTCI(ClimateIndicator):
     """Universal thermal climate index."""
 
     def __init__(self):
+        super().__init__()
         self.stat = "average"
         self.mask_invalid = True
         self.func = xc.atmos.universal_thermal_climate_index
@@ -2766,24 +2555,18 @@ class UTCI:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.universal_thermal_climate_index
         """
-        if stat is None:
-            stat = self.stat
-        if mask_invalid is None:
-            mask_invalid = self.mask_invalid
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            stat=stat,
-            mask_invalid=mask_invalid,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, stat=stat, mask_invalid=mask_invalid
         )
 
 
-class WI:
+class WI(ClimateIndicator):
     """Number of winter days (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = -10
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.tn_days_below
 
     def compute(self, thresh=None, **params):
@@ -2806,24 +2589,18 @@ class WI:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.tn_days_below
         """
-        if thresh is None:
-            thresh = self.thresh
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            **params,
-        )
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
-class HWf:
+class HWf(ClimateIndicator):
     """Number of heat waves (tasmax, tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh_tasmin = 22
         self.thresh_tasmax = 30
         self.window = 3
+        self.units = {"thresh_tasmin": "degC", "thresh_tasmax": "degC"}
         self.func = xc.atmos.heat_wave_frequency
 
     def compute(
@@ -2861,31 +2638,23 @@ class HWf:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_frequency
         """
-        if thresh_tasmax is None:
-            thresh_tasmax = self.thresh_tasmax
-        if thresh_tasmin is None:
-            thresh_tasmin = self.thresh_tasmin
-        if window is None:
-            window = self.window
-        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
-        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh_tasmax=thresh_tasmax,
+        return self.compute_climate_indicator(
+            params=params,
             thresh_tasmin=thresh_tasmin,
+            thresh_tasmax=thresh_tasmax,
             window=window,
-            **params,
         )
 
 
-class HWx:
+class HWx(ClimateIndicator):
     """Maximum length of heat waves (tasmax, tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh_tasmin = 22
         self.thresh_tasmax = 30
         self.window = 1
+        self.units = {"thresh_tasmin": "degC", "thresh_tasmax": "degC"}
         self.func = xc.atmos.heat_wave_max_length
 
     def compute(
@@ -2923,31 +2692,23 @@ class HWx:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.heat_wave_max_length
         """
-        if thresh_tasmax is None:
-            thresh_tasmax = self.thresh_tasmax
-        if thresh_tasmin is None:
-            thresh_tasmin = self.thresh_tasmax
-        if window is None:
-            window = self.window
-        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
-        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh_tasmax=thresh_tasmax,
+        return self.compute_climate_indicator(
+            params=params,
             thresh_tasmin=thresh_tasmin,
+            thresh_tasmax=thresh_tasmax,
             window=window,
-            **params,
         )
 
 
-class HWn:
+class HWn(ClimateIndicator):
     """Total number of days in heat waves (tasmax, tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh_tasmin = 22
         self.thresh_tasmax = 30
         self.window = 3
+        self.units = {"thresh_tasmin": "degC", "thresh_tasmax": "degC"}
         self.func = xc.atmos.heat_wave_total_length
 
     def compute(
@@ -2985,30 +2746,22 @@ class HWn:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.hot_spell_total_length
         """
-        if thresh_tasmax is None:
-            thresh_tasmax = self.thresh_tasmax
-        if thresh_tasmin is None:
-            thresh_tasmin = self.thresh_tasmin
-        if window is None:
-            window = self.window
-        thresh_tasmax = _thresh_string(thresh_tasmax, "degC")
-        thresh_tasmin = _thresh_string(thresh_tasmin, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh_tasmax=thresh_tasmax,
+        return self.compute_climate_indicator(
+            params=params,
             thresh_tasmin=thresh_tasmin,
+            thresh_tasmax=thresh_tasmax,
             window=window,
-            **params,
         )
 
 
-class GSS:
+class GSS(ClimateIndicator):
     """Growing season start (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 5
         self.window = 5
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.growing_season_start
 
     def compute(self, thresh=None, window=None, **params):
@@ -3034,26 +2787,19 @@ class GSS:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.growing_season_start
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class GSE:
+class GSE(ClimateIndicator):
     """Growing season end (tas)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 5
         self.window = 5
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.growing_season_end
 
     def compute(self, thresh=None, window=None, **params):
@@ -3079,26 +2825,19 @@ class GSE:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.growing_season_end
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class FFS:
+class FFS(ClimateIndicator):
     """Frost free season start (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 0
         self.window = 5
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.frost_free_season_start
 
     def compute(self, thresh=None, window=None, **params):
@@ -3124,26 +2863,19 @@ class FFS:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.frost_free_season_start
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class FFE:
+class FFE(ClimateIndicator):
     """Frost free season end (tasmin)."""
 
     def __init__(self):
+        super().__init__()
         self.thresh = 0
         self.window = 5
+        self.units = {"thresh": "degC"}
         self.func = xc.atmos.frost_free_season_end
 
     def compute(self, thresh=None, window=None, **params):
@@ -3169,24 +2901,16 @@ class FFE:
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.frost_free_season_end
         """
-        if thresh is None:
-            thresh = self.thresh
-        if window is None:
-            window = self.window
-        thresh = _thresh_string(thresh, "degC")
-
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(
-            thresh=thresh,
-            window=window,
-            **params,
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
         )
 
 
-class FG:
+class FG(ClimateIndicator):
     """Mean daily mean wind speed."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.sfcWind_mean
 
     def compute(self, **params):
@@ -3205,14 +2929,14 @@ class FG:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_mean
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class FGn:
+class FGn(ClimateIndicator):
     """Minimum daily mean wind speed."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.sfcWind_min
 
     def compute(self, **params):
@@ -3231,14 +2955,14 @@ class FGn:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_min
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class FGx:
+class FGx(ClimateIndicator):
     """Maximum daily mean wind speed."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.sfcWind_max
 
     def compute(self, **params):
@@ -3257,14 +2981,14 @@ class FGx:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWind_max
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class FX:
+class FX(ClimateIndicator):
     """Mean daily maximum wind speed."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.sfcWindmax_mean
 
     def compute(self, **params):
@@ -3280,14 +3004,14 @@ class FX:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWindmax_mean
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class FXn:
+class FXn(ClimateIndicator):
     """Minimum daily maximum wind speed."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.sfcWindmax_min
 
     def compute(self, **params):
@@ -3303,14 +3027,14 @@ class FXn:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWindmax_min
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
 
 
-class FXx:
+class FXx(ClimateIndicator):
     """Maximum daily maximum wind speed."""
 
     def __init__(self):
+        super().__init__()
         self.func = xc.atmos.sfcWindmax_max
 
     def compute(self, **params):
@@ -3326,5 +3050,4 @@ class FXx:
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWindmax_max
         """
-        params = _clean_up_params(params=params, func=self.func)
-        return self.func(**params)
+        return self.compute_climate_indicator(params=params)
