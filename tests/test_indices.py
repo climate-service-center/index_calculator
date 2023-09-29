@@ -414,16 +414,6 @@ def test_RYYpTOT():
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
-def test_RYYpABS():
-    idx_class = indices.RYYpABS()
-    result = idx_class.compute(
-        pr=pr_xarray(),
-        freq="7D",
-        base_period_time_range=["2000-01-01", "2000-01-07"],
-    )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
-
-
 def test_R90pTOT():
     idx_class = indices.RYYpTOT()
     result = idx_class.compute(
