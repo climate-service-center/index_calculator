@@ -333,6 +333,24 @@ def sfcWind_series(values, **kwargs):
     return _sfcWind_series(values, **kwargs)
 
 
+def sfcWindmax_series(values, **kwargs):
+    def _sfcWindmax_series(values, start="1/1/2000", freq="D"):
+        coords = pd.date_range(start, periods=len(values), freq=freq)
+        return xr.DataArray(
+            values,
+            coords=[coords],
+            dims="time",
+            name="sfcWindmax",
+            attrs={
+                "standard_name": "wind_speed",
+                "cell_methods": "time: max",
+                "units": "m s-1",
+            },
+        )
+
+    return _sfcWindmax_series(values, **kwargs)
+
+
 def mrt_series(values, **kwargs):
     def _mrt_series(values, start="1/1/2000", freq="D"):
         coords = pd.date_range(start, periods=len(values), freq=freq)

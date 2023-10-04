@@ -13,6 +13,7 @@ from .conftest import (
     rsds_series,
     rsus_series,
     sfcWind_series,
+    sfcWindmax_series,
     snd_series,
     snw_series,
     tas_series,
@@ -75,6 +76,10 @@ def rlus_xarray(series=[30, 50, 100, 150, 70, 30, 8], **kwargs):
 
 def sfcWind_xarray(series=[2, 18, 5, 10, 23, 1, 7], **kwargs):
     return sfcWind_series(np.array(series), **kwargs)
+
+
+def sfcWindmax_xarray(series=[2, 18, 5, 10, 23, 1, 7], **kwargs):
+    return sfcWindmax_series(np.array(series), **kwargs)
 
 
 def mrt_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
@@ -754,7 +759,7 @@ def test_RRm():
     np.testing.assert_allclose(result, [8.857], rtol=1e-03)
 
 
-def FG():
+def test_FG():
     idx_class = indices.FG()
     result = idx_class.compute(
         sfcWind=sfcWind_xarray(),
@@ -763,7 +768,7 @@ def FG():
     np.testing.assert_allclose(result, [9.429], rtol=1e-03)
 
 
-def FGn():
+def test_FGn():
     idx_class = indices.FGn()
     result = idx_class.compute(
         sfcWind=sfcWind_xarray(),
@@ -772,7 +777,7 @@ def FGn():
     np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
-def FGx():
+def test_FGx():
     idx_class = indices.FGx()
     result = idx_class.compute(
         sfcWind=sfcWind_xarray(),
@@ -781,28 +786,28 @@ def FGx():
     np.testing.assert_allclose(result, [23], rtol=1e-03)
 
 
-def FX():
-    idx_class = indices.FG()
+def test_FX():
+    idx_class = indices.FX()
     result = idx_class.compute(
-        sfcWindmax=sfcWind_xarray(),
+        sfcWindmax=sfcWindmax_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [9.429], rtol=1e-03)
 
 
-def FXn():
-    idx_class = indices.FGn()
+def test_FXn():
+    idx_class = indices.FXn()
     result = idx_class.compute(
-        sfcWindmax=sfcWind_xarray(),
+        sfcWindmax=sfcWindmax_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
-def FXx():
-    idx_class = indices.FGx()
+def test_FXx():
+    idx_class = indices.FXx()
     result = idx_class.compute(
-        sfcWindmax=sfcWind_xarray(),
+        sfcWindmax=sfcWindmax_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
