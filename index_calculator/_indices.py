@@ -17,6 +17,7 @@ import xclim as xc
 class ClimateIndicator:
     def __init__(self):
         self.units = {}
+        self.date_bounds = None
 
     def _thresh_string(self, thresh, units):
         if isinstance(thresh, str):
@@ -67,8 +68,16 @@ class ClimateIndicator:
         params = self._clean_up_params(params=params, func=self.func)
         return params, kwargs
 
+    def _dates_to_bounds(self, kwargs):
+        kwargs["date_bounds"] = (kwargs["start_date"], kwargs["end_date"])
+        del kwargs["start_date"]
+        del kwargs["end_date"]
+        return kwargs
+
     def compute_climate_indicator(self, params, **kwargs):
-        parmas, kwargs = self._adjust_params_and_kwargs(params, **kwargs)
+        params, kwargs = self._adjust_params_and_kwargs(params, **kwargs)
+        if self.date_bounds is True:
+            kwargs = self._dates_to_bounds(kwargs)
         return self.func(**params, **kwargs)
 
 
@@ -361,7 +370,7 @@ class CSU(ClimateIndicator):
         For information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.maximum_consecutive_warm_days
         """
-        self.compute_climate_indicator(params=params, thresh=thresh)
+        return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
 # class CW:
@@ -787,6 +796,7 @@ class LFD(ClimateIndicator):
         super().__init__()
         self.start_date = "04-01"
         self.end_date = "06-30"
+        self.date_bounds = True
         self.func = xc.atmos.late_frost_days
 
     def compute(self, start_date=None, end_date=None, **params):
@@ -811,7 +821,7 @@ class LFD(ClimateIndicator):
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.late_frost_days
         """
         return self.compute_climate_indicator(
-            params=params, date_bounds=(start_date, end_date)
+            params=params, start_date=start_date, end_date=end_date
         )
 
 
@@ -2390,11 +2400,11 @@ class SD(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.thresh = 1
-        self.units = {"thresh": "mm/day"}
+        self.low = 1
+        self.units = {"low": "mm/day"}
         self.func = xc.atmos.days_with_snow
 
-    def compute(self, thresh=None, **params):
+    def compute(self, low=None, **params):
         """Calculate number of snow days.
 
         Parameters
@@ -2415,7 +2425,7 @@ class SD(ClimateIndicator):
         For more information on the input parameters see:
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.days_with_snow
         """
-        return self.compute_climate_indicator(params=params, thresh=thresh)
+        return self.compute_climate_indicator(params=params, low=low)
 
 
 class SCD(ClimateIndicator):
