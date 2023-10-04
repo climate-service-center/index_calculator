@@ -270,8 +270,10 @@ History
 * new ERA5 DRS structure and file naming convention
 * type of components in `pjson` from `str` to `list`
 
-0.10.0 (unpublished)
+0.10.0 (2023-10-04)
 -------------------
 
 * correct CIname
-* make indices classe callable
+* make indices classes callable
+* split `_indices.py` into `_inidices.py` and `_climate_indicator.py`
+* make conversion indices possible
