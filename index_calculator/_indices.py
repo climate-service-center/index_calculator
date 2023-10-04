@@ -16,7 +16,6 @@ class ClimateIndicator:
         self.func = None
         self.units = {}
         self.date_bounds = None
-        self.percentile = None
         self.base_period_time_range = BASE_PERIOD
         self.split_large_chunks = True
 
@@ -33,9 +32,13 @@ class ClimateIndicator:
             return dictionary[var]
         raise ValueError("Variable {} not found!")
 
-    def _clean_up_params(self, params, func):
+    def _clean_up_params(self, params, func, exceptions=[]):
         del_list = []
+        if not callable(func):
+            return params
         for param in params.keys():
+            if param in exceptions:
+                continue
             if param not in signature(func).parameters.keys():
                 warn(
                     "Function {} does not provide parameter {}\n"
@@ -50,6 +53,8 @@ class ClimateIndicator:
     def _set_default_if_None(self, params):
         params_ = {}
         for k, v in params.items():
+            if isinstance(v, dict):
+                v = self._set_default_if_None(v)
             if v is None:
                 if hasattr(self, k):
                     v = getattr(self, k)
@@ -61,17 +66,12 @@ class ClimateIndicator:
     def _add_units(self, params):
         params_ = {}
         for k, v in params.items():
+            if isinstance(v, dict):
+                v = self._add_units(v)
             if k in self.units.keys():
                 v = self._thresh_string(v, self.units[k])
             params_[k] = v
         return params_
-
-    def _adjust_params_and_kwargs(self, params, **kwargs):
-        kwargs = self._set_default_if_None(kwargs)
-        kwargs = self._add_units(kwargs)
-        kwargs = self._clean_up_params(params=kwargs, func=self.func)
-        params = self._clean_up_params(params=params, func=self.func)
-        return params, kwargs
 
     def _dates_to_bounds(self, kwargs):
         kwargs["date_bounds"] = (kwargs["start_date"], kwargs["end_date"])
@@ -120,13 +120,18 @@ class ClimateIndicator:
         return kwargs
 
     def compute_climate_indicator(self, params, **kwargs):
-        if self.percentile is True:
+        params = self._clean_up_params(params=params, func=self.func)
+        kwargs = self._set_default_if_None(kwargs)
+        kwargs = self._add_units(kwargs)
+        if "percentiles" in kwargs.keys():
             kwargs = self._get_percentiles(params, kwargs)
         if self.date_bounds is True:
-            kwargs = self._dates_to_bounds(params, kwargs)
+            kwargs = self._dates_to_bounds(kwargs)
         if self.func is None:
-            return params, kwargs
-        params, kwargs = self._adjust_params_and_kwargs(params, **kwargs)
+            return kwargs
+        kwargs = self._clean_up_params(
+            params=kwargs, func=self.func, exceptions=["date_bounds"]
+        )
         if self.split_large_chunks is True:
             return self.func(**params, **kwargs)
         if self.split_large_chunks is False:
@@ -143,7 +148,6 @@ class CD(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.cold_and_dry_days
 
     def compute(
@@ -296,7 +300,6 @@ class CSDI(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.window = 6
-        self.percentile = True
         self.func = xc.atmos.cold_spell_duration_index
 
     def compute(
@@ -384,7 +387,6 @@ class CW(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.cold_and_wet_days
 
     def compute(
@@ -1083,6 +1085,9 @@ class RRYYp(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
+        self.per = 75
+        self.thresh = 1
+        self.units = {"thresh": "mm/day"}
 
     def compute(
         self,
@@ -1121,12 +1126,12 @@ class RRYYp(ClimateIndicator):
                 "thresh": thresh,
             },
         }
-        params, kwargs = self.compute_climate_indicator(
+        results = self.compute_climate_indicator(
             params=params,
             percentiles=percentiles,
             base_period_time_range=base_period_time_range,
         )
-        return kwargs["pr_per"]
+        return results["pr_per"]
 
 
 class RYYp(ClimateIndicator):
@@ -1136,7 +1141,7 @@ class RYYp(ClimateIndicator):
         super().__init__()
         self.per = 75
         self.thresh = 1
-        self.percentile = True
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.days_over_precip_doy_thresh
 
     def compute(
@@ -1278,6 +1283,7 @@ class RYYpTOT(ClimateIndicator):
         super().__init__()
         self.per = 75
         self.thresh = 1
+        self.units = {"thresh": "mm/day"}
         self.func = xc.atmos.fraction_over_precip_thresh
 
     def compute(
@@ -1454,7 +1460,6 @@ class TG10p(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.tas_per = None
-        self.percentile = True
         self.func = xc.atmos.tg10p
 
     def compute(
@@ -1504,7 +1509,6 @@ class TG90p(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.tg90p
 
     def compute(
@@ -1609,7 +1613,6 @@ class TX10p(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.tx10p
 
     def compute(
@@ -1659,7 +1662,6 @@ class TX90p(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.tx90p
 
     def compute(
@@ -1778,7 +1780,6 @@ class TN10p(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.tn10p
 
     def compute(
@@ -1811,7 +1812,7 @@ class TN10p(ClimateIndicator):
         percentiles = {
             "tasmin_per": {
                 "variable": "tasmin",
-                "per": 25,
+                "per": 10,
                 "method": "temperature",
             },
         }
@@ -1828,7 +1829,6 @@ class TN90p(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.tn90p
 
     def compute(
@@ -1924,7 +1924,6 @@ class WD(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.warm_and_dry_days
 
     def compute(
@@ -1990,7 +1989,6 @@ class WSDI(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.window = 6
-        self.percentile = True
         self.func = xc.atmos.warm_spell_duration_index
 
     def compute(
@@ -2046,7 +2044,6 @@ class WW(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.percentile = True
         self.func = xc.atmos.warm_and_wet_days
 
     def compute(
