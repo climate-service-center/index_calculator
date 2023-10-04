@@ -121,7 +121,6 @@ class PreProcessing:
 
     def _preprocessing(self):
         ds_ = self._convert_to_frequency(self.ds)
-
         time_control = pyh.time_control(ds_)
         if not self.var_name:
             self.var_name = time_control.name
@@ -130,16 +129,13 @@ class PreProcessing:
 
         if self.time_range:
             time_control.select_time_range(self.time_range)
-
         if self.crop_time_axis:
             time_control.select_limited_time_range(
                 smonth=_bounds[self.freq]["start"],
                 emonth=_bounds[self.freq]["end"],
             )
-
         if self.check_time_axis:
             time_control.check_timestamps(correct=True)
-
         self.ATimeRange = avail_time
         ds = time_control.ds
         return self._rename_variable_names(ds)

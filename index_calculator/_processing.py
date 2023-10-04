@@ -204,9 +204,12 @@ class Processing:
                 end=self.preproc.time.values[-1],
                 frequency=_tfreq[self.freq],
             )
-            idx_ds = idx_ds.assign_coords(
-                {"time": date_range},
-            )
+            if len(idx_ds["time"]) == len(date_range):
+                idx_ds = idx_ds.assign_coords(
+                    {"time": date_range},
+                )
+            else:
+                self.freq = self.ifreq
             dim_squeeze = []
             for dim in idx_ds.dims:
                 if len(idx_ds[dim]) == 1 and dim != "time":
