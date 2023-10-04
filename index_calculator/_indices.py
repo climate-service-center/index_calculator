@@ -1,6 +1,6 @@
 import xclim as xc
 
-from .climate_indicator import ClimateIndicator
+from ._climate_indicator import ClimateIndicator
 
 
 class CD(ClimateIndicator):

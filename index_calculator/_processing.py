@@ -93,7 +93,7 @@ class Processing:
                 replacement[attr] = self.kwargs[attr]
             elif numb_name:
                 default_value = getattr(obj, attr)
-                if not isinstance(default_value, list):
+                if isinstance(default_value, (int, str, float)):
                     default_value = float(default_value)
                     if default_value < 0:
                         numb_name = "-{}".format(numb_name)
