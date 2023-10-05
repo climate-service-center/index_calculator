@@ -17,9 +17,6 @@
     "MSWEP": {
 	"variables": {
 	    "precipitation": "pr"
-	},
-	"units": {
-	    "pr": "mm 3h-1"
 	}
     }
 }
