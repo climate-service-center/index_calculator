@@ -84,14 +84,18 @@ class PreProcessing:
         if self.project not in cfjson.keys():
             return ds
         var_names = cfjson[self.project]["variables"]
-        units = cfjson[self.project]["units"]
-        for dvar in ds.data_vars:
+        if "units" in cfjson[self.project].keys():
+            units = cfjson[self.project]["units"]
+        else:
+            units = {}
+        ds_ = ds.copy()
+        for dvar in ds_.data_vars:
             if dvar in var_names.keys():
-                ds = ds.rename({dvar: var_names[dvar]})
+                ds_ = ds_.rename({dvar: var_names[dvar]})
                 dvar = var_names[dvar]
             if dvar in units.keys():
-                ds[dvar].attrs["units"] = units[dvar]
-        return ds
+                ds_[dvar].attrs["units"] = units[dvar]
+        return ds_
 
     def _convert_to_frequency(self, ds):
         if self.ifreq not in fjson.keys():
@@ -103,27 +107,39 @@ class PreProcessing:
         if conv["freq"] == xr.infer_freq(ds.time):
             return ds
         data_vars = {}
-        for dvar in ds.data_vars:
+        ds_ = ds.copy()
+        for dvar in ds_.data_vars:
             if dvar in conv["var"].keys():
                 data_vars[dvar] = getattr(
-                    ds[dvar].resample(time=conv["freq"]),
+                    ds_[dvar].resample(time=conv["freq"]),
                     conv["var"][dvar],
                 )(dim="time")
                 data_vars[dvar].attrs["cell_methods"] = "time: {}".format(
                     conv["var"][dvar]
                 )
                 coords = data_vars[dvar].coords
+        if len(data_vars) == 0:
+            raise KeyError(
+                "Could not convert to frequency {}".format(self.ifreq),
+                "Could not find any variable of"
+                "{} in conversion dictionary {}".format(
+                    [v for v in ds_.data_vars], conv["var"]
+                ),
+            )
         return xr.Dataset(
             data_vars=data_vars,
             coords=coords,
-            attrs=ds.attrs,
+            attrs=ds_.attrs,
         )
 
     def _preprocessing(self):
-        ds_ = self._convert_to_frequency(self.ds)
+        if self.var_name is None:
+            self.var_name = pyh.get_var_name(self.ds)
+
+        ds_ = self._rename_variable_names(self.ds)
+        ds_ = self._convert_to_frequency(ds_)
+
         time_control = pyh.time_control(ds_)
-        if not self.var_name:
-            self.var_name = time_control.name
 
         avail_time = get_time_range_as_str(time_control.time, self.afmt)
 
@@ -137,5 +153,4 @@ class PreProcessing:
         if self.check_time_axis:
             time_control.check_timestamps(correct=True)
         self.ATimeRange = avail_time
-        ds = time_control.ds
-        return self._rename_variable_names(ds)
+        return time_control.ds
