@@ -1259,6 +1259,39 @@ class SU(ClimateIndicator):
         return self.compute_climate_indicator(params=params, thresh=thresh)
 
 
+class CMD(ClimateIndicator):
+    """Number of calm days (sfcWind)."""
+
+    def __init__(self):
+        super().__init__()
+        self.thresh = 2
+        self.units = {"thresh": "m s-1"}
+        self.func = xc.atmos.calm_days
+
+    def compute(self, thresh=None, **params):
+        """Calculate number of calm days.
+
+        Parameters
+        ----------
+        thresh: int or string, optional
+            Threshold wind speed below which a day is considered
+            as a calm day (default: 2 m s-1).
+            If type of threshold is an integer the unit is set to m s-1.
+
+        Returns
+        -------
+        xarray.DataArray
+            Number of calm days ( fg > {thresh}).
+
+        Notes
+        -----
+        For more information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.calm_days
+
+        """
+        return self.compute_climate_indicator(params=params, thresh=thresh)
+
+
 class SQI(ClimateIndicator):
     """Number of uncomfortable sleep events (tasmin)."""
 

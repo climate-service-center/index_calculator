@@ -811,3 +811,12 @@ def test_FXx():
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
+
+
+def test_CMD():
+    idx_class = indices.CMD()
+    result = idx_class.compute(
+        sfcWind=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [1], rtol=1e-03)
