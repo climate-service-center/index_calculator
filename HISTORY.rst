@@ -269,3 +269,11 @@ History
 * set left and right bounds for `yearAC` (yyyy1-07-01 to yyyy2-06-30) and for `yearHydro` (yyyy1-09-01 to yyyy2-08-31)
 * new ERA5 DRS structure and file naming convention
 * type of components in `pjson` from `str` to `list`
+
+0.10.0 (2023-10-04)
+-------------------
+
+* correct CIname
+* make indices classes callable
+* split `_indices.py` into `_inidices.py` and `_climate_indicator.py`
+* make conversion indices possible

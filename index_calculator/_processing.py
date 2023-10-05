@@ -80,7 +80,7 @@ class Processing:
             self.IDXname = replace_name
         else:
             raise NameError("{} not defined.".format(self.CIname))
-        return numb_name, idx_object
+        return numb_name, idx_object()
 
     def _get_replacement(self, obj, numb_name):
         replacement = {}
@@ -93,7 +93,7 @@ class Processing:
                 replacement[attr] = self.kwargs[attr]
             elif numb_name:
                 default_value = getattr(obj, attr)
-                if not isinstance(default_value, list):
+                if isinstance(default_value, (int, str, float)):
                     default_value = float(default_value)
                     if default_value < 0:
                         numb_name = "-{}".format(numb_name)
@@ -137,10 +137,10 @@ class Processing:
                     continue
                 elif isinstance(v, str):
                     continue
-                elif numb_name is not None:
+                elif numb_name:
                     self.CIname = self.CIname.replace(
                         numb_name,
-                        v,
+                        str(v),
                     )
                 elif str(v) not in self.CIname:
                     self.CIname = "{}{}".format(self.CIname, str(v))
@@ -204,9 +204,12 @@ class Processing:
                 end=self.preproc.time.values[-1],
                 frequency=_tfreq[self.freq],
             )
-            idx_ds = idx_ds.assign_coords(
-                {"time": date_range},
-            )
+            if len(idx_ds["time"]) == len(date_range):
+                idx_ds = idx_ds.assign_coords(
+                    {"time": date_range},
+                )
+            else:
+                self.freq = self.ifreq
             dim_squeeze = []
             for dim in idx_ds.dims:
                 if len(idx_ds[dim]) == 1 and dim != "time":

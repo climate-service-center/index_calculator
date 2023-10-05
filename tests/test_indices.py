@@ -13,6 +13,7 @@ from .conftest import (
     rsds_series,
     rsus_series,
     sfcWind_series,
+    sfcWindmax_series,
     snd_series,
     snw_series,
     tas_series,
@@ -77,17 +78,23 @@ def sfcWind_xarray(series=[2, 18, 5, 10, 23, 1, 7], **kwargs):
     return sfcWind_series(np.array(series), **kwargs)
 
 
+def sfcWindmax_xarray(series=[2, 18, 5, 10, 23, 1, 7], **kwargs):
+    return sfcWindmax_series(np.array(series), **kwargs)
+
+
 def mrt_xarray(series=[-1, -10, 0, 15, 32, 6, -8], **kwargs):
     return mrt_series(np.array(series), **kwargs)
 
 
 def test_TG():
-    result = indices.TG.compute(tas=tas_xarray(), freq="7D")
+    idx_class = indices.TG()
+    result = idx_class.compute(tas=tas_xarray(), freq="7D")
     np.testing.assert_allclose(result, 278, rtol=1e-03)
 
 
 def test_TG10p():
-    result = indices.TG10p.compute(
+    idx_class = indices.TG10p()
+    result = idx_class.compute(
         tas=tas_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -96,7 +103,8 @@ def test_TG10p():
 
 
 def test_TG90p():
-    result = indices.TG90p.compute(
+    idx_class = indices.TG90p()
+    result = idx_class.compute(
         tas=tas_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -105,92 +113,110 @@ def test_TG90p():
 
 
 def test_RR():
-    result = indices.RR.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.RR()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 62, rtol=1e-03)
 
 
 def test_SDII():
-    result = indices.SDII.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.SDII()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 10.33, rtol=1e-03)
 
 
 def test_RR1():
-    result = indices.RR1.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.RR1()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 6, rtol=1e-03)
 
 
 def test_R10mm():
-    result = indices.R10mm.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.R10mm()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_R20mm():
-    result = indices.R20mm.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.R20mm()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_R25mm():
-    result = indices.R25mm.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.R25mm()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_RYYmm():
-    result = indices.RYYmm.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.RYYmm()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_R30mm():
-    result = indices.RYYmm.compute(pr=pr_xarray(), freq="7D", thresh=30)
+    idx_class = indices.RYYmm()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D", thresh=30)
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_DD():
-    result = indices.DD.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.DD()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_CDD():
-    result = indices.CDD.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.CDD()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_CWD():
-    result = indices.CWD.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.CWD()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 4, rtol=1e-03)
 
 
 def test_RX1day():
-    result = indices.RX1day.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.RX1day()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 20, rtol=1e-03)
 
 
 def test_RXYYday():
-    result = indices.RXYYday.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.RXYYday()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 55, rtol=1e-03)
 
 
 def test_RX7day():
-    result = indices.RXYYday.compute(pr=pr_xarray(), freq="7D", window=7)
+    idx_class = indices.RXYYday()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D", window=7)
     np.testing.assert_allclose(result, 62, rtol=1e-03)
 
 
 def test_TR():
-    result = indices.TR.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.TR()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_SQI():
-    result = indices.SQI.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.SQI()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_FD():
-    result = indices.FD.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.FD()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
 
 def test_LFD():
-    result = indices.LFD.compute(
+    idx_class = indices.LFD()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         freq="7D",
         start_date="01-04",
@@ -200,17 +226,20 @@ def test_LFD():
 
 
 def test_ID():
-    result = indices.ID.compute(tasmax=tasmax_xarray(), freq="7D")
+    idx_class = indices.ID()
+    result = idx_class.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 3, rtol=1e-03)
 
 
 def test_TX():
-    result = indices.TX.compute(tasmax=tasmax_xarray(), freq="7D")
+    idx_class = indices.TX()
+    result = idx_class.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 278, rtol=1e-03)
 
 
 def test_TX10p():
-    result = indices.TX10p.compute(
+    idx_class = indices.TX10p()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -219,7 +248,8 @@ def test_TX10p():
 
 
 def test_TX90p():
-    result = indices.TX90p.compute(
+    idx_class = indices.TX90p()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -228,22 +258,26 @@ def test_TX90p():
 
 
 def test_TXn():
-    result = indices.TXn.compute(tasmax=tasmax_xarray(), freq="7D")
+    idx_class = indices.TXn()
+    result = idx_class.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 263.15, rtol=1e-03)
 
 
 def test_TXx():
-    result = indices.TXx.compute(tasmax=tasmax_xarray(), freq="7D")
+    idx_class = indices.TXx()
+    result = idx_class.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 305.15, rtol=1e-03)
 
 
 def test_TN():
-    result = indices.TN.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.TN()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 268.72, rtol=1e-03)
 
 
 def test_TN10p():
-    result = indices.TN10p.compute(
+    idx_class = indices.TN10p()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -252,7 +286,8 @@ def test_TN10p():
 
 
 def test_TN90p():
-    result = indices.TN90p.compute(
+    idx_class = indices.TN90p()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -261,57 +296,68 @@ def test_TN90p():
 
 
 def test_TNn():
-    result = indices.TNn.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.TNn()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 247.15, rtol=1e-03)
 
 
 def test_TNx():
-    result = indices.TNx.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.TNx()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 297.15, rtol=1e-03)
 
 
 def test_SU():
-    result = indices.SU.compute(tasmax=tasmax_xarray(), freq="7D")
+    idx_class = indices.SU()
+    result = idx_class.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_CSU():
-    result = indices.CSU.compute(tasmax=tasmax_xarray(), freq="7D")
+    idx_class = indices.CSU()
+    result = idx_class.compute(tasmax=tasmax_xarray(), freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_DSf():
-    result = indices.DSf.compute(pr=pr_xarray(), window=2, freq="7D")
+    idx_class = indices.DSf()
+    result = idx_class.compute(pr=pr_xarray(), window=2, freq="7D")
     np.testing.assert_allclose(result, 0, rtol=1e-03)
 
 
 def test_DSx():
-    result = indices.DSx.compute(pr=pr_xarray(), window=1, freq="7D")
+    idx_class = indices.DSx()
+    result = idx_class.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_DSn():
-    result = indices.DSn.compute(pr=pr_xarray(), window=1, freq="7D")
+    idx_class = indices.DSn()
+    result = idx_class.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_WSf():
-    result = indices.WSf.compute(pr=pr_xarray(), window=1, freq="7D")
+    idx_class = indices.WSf()
+    result = idx_class.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 2, rtol=1e-03)
 
 
 def test_WSx():
-    result = indices.WSx.compute(pr=pr_xarray(), window=1, freq="7D")
+    idx_class = indices.WSx()
+    result = idx_class.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_WSn():
-    result = indices.WSn.compute(pr=pr_xarray(), window=1, freq="7D")
+    idx_class = indices.WSn()
+    result = idx_class.compute(pr=pr_xarray(), window=1, freq="7D")
     np.testing.assert_allclose(result, 1, rtol=1e-03)
 
 
 def test_RYYp():
-    result = indices.RYYp.compute(
+    idx_class = indices.RYYp()
+    result = idx_class.compute(
         pr=pr_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -320,7 +366,8 @@ def test_RYYp():
 
 
 def test_RRYYp():
-    result = indices.RRYYp.compute(
+    idx_class = indices.RRYYp()
+    result = idx_class.compute(
         pr=pr_xarray(),
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
@@ -336,13 +383,15 @@ def test_RRYYp():
     np.testing.assert_allclose(result, expected, rtol=1e-03)
 
 
-def test_RYYP_perc():
+def test_RYYp_perc():
     pr = pr_xarray()
-    per = indices.RRYYp.compute(
+    idx_class = indices.RRYYp()
+    per = idx_class.compute(
         pr=pr,
         base_period_time_range=["2000-01-01", "2000-01-07"],
     )
-    result = indices.RYYp.compute(
+    idx_class = indices.RYYp()
+    result = idx_class.compute(
         pr=pr,
         per=per,
         freq="7D",
@@ -351,7 +400,8 @@ def test_RYYP_perc():
 
 
 def test_R90p():
-    result = indices.RYYp.compute(
+    idx_class = indices.RYYp()
+    result = idx_class.compute(
         pr=pr_xarray(),
         per=90,
         freq="7D",
@@ -361,16 +411,8 @@ def test_R90p():
 
 
 def test_RYYpTOT():
-    result = indices.RYYpTOT.compute(
-        pr=pr_xarray(),
-        freq="7D",
-        base_period_time_range=["2000-01-01", "2000-01-07"],
-    )
-    np.testing.assert_allclose(result, 0, rtol=1e-03)
-
-
-def test_RYYpABS():
-    result = indices.RYYpABS.compute(
+    idx_class = indices.RYYpTOT()
+    result = idx_class.compute(
         pr=pr_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -379,7 +421,8 @@ def test_RYYpABS():
 
 
 def test_R90pTOT():
-    result = indices.RYYpTOT.compute(
+    idx_class = indices.RYYpTOT()
+    result = idx_class.compute(
         pr=pr_xarray(),
         per=90,
         freq="7D",
@@ -389,32 +432,38 @@ def test_R90pTOT():
 
 
 def test_CFD():
-    result = indices.CFD.compute(tasmin=tasmin_xarray(), freq="7D")
+    idx_class = indices.CFD()
+    result = idx_class.compute(tasmin=tasmin_xarray(), freq="7D")
     np.testing.assert_allclose(result, 3, rtol=1e-03)
 
 
 def test_GD():
-    result = indices.GD.compute(tas=tas_xarray(), freq="7D")
+    idx_class = indices.GD()
+    result = idx_class.compute(tas=tas_xarray(), freq="7D")
     np.testing.assert_allclose(result, 41, rtol=1e-03)
 
 
 def test_GD5():
-    result = indices.GD.compute(tas=tas_xarray(), freq="7D")
+    idx_class = indices.GD()
+    result = idx_class.compute(tas=tas_xarray(), freq="7D")
     np.testing.assert_allclose(result, 41, rtol=1e-03)
 
 
 def test_HD17():
-    result = indices.HD17.compute(tas=tas_xarray(), freq="7D")
+    idx_class = indices.HD17()
+    result = idx_class.compute(tas=tas_xarray(), freq="7D")
     np.testing.assert_allclose(result, 100, rtol=1e-03)
 
 
 def test_PRCPTOT():
-    result = indices.PRCPTOT.compute(pr=pr_xarray(), freq="7D")
+    idx_class = indices.PRCPTOT()
+    result = idx_class.compute(pr=pr_xarray(), freq="7D")
     np.testing.assert_allclose(result, 62, rtol=1e-03)
 
 
 def test_CSDI():
-    result = indices.CSDI.compute(
+    idx_class = indices.CSDI()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -423,7 +472,8 @@ def test_CSDI():
 
 
 def test_WSDI():
-    result = indices.WSDI.compute(
+    idx_class = indices.WSDI()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -432,7 +482,8 @@ def test_WSDI():
 
 
 def test_CHDYYx():
-    result = indices.CHDYYx.compute(
+    idx_class = indices.CHDYYx()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
     )
@@ -440,7 +491,8 @@ def test_CHDYYx():
 
 
 def test_CHD30x():
-    result = indices.CHDYYx.compute(
+    idx_class = indices.CHDYYx()
+    result = idx_class.compute(
         thresh=30,
         tasmax=tasmax_xarray(),
         freq="7D",
@@ -449,7 +501,8 @@ def test_CHD30x():
 
 
 def test_CW():
-    result = indices.CW.compute(
+    idx_class = indices.CW()
+    result = idx_class.compute(
         tas=tas_xarray(),
         pr=pr_xarray(),
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -459,7 +512,8 @@ def test_CW():
 
 
 def test_CD():
-    result = indices.CD.compute(
+    idx_class = indices.CD()
+    result = idx_class.compute(
         tas=tas_xarray(),
         pr=pr_xarray(),
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -469,7 +523,8 @@ def test_CD():
 
 
 def test_WW():
-    result = indices.WW.compute(
+    idx_class = indices.WW()
+    result = idx_class.compute(
         tas=tas_xarray(),
         pr=pr_xarray(),
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -479,7 +534,8 @@ def test_WW():
 
 
 def test_WD():
-    result = indices.WD.compute(
+    idx_class = indices.WD()
+    result = idx_class.compute(
         tas=tas_xarray(),
         pr=pr_xarray(),
         base_period_time_range=["2000-01-01", "2000-01-07"],
@@ -489,7 +545,8 @@ def test_WD():
 
 
 def test_DTR():
-    result = indices.DTR.compute(
+    idx_class = indices.DTR()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         tasmax=tasmax_xarray(),
         freq="7D",
@@ -498,7 +555,8 @@ def test_DTR():
 
 
 def test_CSf():
-    result = indices.CSf.compute(
+    idx_class = indices.CSf()
+    result = idx_class.compute(
         tas=tas_c_xarray(),
         freq="7D",
         thresh=-10,
@@ -508,7 +566,8 @@ def test_CSf():
 
 
 def test_CSx():
-    result = indices.CSx.compute(
+    idx_class = indices.CSx()
+    result = idx_class.compute(
         tas=tas_c_xarray(),
         freq="7D",
         thresh=-10,
@@ -517,7 +576,8 @@ def test_CSx():
 
 
 def test_CSn():
-    result = indices.CSn.compute(
+    idx_class = indices.CSn()
+    result = idx_class.compute(
         tas=tas_c_xarray(),
         freq="7D",
         thresh=-10,
@@ -527,7 +587,8 @@ def test_CSn():
 
 
 def test_HSf():
-    result = indices.HSf.compute(
+    idx_class = indices.HSf()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         thresh=27,
@@ -537,7 +598,8 @@ def test_HSf():
 
 
 def test_HSx():
-    result = indices.HSx.compute(
+    idx_class = indices.HSx()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         thresh=27,
@@ -546,7 +608,8 @@ def test_HSx():
 
 
 def test_HSn():
-    result = indices.HSn.compute(
+    idx_class = indices.HSn()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         freq="7D",
         thresh=27,
@@ -556,7 +619,8 @@ def test_HSn():
 
 
 def test_HWx():
-    result = indices.HWx.compute(
+    idx_class = indices.HWx()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         tasmin=tasmin_xarray(),
         freq="7D",
@@ -567,7 +631,8 @@ def test_HWx():
 
 
 def test_HWf():
-    result = indices.HWf.compute(
+    idx_class = indices.HWf()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         tasmin=tasmin_xarray(),
         freq="7D",
@@ -579,7 +644,8 @@ def test_HWf():
 
 
 def test_HWn():
-    result = indices.HWn.compute(
+    idx_class = indices.HWn()
+    result = idx_class.compute(
         tasmax=tasmax_xarray(),
         tasmin=tasmin_xarray(),
         freq="7D",
@@ -591,7 +657,8 @@ def test_HWn():
 
 
 def test_SD():
-    result = indices.SD.compute(
+    idx_class = indices.SD()
+    result = idx_class.compute(
         prsn=prsn_xarray(),
         freq="7D",
     )
@@ -599,7 +666,8 @@ def test_SD():
 
 
 def test_SCD():
-    result = indices.SCD.compute(
+    idx_class = indices.SCD()
+    result = idx_class.compute(
         snd=snd_xarray(),
         thresh=2,
         freq="7D",
@@ -608,12 +676,14 @@ def test_SCD():
 
 
 def test_Sfreq():
-    result = indices.Sfreq.compute(prsn=prsn_xarray(), freq="7D")
+    idx_class = indices.Sfreq()
+    result = idx_class.compute(prsn=prsn_xarray(), freq="7D")
     np.testing.assert_allclose(result, 4 / 7 * 100, rtol=1e-03)
 
 
 def test_Sint():
-    result = indices.Sint.compute(
+    idx_class = indices.Sint()
+    result = idx_class.compute(
         prsn=prsn_xarray(),
         freq="7D",
     )
@@ -621,7 +691,8 @@ def test_Sint():
 
 
 def test_UTCI():
-    result = indices.UTCI.compute(
+    idx_class = indices.UTCI()
+    result = idx_class.compute(
         tas=tas_xarray(),
         hurs=hurs_xarray(),
         sfcWind=sfcWind_xarray(),
@@ -631,7 +702,8 @@ def test_UTCI():
 
 
 def test_WI():
-    result = indices.WI.compute(
+    idx_class = indices.WI()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         freq="7D",
     )
@@ -639,7 +711,8 @@ def test_WI():
 
 
 def test_GSS():
-    result = indices.GSS.compute(
+    idx_class = indices.GSS()
+    result = idx_class.compute(
         tas=tas_xarray(),
         window=1,
         freq="7D",
@@ -648,7 +721,8 @@ def test_GSS():
 
 
 def test_GSE():
-    result = indices.GSE.compute(
+    idx_class = indices.GSE()
+    result = idx_class.compute(
         tas=tas_xarray(),
         window=1,
         freq="7D",
@@ -657,7 +731,8 @@ def test_GSE():
 
 
 def test_FFS():
-    result = indices.FFS.compute(
+    idx_class = indices.FFS()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         window=1,
         freq="7D",
@@ -666,7 +741,8 @@ def test_FFS():
 
 
 def test_FFE():
-    result = indices.FFE.compute(
+    idx_class = indices.FFE()
+    result = idx_class.compute(
         tasmin=tasmin_xarray(),
         window=1,
         freq="7D",
@@ -675,59 +751,63 @@ def test_FFE():
 
 
 def test_RRm():
-    result = indices.RRm.compute(
+    idx_class = indices.RRm()
+    result = idx_class.compute(
         pr=pr_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [8.857], rtol=1e-03)
 
 
-def FG():
-    result = indices.FG.compute(
+def test_FG():
+    idx_class = indices.FG()
+    result = idx_class.compute(
         sfcWind=sfcWind_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [9.429], rtol=1e-03)
 
 
-def FGn():
-    result = indices.FGn.compute(
+def test_FGn():
+    idx_class = indices.FGn()
+    result = idx_class.compute(
         sfcWind=sfcWind_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
-def FGx():
-    result = indices.FGx.compute(
+def test_FGx():
+    idx_class = indices.FGx()
+    result = idx_class.compute(
         sfcWind=sfcWind_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
 
 
-def FX():
-    result = indices.FG.compute(
-        sfcWindmax=sfcWind_xarray(),
+def test_FX():
+    idx_class = indices.FX()
+    result = idx_class.compute(
+        sfcWindmax=sfcWindmax_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [9.429], rtol=1e-03)
 
 
-def FXn():
-    result = indices.FGn.compute(
-        sfcWindmax=sfcWind_xarray(),
+def test_FXn():
+    idx_class = indices.FXn()
+    result = idx_class.compute(
+        sfcWindmax=sfcWindmax_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [1], rtol=1e-03)
 
 
-def FXx():
-    result = indices.FGx.compute(
-        sfcWindmax=sfcWind_xarray(),
+def test_FXx():
+    idx_class = indices.FXx()
+    result = idx_class.compute(
+        sfcWindmax=sfcWindmax_xarray(),
         freq="7D",
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
-
-
-test_LFD()
