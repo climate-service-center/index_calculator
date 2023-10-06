@@ -11,6 +11,8 @@ Welcome to index_calculator's documentation!
    usage
    notebooks
    indices
+   newproject
+   newindex
    contributing
    authors
    api
