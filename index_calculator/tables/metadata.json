@@ -479,4 +479,10 @@
 	"units": "",
 	"description": "Calendar day of year, when the temperature is below {thresh} degC for at least {window} consecutive days."
     }
+   "HIX": {
+	"standard_name": "humidex",
+	"long_name": "Temperature felt by a person when relative humidity is taken into account",
+	"units": "degC",
+	"description": "Temperature felt by a person when relative humidity is taken into account."
+    }
 }
