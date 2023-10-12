@@ -812,10 +812,11 @@ def test_FXx():
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
 
+
 def test_HIX():
     idx_class = indices.HIX()
     result = idx_class.compute(
         tas=tas_xarray(),
-        hurs = hurs_array(),
+        hurs=hurs_array(),
     )
-    np.testing.assert_allclose(result, [1,1,1,1,1,1,1], rtol=1e-03)
+    np.testing.assert_allclose(result, [1, 1, 1, 1, 1, 1, 1], rtol=1e-03)

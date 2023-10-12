@@ -2864,6 +2864,7 @@ class FXx(ClimateIndicator):
         """
         return self.compute_climate_indicator(params=params)
 
+
 class HIX(ClimateIndicator):
     """temperature felt by a person when relative humidity is taken into account (tas, hurs)"""
 
@@ -2885,4 +2886,3 @@ class HIX(ClimateIndicator):
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.humidex
         """
         return self.compute_climate_indicator(params=params)
-
