@@ -478,7 +478,7 @@
 	"long_name": "Frost free season end (mean temperature < {thresh} degC)",
 	"units": "",
 	"description": "Calendar day of year, when the temperature is below {thresh} degC for at least {window} consecutive days."
-    }
+    },
    "HIX": {
 	"standard_name": "humidex",
 	"long_name": "Temperature felt by a person when relative humidity is taken into account",
