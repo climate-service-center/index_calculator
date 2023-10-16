@@ -335,6 +335,12 @@
 	"units": "m s-1",
 	"description": "Minimum of daily maximum wind speed."
     },
+    "CMD": {
+	"standard_name": "days_with_wind_speed_below_threshold",
+	"long_name": "Number of calm days (wind speed < {thresh} m s-2)",
+	"units": "days",
+	"description": "Number of days with daily wind speed below {thresh} m s-2."
+    },
     "CW": {
 	"standard_name": "cold_and_wet_days",
 	"long_name": "Number of cold and wet days",
