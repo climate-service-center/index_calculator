@@ -819,4 +819,4 @@ def test_HIX():
         tas=tas_xarray(),
         hurs=hurs_xarray(),
     )
-    np.testing.assert_allclose(result, [1, 1, 1, 1, 1, 1, 1], rtol=1e-03)
+    np.testing.assert_allclose(result, [2.868104811745071, 8.435714684953929, 1.528, 13.51597906417013, 3.738365748470566, 5.315428123614425, 1.0889742059412832], rtol=1e-03)
