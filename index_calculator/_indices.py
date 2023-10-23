@@ -2899,7 +2899,11 @@ class FXx(ClimateIndicator):
 
 
 class HIX(ClimateIndicator):
-    """temperature felt by a person when relative humidity is taken into account (tas, hurs)"""
+    """temperature felt by a person.
+
+    When relative humidity is taken into account (tas, hurs)
+
+    """
 
     def __init__(self):
         super().__init__()
@@ -2908,10 +2912,11 @@ class HIX(ClimateIndicator):
     def compute(self, **params):
         """Calculate maximum number of consecutive heat days.
 
-         Returns
+        Returns
         -------
         xarray.DataArray
-            temperature felt by a person when relative humidity is taken into account.
+            temperature felt by a person when relative humidity
+            is taken into account.
 
         Notes
         -----
