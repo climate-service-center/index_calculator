@@ -80,5 +80,6 @@
     "FX": "sfcWindmax",
     "FXx": "sfcWindmax",
     "FXn": "sfcWindmax",
-    "CMD": "sfcWind"
+    "CMD": "sfcWind",
+    "HIX": ["tas", "hurs"]
 }

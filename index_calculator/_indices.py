@@ -2896,3 +2896,31 @@ class FXx(ClimateIndicator):
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.sfcWindmax_max
         """
         return self.compute_climate_indicator(params=params)
+
+
+class HIX(ClimateIndicator):
+    """temperature felt by a person.
+
+    When relative humidity is taken into account (tas, hurs)
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.func = xc.atmos.humidex
+
+    def compute(self, **params):
+        """Calculate maximum number of consecutive heat days.
+
+        Returns
+        -------
+        xarray.DataArray
+            temperature felt by a person when relative humidity
+            is taken into account.
+
+        Notes
+        -----
+        For information on the input parameters see:
+            https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.humidex
+        """
+        return self.compute_climate_indicator(params=params)
