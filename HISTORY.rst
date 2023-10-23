@@ -277,3 +277,14 @@ History
 * make indices classes callable
 * split `_indices.py` into `_inidices.py` and `_climate_indicator.py`
 * make conversion indices possible
+
+0.11.0 (unpublished)
+--------------------
+* new indicators:
+
+    * CMD_ calm days
+
+* documentation: 
+
+    * how to implement a new project
+    * how to implement a new indicator

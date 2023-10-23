@@ -812,7 +812,7 @@ def test_FXx():
     )
     np.testing.assert_allclose(result, [23], rtol=1e-03)
 
-
+    
 def test_HIX():
     idx_class = indices.HIX()
     result = idx_class.compute(
@@ -820,3 +820,14 @@ def test_HIX():
         hurs=hurs_xarray(),
     )
     np.testing.assert_allclose(result, [-4.977235, -14.36269 ,  -4.706667,  17.962594,  29.079492, 3.561291, -12.997314], rtol=1e-03)
+
+    
+def test_CMD():
+    idx_class = indices.CMD()
+    result = idx_class.compute(
+        sfcWind=sfcWind_xarray(),
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [1], rtol=1e-03)
+
+    
