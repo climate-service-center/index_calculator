@@ -284,7 +284,7 @@ History
 
     * CMD_ calm days
 
-* documentation: 
+* documentation:
 
     * how to implement a new project
     * how to implement a new indicator
