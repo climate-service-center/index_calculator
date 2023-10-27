@@ -2,8 +2,8 @@
 History
 =======
 
-0.11.0 (unpublished)
---------------------
+0.11.0 (2023-10-27)
+-------------------
 * new indicators:
 
     * CMD: calm days
