@@ -6,7 +6,7 @@ History
 --------------------
 * new indicators:
 
-    * CMD_ calm days
+    * CMD: calm days
 
 * documentation:
 
