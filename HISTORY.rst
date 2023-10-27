@@ -288,3 +288,5 @@ History
 
     * how to implement a new project
     * how to implement a new indicator
+
+* indicator UTCI: set default stat from `average` to `sunlit`
