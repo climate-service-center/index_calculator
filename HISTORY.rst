@@ -10,6 +10,7 @@ History
    * updates of build system (setuptools is deprecated) (:pull:`40`)
      * using `pyproject.toml <https://stackoverflow.com/questions/62983756/what-is-pyproject-toml-file-for>`_ file instead of ``setup.py``
      * using `setuptools_scm <https://github.com/pypa/setuptools_scm>`_ for automatic updating of version numbers.
+     * updates of ``pre-commit`` hooks.
 
 * new indicators:
 
