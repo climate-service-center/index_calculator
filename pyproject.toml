@@ -31,6 +31,9 @@ documentation = "https://index-calculator.readthedocs.io"
 repository = "https://github.com/ludwiglierhammer/index_calculator.git"
 changelog = "https://index-calculator.readthedocs.io/en/latest/history.html"
 
+[project.scripts]
+index_calculator = "index_calculator.cli:main"
+
 [build-system]
 requires = [
     "xarray",
@@ -134,6 +137,5 @@ module=[
 ignore_missing_imports = true
 
 [tool.coverage.run]
-omit = [
-    "test.py"
-]
+relative_files = true
+omit = ["tests/*.py"]
