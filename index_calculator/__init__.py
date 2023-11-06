@@ -17,7 +17,6 @@ from ._tables import vjson  # noqa
 from ._tables import xjson  # noqa
 from .index_calculator import IndexCalculator as index_calculator
 
-
 try:
     __version__ = pkg_resources.get_distribution("index_calculator").version
 except Exception:
