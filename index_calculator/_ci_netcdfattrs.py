@@ -3,6 +3,7 @@ from datetime import datetime as dt
 
 import xclim as xc
 
+
 def _get_version():
     __version__ = "unknown"
     try:
@@ -10,6 +11,7 @@ def _get_version():
     except ImportError:
         pass
     return __version__
+
 
 __version__ = _get_version()
 

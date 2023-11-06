@@ -15,6 +15,7 @@ from ._tables import vjson  # noqa
 from ._tables import xjson  # noqa
 from .index_calculator import IndexCalculator as index_calculator
 
+
 def _get_version():
     __version__ = "unknown"
     try:
@@ -22,6 +23,7 @@ def _get_version():
     except ImportError:
         pass
     return __version__
+
 
 __version__ = _get_version()
 
