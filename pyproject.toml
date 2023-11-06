@@ -1,0 +1,139 @@
+[project]
+name = "index_calculator"
+description="Python index-calculator is an xclim wrapper"
+readme = "README.rst"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+keywords = ["index_calculator"]
+classifiers = [
+        "Development Status :: 2 - Pre-Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "xarray",
+    "dask",
+    "xclim",
+    "pyhomogenize>=0.5.1",
+    "pint>=0.1",
+    "pooch"
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://index-calculator.readthedocs.io"
+documentation = "https://index-calculator.readthedocs.io"
+repository = "https://github.com/ludwiglierhammer/index_calculator.git"
+changelog = "https://index-calculator.readthedocs.io/en/latest/history.html"
+
+[build-system]
+requires = [
+    "xarray",
+    "setuptools>=45",
+    "wheel",
+    "setuptools_scm[toml]>=6.2",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["index_calculator"]
+
+[tool.setuptools_scm]
+fallback_version = "999"
+write_to = "index_calculator/_version.py"
+write_to_template= '__version__ = "{version}"'
+tag_regex= "^(?P<prefix>v)?(?P<version>[^\\+]+)(?P<suffix>.*)?$"
+
+[tool.black]
+target-version = ["py38"]
+
+[tool.ruff]
+target-version = "py38"
+builtins = ["ellipsis"]
+exclude = [
+    ".eggs",
+    "doc",
+]
+# E402: module level import not at top of file
+# E501: line too long - let black worry about that
+# E731: do not assign a lambda expression, use a def
+ignore = [
+    "E203",
+    "E402",
+    "E501",
+    "E731",
+]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I",
+    # Pyupgrade
+    "UP",
+]
+
+[tool.ruff.isort]
+known-first-party = ["index_calculator"]
+known-third-party = [
+    "dask",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "pint",
+    "pkg_resources",
+    "pytest",
+    "setuptools",
+    "sphinx_autosummary_accessors",
+    "xarray"
+]
+
+[tool.pytest]
+python_files = "test_*.py"
+testpaths = ["./tests"]
+
+[tool.rstcheck]
+report_level = "WARNING"
+ignore_roles = [
+    "pr",
+    "issue",
+]
+ignore_directives = [
+    "ipython",
+    "autodata",
+    "autosummary",
+]
+
+[tool.nbqa.md]
+mdformat = true
+
+[tool.mypy]
+exclude = "doc|flycheck"
+files = "index_calculator/"
+show_error_codes = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module=[
+    "cftime",
+    "pandas",
+    "pooch",
+    "pint",
+    "matplotlib",
+    "pytest",
+    "shapely.geometry",
+    "xarray.core.pycompat",
+]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+omit = [
+    "test.py"
+]
