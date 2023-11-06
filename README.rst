@@ -18,7 +18,7 @@ Python index_calculator is an xclim wrapper to calculate climate indicators from
 
 Documentation
 -------------
-The official documentation is at https://index_calculator.readthedocs.io/
+The official documentation is at https://index-calculator.readthedocs.io/
 
 Features
 --------
