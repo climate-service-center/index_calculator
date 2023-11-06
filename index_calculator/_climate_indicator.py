@@ -22,7 +22,7 @@ class ClimateIndicator:
         if isinstance(thresh, str):
             return thresh
         else:
-            return "{} {}".format(str(thresh), units)
+            return f"{str(thresh)} {units}"
 
     def _get_da(self, dictionary, var):
         if "ds" in dictionary.keys():
@@ -40,9 +40,9 @@ class ClimateIndicator:
                 continue
             if param not in signature(func).parameters.keys():
                 warn(
-                    "Function {} does not provide parameter {}\n"
+                    f"Function {func} does not provide parameter {param}\n"
                     "The parameter will be deleted \n"
-                    "from parameter list".format(func, param)
+                    "from parameter list"
                 )
                 del_list.append(param)
         for param in del_list:

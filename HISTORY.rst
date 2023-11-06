@@ -4,6 +4,14 @@ History
 
 0.11.0 (2023-10-27)
 -------------------
+
+* internal updates:
+
+   * updates of build system (setuptools is deprecated) (:pull:`40`)
+     * using `pyproject.toml <https://stackoverflow.com/questions/62983756/what-is-pyproject-toml-file-for>`_ file instead of ``setup.py``
+     * using `setuptools_scm <https://github.com/pypa/setuptools_scm>`_ for automatic updating of version numbers.
+     * updates of ``pre-commit`` hooks.
+
 * new indicators:
 
     * CMD: calm days
@@ -13,7 +21,7 @@ History
     * how to implement a new project
     * how to implement a new indicator
 
-* indicator UTCI: set default stat from `average` to `sunlit`
+* indicator UTCI: set default stat from ``average`` to ``sunlit``
 
 
 0.10.0 (2023-10-04)
@@ -21,7 +29,7 @@ History
 
 * correct CIname
 * make indices classes callable
-* split `_indices.py` into `_inidices.py` and `_climate_indicator.py`
+* split ``_indices.py`` into ``_inidices.py`` and ``_climate_indicator.py``
 * make conversion indices possible
 
 0.9.0 (2023-09-25)
@@ -30,10 +38,10 @@ History
 * convert time frequencies to requested time frequency
 * rename variable name(s) to requested variable name(s)
 * convert input variable(s) to requested input variable(s): sfcWind, snd
-* SCD: set default threshold to `3mm day-1`
-* set left and right bounds for `yearAC` (yyyy1-07-01 to yyyy2-06-30) and for `yearHydro` (yyyy1-09-01 to yyyy2-08-31)
+* SCD: set default threshold to ``3mm day-1``
+* set left and right bounds for ``yearAC`` (yyyy1-07-01 to yyyy2-06-30) and for ``yearHydro`` (yyyy1-09-01 to yyyy2-08-31)
 * new ERA5 DRS structure and file naming convention
-* type of components in `pjson` from `str` to `list`
+* type of components in ``pjson`` from ``str`` to ``list``
 
 0.8.2 (2023-08-31)
 ------------------

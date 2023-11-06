@@ -2,19 +2,32 @@
 
 __author__ = """Ludwig Lierhammer"""
 __email__ = "ludwig.lierhammer@dwd.de"
-__version__ = "0.11.0"
 
 from ._outputwriter import OutputWriter as outputwriter
 from ._postprocessing import PostProcessing as postprocessing
 from ._preprocessing import PreProcessing as preprocessing
 from ._processing import Processing as processing
-from ._tables import cfjson  # noqa
-from ._tables import fjson  # noqa
-from ._tables import mjson  # noqa
-from ._tables import pjson  # noqa
-from ._tables import vjson  # noqa
-from ._tables import xjson  # noqa
+from ._tables import (
+    cfjson,  # noqa
+    fjson,  # noqa
+    mjson,  # noqa
+    pjson,  # noqa
+    vjson,  # noqa
+    xjson,  # noqa
+)
 from .index_calculator import IndexCalculator as index_calculator
+
+
+def _get_version():
+    __version__ = "unknown"
+    try:
+        from ._version import __version__
+    except ImportError:
+        pass
+    return __version__
+
+
+__version__ = _get_version()
 
 preprocessing.__module__ = __name__
 preprocessing.__name__ = "preprocessing"

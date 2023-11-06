@@ -3,7 +3,17 @@ from datetime import datetime as dt
 
 import xclim as xc
 
-from index_calculator import __version__
+
+def _get_version():
+    __version__ = "unknown"
+    try:
+        from ._version import __version__
+    except ImportError:
+        pass
+    return __version__
+
+
+__version__ = _get_version()
 
 
 class NetCDFattrs:
@@ -99,7 +109,7 @@ class NetCDFglobalattrs(NetCDFattrs):
             try:
                 dictionary[attribute] = getattr(self, "_" + attribute)(obj)
             except AttributeError:
-                warnings.warn("Could not set attribute {}".format(attribute))
+                warnings.warn(f"Could not set attribute {attribute}")
         return dictionary
 
     def _ci_additional_reference_period(self, obj):
