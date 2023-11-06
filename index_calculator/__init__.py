@@ -3,8 +3,6 @@
 __author__ = """Ludwig Lierhammer"""
 __email__ = "ludwig.lierhammer@dwd.de"
 
-import pkg_resources
-
 from ._outputwriter import OutputWriter as outputwriter
 from ._postprocessing import PostProcessing as postprocessing
 from ._preprocessing import PreProcessing as preprocessing
@@ -17,13 +15,15 @@ from ._tables import vjson  # noqa
 from ._tables import xjson  # noqa
 from .index_calculator import IndexCalculator as index_calculator
 
-try:
-    __version__ = pkg_resources.get_distribution("index_calculator").version
-except Exception:
-    # Local copy or not installed with setuptools.
-    # Disable minimum version checks on downstream libraries.
-    __version__ = "999"
+def _get_version():
+    __version__ = "unknown"
+    try:
+        from ._version import __version__
+    except ImportError:
+        pass
+    return __version__
 
+__version__ = _get_version()
 
 preprocessing.__module__ = __name__
 preprocessing.__name__ = "preprocessing"
