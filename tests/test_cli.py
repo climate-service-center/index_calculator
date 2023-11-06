@@ -8,7 +8,7 @@ from .conftest import tas_day_netcdf
 def test_cli():
     s = (
         "index_calculator "
-        "-i {} "
+        f"-i {tas_day_netcdf()} "
         "-o test.nc "
         "-x TG "
         "-p CORDEX "
@@ -16,5 +16,5 @@ def test_cli():
         "-inst_id TEST "
         "-contact test@test.de "
         "-freq week"
-    ).format(tas_day_netcdf())
+    )
     os.system(s)

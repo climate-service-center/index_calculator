@@ -109,7 +109,7 @@ class NetCDFglobalattrs(NetCDFattrs):
             try:
                 dictionary[attribute] = getattr(self, "_" + attribute)(obj)
             except AttributeError:
-                warnings.warn("Could not set attribute {}".format(attribute))
+                warnings.warn(f"Could not set attribute {attribute}")
         return dictionary
 
     def _ci_additional_reference_period(self, obj):

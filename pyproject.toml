@@ -102,7 +102,7 @@ testpaths = ["./tests"]
 [tool.rstcheck]
 report_level = "WARNING"
 ignore_roles = [
-    "pr",
+    "pull",
     "issue",
 ]
 ignore_directives = [

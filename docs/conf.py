@@ -47,6 +47,12 @@ extensions = [
     "IPython.sphinxext.ipython_console_highlighting",
 ]
 
+
+extlinks = {
+    "issue": ("https://github.com/ludwiglierhammer/index_calculator/issues/%s", "#%s"),
+    "pull": ("https://github.com/ludwiglierhammer/index_calculator/pull/%s", "#%s"),
+}
+
 autosummary_generate = True
 
 napoleon_use_param = False
