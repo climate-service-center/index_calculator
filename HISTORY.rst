@@ -5,24 +5,25 @@ History
 0.11.0 (2023-10-27)
 -------------------
 
-* internal updates:
+Internal Changes
+~~~~~~~~~~~~~~~~
 
-   * updates of build system (setuptools is deprecated) (:pull:`40`)
-     * using `pyproject.toml <https://stackoverflow.com/questions/62983756/what-is-pyproject-toml-file-for>`_ file instead of ``setup.py``
-     * using `setuptools_scm <https://github.com/pypa/setuptools_scm>`_ for automatic updating of version numbers.
-     * updates of ``pre-commit`` hooks.
+* updates of build system (setuptools is deprecated) (:pull:`40`)
+* using `pyproject.toml <https://stackoverflow.com/questions/62983756/what-is-pyproject-toml-file-for>`_ file instead of ``setup.py``
+* using `setuptools_scm <https://github.com/pypa/setuptools_scm>`_ for automatic updating of version numbers.
+* updates of ``pre-commit`` hooks.
+* indicator UTCI: set default stat from ``average`` to ``sunlit`` (:pull:`36`)
 
-* new indicators:
+New Indicators
+~~~~~~~~~~~~~~
 
-    * CMD: calm days
+* CMD: calm days
 
-* documentation:
+Documentation
+~~~~~~~~~~~~~
 
-    * how to implement a new project
-    * how to implement a new indicator
-
-* indicator UTCI: set default stat from ``average`` to ``sunlit``
-
+* how to implement a new project
+* how to implement a new indicator
 
 0.10.0 (2023-10-04)
 -------------------
