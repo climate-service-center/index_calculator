@@ -1,4 +1,4 @@
-name: CI
+name: index_calculator Testing Suite
 on:
   push:
     branches:
