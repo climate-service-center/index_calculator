@@ -106,11 +106,11 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
         :target: https://github.com/psf/black
         :alt: Python Black
-        
+
 .. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
         :target: https://github.com/astral-sh/ruff
         :alt: Ruff
-        
+
 .. |pre-commit| image:: https://results.pre-commit.ci/badge/github/ludwiglierhammer/index_calculator/master.svg
         :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/master
         :alt: pre-commit.ci status
@@ -118,10 +118,10 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 .. |fossa| image:: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fludwiglierhammer%2Findex_calculator.svg?type=shield
         :target: https://app.fossa.com/projects/git%2Bgithub.com%2Fludwiglierhammer%2Findex_calculator?ref=badge_shield
         :alt: FOSSA
-        
+
 .. |security| image:: https://www.bestpractices.dev/projects/8143/badge
         :target: https://www.bestpractices.dev/projects/8143
-        :alt: Open Source Security Foundation        
+        :alt: Open Source Security Foundation
 
 .. |status| image:: https://www.repostatus.org/badges/latest/active.svg
         :target: https://www.repostatus.org/#active
