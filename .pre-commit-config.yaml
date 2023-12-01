@@ -1,5 +1,16 @@
 ci:
-    autoupdate_schedule: quarterly
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: quarterly
+  submodules: false
+
+default_language_version:
+  python: python3.11
 
 repos:
 
@@ -9,64 +20,77 @@ repos:
       - id: pyupgrade
         args: ["--py39-plus"]
 
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+        args: ['--allow-multiple-documents']
+      - id: debug-statements
+      - id: pretty-format-json
+        args: ['--autofix', '--no-ensure-ascii', '--no-sort-keys']
+        exclude: '.ipynb'
+
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.23.1
+    hooks:
+      - id: toml-sort-fix
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.32.0
+    hooks:
+      - id: yamllint
+        args: ['--config-file=.yamllint.yaml']
+
+  - repo: https://github.com/psf/black
+    rev: 23.10.1
+    hooks:
+      - id: black
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: 'v0.1.1'
+    rev: v0.1.4
     hooks:
       - id: ruff
         args: ["--show-fixes", "--fix"]
+
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.7.0
+    hooks:
+      - id: nbqa-black
+      - id: nbqa-ruff
+        args: ["--fix"]
+      - id: nbqa-pyupgrade
+        args: ['--py38-plus']
+      - id: nbqa-isort
+        args: ['--settings-file=pyproject.toml']
+
+  - repo: https://github.com/keewis/blackdoc
+    rev: v0.3.9
+    hooks:
+      - id: blackdoc
+        additional_dependencies: ['black==23.10.1']
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.10.1
     hooks:
       - id: black
 
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.27.1
+    hooks:
+      - id: check-github-workflows
+      - id: check-readthedocs
+
   - repo: https://github.com/rstcheck/rstcheck
     rev: v6.2.0
     hooks:
-        - id: rstcheck
-          additional_dependencies: [sphinx, tomli]
-          args: ['--config', 'pyproject.toml']
-
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
-    hooks:
-    - id: mdformat
-      additional_dependencies:
-        - mdformat-black
-        - mdformat-myst
-
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.7.0
-    hooks:
-        - id: nbqa-black
-        - id: nbqa-ruff
-          args: ["--fix"]
-        - id: nbqa
-          entry: nbqa mdformat
-          name: nbqa-mdformat
-          alias: nbqa-mdformat
-          additional_dependencies: [mdformat==0.7.17]
-
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-toml
-      - id: check-yaml
-      - id: debug-statements
-
-  - repo: https://github.com/keewis/blackdoc
-    rev: v0.3.8
-    hooks:
-      - id: blackdoc
-        files: .+\.py$
-
-  - repo: https://github.com/citation-file-format/cff-converter-python
-    rev: "44e8fc9"
-    hooks:
-    - id: validate-cff
+      - id: rstcheck
+        additional_dependencies: [sphinx, tomli]
+        args: ['--config', 'pyproject.toml']
 
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.15
@@ -79,3 +103,8 @@ repos:
       - id: rst-backticks
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
+
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes

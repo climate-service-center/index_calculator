@@ -1,50 +1,195 @@
 {
-    "CMIP5": {
-	"components": ["ci_name", "frequency", "model_id", "experiment_id", "parent_experiment_rip", "ci_institute_id", "ci_frequency", "ci_timerange_index"],
-	"format": "{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"icomponents": ["variable_id", "frequency", "model_id", "experiment_id", "parent_experiment_rip", "timerange"],
-	"iformat": "{}_{}_{}_{}_{}_{}.nc",
-	"drs_components": ["ci_institute_id", "institute_id", "model_id", "experiment_id", "frequency", "modeling_realm", "ci_frequency", "parent_experiment_rip", "ci_name", "ci_package_reference"],
-	"drs_format": "cmip5/{}/{}/{}/{}/{}/{}/{}/{}/{}"
-    },
-    "CMIP6": {
-	"components": ["ci_name", "table_id", "source_id", "experiment_id", "variant_label", "grid_label", "ci_institute_id", "ci_frequency", "ci_timerange_index"],
-	"format": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"icomponents":["variable_id", "table_id", "source_id", "experiment_id", "variant_label", "grid_label", "timerange"],
-	"iformat": "{}_{}_{}_{}_{}_{}_{}.nc",
-	"drs_components": ["ci_institute_id", "activity_id", "institution_id", "source_id", "experiment_id", "variant_label", "table_id", "ci_frequency", "ci_name", "grid_label", "ci_package_reference"],
-	"drs_format": "cmip6/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
-    },
-    "CORDEX": {
-	"components": ["ci_name", "CORDEX_domain", "driving_model_id", "driving_experiment_name", "driving_model_ensemble_member", "model_id", "rcm_version_id", "frequency", "ci_institute_id", "ci_frequency", "ci_timerange_index"],
-	"format": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"icomponents": ["variable_id", "CORDEX_domain", "driving_model_id", "driving_experiment_name", "driving_model_ensemble_member", "model_id", "rcm_version_id", "frequency", "timerange"],
-	"iformat": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
-	"drs_components": ["CORDEX_domain", "ci_institute_id", "institute_id", "driving_model_id", "driving_experiment_name", "driving_model_ensemble_member", "model_id", "rcm_version_id", "ci_frequency", "ci_name", "ci_package_reference"],
-	"drs_format": "cordex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
-    },
-    "EOBS": {
-	"components": ["ci_name", "E-OBS_version", "ci_institute_id", "ci_frequency", "ci_timerange_index"],
-	"format": "{}_ens_mean_0-1deg_reg_v{}_{}_{}_{}.nc",
-	"icomponents": ["variable_id", "resolution", "E-OBS_version"],
-	"iformat": "{}_ens_mean_0.1deg_reg_v{}.nc",
-	"drs_components": ["ci_institute_id", "E-OBS_version", "ci_frequency", "ci_name", "ci_package_reference"],
-	"drs_format": "eobs/{}/0-1deg/{}/{}/{}/{}"
-    },
-    "ERA5": {
-	"components": ["ci_name", "frequency", "product_id", "member_id", "ci_institute_id", "ci_frequency", "ci_timerange_index"],
-	"format": "{}_{}_{}_era5_{}_{}_{}_{}.nc",
-	"icomponents": ["variable_id", "frequency", "product_id", "member_id", "timerange"],
-	"iformat": "{}_{}_{}_era5_{}_{}.nc",
-	"drs_components": ["ci_institute_id", "ci_frequency", "ci_name", "member_id", "ci_package_reference"],
-	"drs_format": "era5/{}/ECMWF/IFS/ERA5/{}/atmos/{}/{}/{}"
-    },
-    "HYRAS": {
-	"components": ["ci_name", "horizontal_resolution", "realization", "ci_frequency", "ci_timerange_index"],
-	"format": "{}_hyras_{}_{}_{}_de_{}.nc",
-	"icomponents": ["variable_id", "horizontal_resolution", "year", "realization"],
-	"iformat": "{}_hyras_{}_{}_{}_de.nc",
-	"drs_components": ["ci_institute_id", "realization", "horizontal_resolution", "ci_frequency", "ci_name", "ci_package_reference"],
-	"drs_format": "hyras/{}/{}/{}/{}/{}/{}"
-    }
+  "CMIP5": {
+    "components": [
+      "ci_name",
+      "frequency",
+      "model_id",
+      "experiment_id",
+      "parent_experiment_rip",
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_timerange_index"
+    ],
+    "format": "{}_{}_{}_{}_{}_{}_{}_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "frequency",
+      "model_id",
+      "experiment_id",
+      "parent_experiment_rip",
+      "timerange"
+    ],
+    "iformat": "{}_{}_{}_{}_{}_{}.nc",
+    "drs_components": [
+      "ci_institute_id",
+      "institute_id",
+      "model_id",
+      "experiment_id",
+      "frequency",
+      "modeling_realm",
+      "ci_frequency",
+      "parent_experiment_rip",
+      "ci_name",
+      "ci_package_reference"
+    ],
+    "drs_format": "cmip5/{}/{}/{}/{}/{}/{}/{}/{}/{}"
+  },
+  "CMIP6": {
+    "components": [
+      "ci_name",
+      "table_id",
+      "source_id",
+      "experiment_id",
+      "variant_label",
+      "grid_label",
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_timerange_index"
+    ],
+    "format": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "table_id",
+      "source_id",
+      "experiment_id",
+      "variant_label",
+      "grid_label",
+      "timerange"
+    ],
+    "iformat": "{}_{}_{}_{}_{}_{}_{}.nc",
+    "drs_components": [
+      "ci_institute_id",
+      "activity_id",
+      "institution_id",
+      "source_id",
+      "experiment_id",
+      "variant_label",
+      "table_id",
+      "ci_frequency",
+      "ci_name",
+      "grid_label",
+      "ci_package_reference"
+    ],
+    "drs_format": "cmip6/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
+  },
+  "CORDEX": {
+    "components": [
+      "ci_name",
+      "CORDEX_domain",
+      "driving_model_id",
+      "driving_experiment_name",
+      "driving_model_ensemble_member",
+      "model_id",
+      "rcm_version_id",
+      "frequency",
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_timerange_index"
+    ],
+    "format": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "CORDEX_domain",
+      "driving_model_id",
+      "driving_experiment_name",
+      "driving_model_ensemble_member",
+      "model_id",
+      "rcm_version_id",
+      "frequency",
+      "timerange"
+    ],
+    "iformat": "{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
+    "drs_components": [
+      "CORDEX_domain",
+      "ci_institute_id",
+      "institute_id",
+      "driving_model_id",
+      "driving_experiment_name",
+      "driving_model_ensemble_member",
+      "model_id",
+      "rcm_version_id",
+      "ci_frequency",
+      "ci_name",
+      "ci_package_reference"
+    ],
+    "drs_format": "cordex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
+  },
+  "EOBS": {
+    "components": [
+      "ci_name",
+      "E-OBS_version",
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_timerange_index"
+    ],
+    "format": "{}_ens_mean_0-1deg_reg_v{}_{}_{}_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "resolution",
+      "E-OBS_version"
+    ],
+    "iformat": "{}_ens_mean_0.1deg_reg_v{}.nc",
+    "drs_components": [
+      "ci_institute_id",
+      "E-OBS_version",
+      "ci_frequency",
+      "ci_name",
+      "ci_package_reference"
+    ],
+    "drs_format": "eobs/{}/0-1deg/{}/{}/{}/{}"
+  },
+  "ERA5": {
+    "components": [
+      "ci_name",
+      "frequency",
+      "product_id",
+      "member_id",
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_timerange_index"
+    ],
+    "format": "{}_{}_{}_era5_{}_{}_{}_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "frequency",
+      "product_id",
+      "member_id",
+      "timerange"
+    ],
+    "iformat": "{}_{}_{}_era5_{}_{}.nc",
+    "drs_components": [
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_name",
+      "member_id",
+      "ci_package_reference"
+    ],
+    "drs_format": "era5/{}/ECMWF/IFS/ERA5/{}/atmos/{}/{}/{}"
+  },
+  "HYRAS": {
+    "components": [
+      "ci_name",
+      "horizontal_resolution",
+      "realization",
+      "ci_frequency",
+      "ci_timerange_index"
+    ],
+    "format": "{}_hyras_{}_{}_{}_de_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "horizontal_resolution",
+      "year",
+      "realization"
+    ],
+    "iformat": "{}_hyras_{}_{}_{}_de.nc",
+    "drs_components": [
+      "ci_institute_id",
+      "realization",
+      "horizontal_resolution",
+      "ci_frequency",
+      "ci_name",
+      "ci_package_reference"
+    ],
+    "drs_format": "hyras/{}/{}/{}/{}/{}/{}"
+  }
 }
