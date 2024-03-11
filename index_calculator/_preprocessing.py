@@ -97,8 +97,8 @@ class PreProcessing:
     def _convert_to_frequency(self, ds):
         if self.ifreq not in fjson.keys():
             raise ValueError(
-                "Could not convert to frequency {}".format(self.ifreq),
-                "Try one of {}.".format(fjson.keys()),
+                f"Could not convert to frequency {self.ifreq}",
+                f"Try one of {fjson.keys()}.",
             )
         return ds
         

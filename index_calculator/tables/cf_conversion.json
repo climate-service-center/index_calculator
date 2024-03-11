@@ -1,17 +1,17 @@
 {
-    "EOBS": {
-	"variables": {
-	    "tn": "tasmin",
-	    "hu": "hurs",
-	    "rr": "pr",
-	    "fg": "sfcWind",
-	    "pp": "ps",
-	    "tx": "tasmax",
-	    "tg": "tas",
-	    "qq": "rsds"
-	},
-	"units": {
-	    "pr": "mm day-1"
-	}
+  "EOBS": {
+    "variables": {
+      "tn": "tasmin",
+      "hu": "hurs",
+      "rr": "pr",
+      "fg": "sfcWind",
+      "pp": "ps",
+      "tx": "tasmax",
+      "tg": "tas",
+      "qq": "rsds"
+    },
+    "units": {
+      "pr": "mm day-1"
     }
+  }
 }

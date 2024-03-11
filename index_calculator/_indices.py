@@ -2363,7 +2363,7 @@ class UTCI(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.stat = "average"
+        self.stat = "sunlit"
         self.mask_invalid = True
         self.func = xc.atmos.universal_thermal_climate_index
 

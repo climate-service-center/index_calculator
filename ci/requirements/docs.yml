@@ -6,7 +6,7 @@ channels:
 
 dependencies:
     - python
-    - xclim>=0.34.0
+    - xclim>=0.46.0
     - pint>=0.10
     - cf_xarray
     - xarray

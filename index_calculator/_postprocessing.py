@@ -85,7 +85,7 @@ class PostProcessing:
 
     def _get_time_borders(self, times):
         left, right = get_time_range_as_str(times, self.fmt)
-        return "{}-{}".format(left, right)
+        return f"{left}-{right}"
 
     def _postprocessing(self):
         _mjson = copy.deepcopy(mjson)

@@ -79,7 +79,7 @@ class Processing:
             idx_object = getattr(indices, replace_name)
             self.IDXname = replace_name
         else:
-            raise NameError("{} not defined.".format(self.CIname))
+            raise NameError(f"{self.CIname} not defined.")
         return numb_name, idx_object()
 
     def _get_replacement(self, obj, numb_name):
@@ -96,7 +96,7 @@ class Processing:
                 if isinstance(default_value, (int, str, float)):
                     default_value = float(default_value)
                     if default_value < 0:
-                        numb_name = "-{}".format(numb_name)
+                        numb_name = f"-{numb_name}"
                 else:
                     continue
                 replacement[attr] = float(numb_name)
@@ -109,10 +109,7 @@ class Processing:
                     continue
                 if replacement[attr][0] == "0":
                     replacement[attr] = float(
-                        "{}.{}".format(
-                            replacement[attr][0],
-                            replacement[attr][1:],
-                        )
+                        f"{replacement[attr][0]}.{replacement[attr][1:]}"
                     )
                 else:
                     replacement[attr] = int(replacement[attr])
@@ -143,7 +140,7 @@ class Processing:
                         str(v),
                     )
                 elif str(v) not in self.CIname:
-                    self.CIname = "{}{}".format(self.CIname, str(v))
+                    self.CIname = f"{self.CIname}{str(v)}"
                 break
 
     def _adjust_params_to_ci(self):
@@ -166,11 +163,9 @@ class Processing:
                 continue
             if not hasattr(conv_vars, input_variable):
                 raise ValueError(
-                    """Requested input variable {}
+                    f"""Requested input variable {input_variable}
                     is not provided and can not be calculated
-                    from provided input variables {}""".format(
-                        input_variable, ds.data_vars
-                    )
+                    from provided input variables {ds.data_vars}"""
                 )
             ds[input_variable] = getattr(conv_vars, input_variable)()
 

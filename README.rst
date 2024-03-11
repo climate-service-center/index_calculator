@@ -3,13 +3,13 @@ Calculate climate indicators with standardized project-specific attributes: inde
 ============================================================================================
 
 +----------------------------+-----------------------------------------------------+
-| Versions                   | |pypi|                                              |
+| Versions                   | |pypi| |versions|                                   |
 +----------------------------+-----------------------------------------------------+
-| Documentation and Support  | |docs| |versions|                                   |
+| Documentation and Support  | |docs|                                              |
 +----------------------------+-----------------------------------------------------+
 | Open Source                | |license| |zenodo|                                  |
 +----------------------------+-----------------------------------------------------+
-| Coding Standards           | |black| |pre-commit|                                |
+| Coding Standards           | |black| |ruff| |pre-commit| |security| |fossa|      |
 +----------------------------+-----------------------------------------------------+
 | Development Status         | |status| |build| |coveralls|                        |
 +----------------------------+-----------------------------------------------------+
@@ -18,7 +18,7 @@ Python index_calculator is an xclim wrapper to calculate climate indicators from
 
 Documentation
 -------------
-The official documentation is at https://index_calculator.readthedocs.io/
+The official documentation is at https://index-calculator.readthedocs.io/
 
 Features
 --------
@@ -77,13 +77,6 @@ Requirements
 
 * cftime
 
-
-Contact
--------
-In cases of any problems, needs or wishes do not hesitate to contact:
-
-ludwig.lierhammer@hereon.de
-
 Credits
 -------
 
@@ -114,9 +107,21 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
         :target: https://github.com/psf/black
         :alt: Python Black
 
+.. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+        :target: https://github.com/astral-sh/ruff
+        :alt: Ruff
+
 .. |pre-commit| image:: https://results.pre-commit.ci/badge/github/ludwiglierhammer/index_calculator/master.svg
-   :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/master
-   :alt: pre-commit.ci status
+        :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/master
+        :alt: pre-commit.ci status
+
+.. |fossa| image:: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fludwiglierhammer%2Findex_calculator.svg?type=shield
+        :target: https://app.fossa.com/projects/git%2Bgithub.com%2Fludwiglierhammer%2Findex_calculator?ref=badge_shield
+        :alt: FOSSA
+
+.. |security| image:: https://www.bestpractices.dev/projects/8143/badge
+        :target: https://www.bestpractices.dev/projects/8143
+        :alt: Open Source Security Foundation
 
 .. |status| image:: https://www.repostatus.org/badges/latest/active.svg
         :target: https://www.repostatus.org/#active
@@ -127,9 +132,9 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
         :alt: Build Status
 
 .. |coveralls| image:: https://codecov.io/gh/ludwiglierhammer/index_calculator/branch/master/graph/badge.svg
-	:target: https://codecov.io/gh/ludwiglierhammer/index_calculator
-	:alt: Coveralls
+	      :target: https://codecov.io/gh/ludwiglierhammer/index_calculator
+	      :alt: Coveralls
 
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7762679.svg
         :target: https://doi.org/10.5281/zenodo.7762679
- 	:alt:   DOI
+        :alt:   DOI
