@@ -19,7 +19,7 @@
     },
     "freq": "D"
   }
-"3h": {
+"3hr": {
     "var": {
       "hurs": "mean",
       "pr": "mean",
