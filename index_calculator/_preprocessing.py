@@ -62,6 +62,7 @@ class PreProcessing:
         time_range=None,
         crop_time_axis=True,
         check_time_axis=True,
+        convert_time_axis=True
         **kwargs,
     ):
         if ds is None:
@@ -99,43 +100,9 @@ class PreProcessing:
                 "Could not convert to frequency {}".format(self.ifreq),
                 "Try one of {}.".format(fjson.keys()),
             )
-        conv = fjson[self.ifreq]
-        if conv["freq"] == xr.infer_freq(ds.time):
-            return ds
-        data_vars = {}
-        for dvar in ds.data_vars:
-            if dvar in conv["var"].keys():
-                data_vars[dvar] = getattr(
-                    ds[dvar].resample(time=conv["freq"]),
-                    conv["var"][dvar],
-                )(dim="time")
-                data_vars[dvar].attrs["cell_methods"] = "time: {}".format(
-                    conv["var"][dvar]
-                )
-                coords = data_vars[dvar].coords
-        return xr.Dataset(
-            data_vars=data_vars,
-            coords=coords,
-            attrs=ds.attrs,
-        )
-
+        return ds
+        
     def _preprocessing(self):
-        ds_ = self._convert_to_frequency(self.ds)
-        time_control = pyh.time_control(ds_)
-        if not self.var_name:
-            self.var_name = time_control.name
-
-        avail_time = get_time_range_as_str(time_control.time, self.afmt)
-
-        if self.time_range:
-            time_control.select_time_range(self.time_range)
-        if self.crop_time_axis:
-            time_control.select_limited_time_range(
-                smonth=_bounds[self.freq]["start"],
-                emonth=_bounds[self.freq]["end"],
-            )
-        if self.check_time_axis:
-            time_control.check_timestamps(correct=True)
-        self.ATimeRange = avail_time
-        ds = time_control.ds
+        if convert_time_axis is True:
+            ds_ = self._convert_to_frequency(self.ds)
         return self._rename_variable_names(ds)
