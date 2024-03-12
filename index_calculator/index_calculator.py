@@ -61,11 +61,15 @@ class IndexCalculator:
     def _compute(self, write=False, **kwargs):
         """Compute climate index."""
         preproc_obj = preprocessing(**kwargs)
+        print('preprocessing done.')
         proc_obj = processing(preproc_obj=preproc_obj)
+        print('processing done.')
         postproc_obj = postprocessing(proc_obj=proc_obj)
+        print('postprocessing done.')
         if write is True:
             outputwriter(
                 postproc_obj=postproc_obj,
                 **kwargs,
             )
+            print('writing done.')
         return postproc_obj
