@@ -213,12 +213,12 @@ class Processing:
             time_encoding = ds.time.encoding
             time_encoding["dtype"] = np.float64
             idx_ds.time.encoding = time_encoding
-            idx_ds = (
-                pyh.time_control(idx_ds)
-                .add_time_bounds(
-                    frequency="day",
-                ).ds
-             )
+            #idx_ds = (
+            #    pyh.time_control(idx_ds)
+            #    .add_time_bounds(
+            #        frequency=self.freq,
+            #    ).ds
+            # )
             self.unlimited_dims = "time"
         else:
             for dim in idx_ds[self.CIname].dims:
