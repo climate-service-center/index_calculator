@@ -108,4 +108,4 @@ class PreProcessing:
     def _preprocessing(self):
         #if check_time_axis is True:
         #    ds_ = self._convert_to_frequency(self.ds)
-        return self._rename_variable_names(ds)
+        return self._rename_variable_names(self.ds)
