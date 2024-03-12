@@ -210,16 +210,16 @@ class Processing:
                 if len(idx_ds[dim]) == 1 and dim != "time":
                     dim_squeeze += [dim]
             idx_ds = idx_ds.squeeze(dim=dim_squeeze)
-            #time_encoding = ds.time.encoding
-            #time_encoding["dtype"] = np.float64
-            #idx_ds.time.encoding = time_encoding
-            # idx_ds = (
-            #     pyh.time_control(idx_ds)
-            #     .add_time_bounds(
-            #         frequency=self.freq,
-            #     )
-            #     .ds
-            # )
+            time_encoding = ds.time.encoding
+            time_encoding["dtype"] = np.float64
+            idx_ds.time.encoding = time_encoding
+            idx_ds = (
+                pyh.time_control(idx_ds)
+                .add_time_bounds(
+                    frequency=self.freq,
+                )
+                .ds
+            )
             self.unlimited_dims = "time"
         else:
             for dim in idx_ds[self.CIname].dims:
