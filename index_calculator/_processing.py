@@ -216,7 +216,7 @@ class Processing:
             idx_ds = (
                 pyh.time_control(idx_ds)
                 .add_time_bounds(
-                    frequency=self.freq,
+                    frequency="day",
                 ).ds
              )
             self.unlimited_dims = "time"
