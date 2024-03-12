@@ -102,7 +102,6 @@ class PreProcessing:
             )
         if conv["freq"] == '3hr':
             return ds
-        return ds
         
     def _preprocessing(self):
         if convert_time_axis is True:
