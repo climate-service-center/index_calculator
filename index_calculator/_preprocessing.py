@@ -117,4 +117,4 @@ class PreProcessing:
             time_control.select_time_range(self.time_range)
         self.ATimeRange = avail_time
         ds = time_control.ds
-        return self._rename_variable_names(self.ds)
+        return self._rename_variable_names(ds)
