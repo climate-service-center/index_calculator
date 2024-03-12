@@ -18,7 +18,7 @@
       "vas": "mean"
     },
     "freq": "D"
-  }
+  },
 "3hr": {
     "var": {
       "hurs": "mean",
@@ -38,4 +38,5 @@
       "vas": "mean"
     },
     "freq": "T"
+}
 }
