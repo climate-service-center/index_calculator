@@ -37,6 +37,6 @@
       "uas": "mean",
       "vas": "mean"
     },
-    "freq": "T"
+    "freq": "3hr"
 }
 }

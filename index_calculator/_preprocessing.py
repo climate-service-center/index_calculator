@@ -100,6 +100,7 @@ class PreProcessing:
                 f"Could not convert to frequency {self.ifreq}",
                 f"Try one of {fjson.keys()}.",
             )
+        conv = fjson[self.ifreq]
         if conv["freq"] == '3hr':
             return ds
         
