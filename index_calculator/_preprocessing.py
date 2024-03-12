@@ -101,7 +101,7 @@ class PreProcessing:
                 f"Try one of {fjson.keys()}.",
             )
         conv = fjson[self.ifreq]
-        if conv["freq"] == '3hr':
+        if conv["freq"] == '3H':
             print('inside 3h') 
             return ds
         
