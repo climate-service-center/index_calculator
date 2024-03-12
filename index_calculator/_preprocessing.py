@@ -106,6 +106,15 @@ class PreProcessing:
             return ds
         
     def _preprocessing(self):
-        #if check_time_axis is True:
-        #    ds_ = self._convert_to_frequency(self.ds)
+        ds_ = self._convert_to_frequency(self.ds)
+        time_control = pyh.time_control(ds_)
+        if not self.var_name:
+            self.var_name = time_control.name
+
+        avail_time = get_time_range_as_str(time_control.time, self.afmt)
+
+        if self.time_range:
+            time_control.select_time_range(self.time_range)
+        self.ATimeRange = avail_time
+        ds = time_control.ds
         return self._rename_variable_names(self.ds)
