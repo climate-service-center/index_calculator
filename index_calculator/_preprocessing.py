@@ -102,6 +102,7 @@ class PreProcessing:
             )
         conv = fjson[self.ifreq]
         if conv["freq"] == '3hr':
+            print('inside 3h') 
             return ds
         
     def _preprocessing(self):
