@@ -2,6 +2,14 @@
 History
 =======
 
+UNRELEASED
+----------
+
+Internal Changes
+~~~~~~~~~~~~~~~~
+
+* add ``dependabot.yml`` (:pull:`51`)
+
 0.11.0 (2023-11-20)
 -------------------
 
