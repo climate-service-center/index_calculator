@@ -47,7 +47,7 @@ jobs:
             echo "Looks good"
           fi
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: releases
           path: dist
