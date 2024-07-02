@@ -5,14 +5,14 @@ channels:
 dependencies:
     - dask
     - xarray
-    - numpy
+    - numpy<2
     - xclim
     - netCDF4
     - pytest
     - pytest-cov
     - pytest-env
     - pooch
-    - pint
+    - pint<0.24
 
     - pip:
       - pyhomogenize>=0.5.1
