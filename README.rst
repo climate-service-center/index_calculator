@@ -49,13 +49,15 @@ You can install the package directly with pip:
 
      pip install index_calculator
 
-If you want to contribute, I recommend cloning the repository and installing the package in development mode, e.g.
+If you want to contribute, we recommend cloning the repository, setup a conda environmant and installing the package in development mode, e.g.
 
 .. code-block:: console
 
     git clone https://github.com/ludwiglierhammer/index_calculator
     cd index_calculator
-    pip install -e .
+    conda env create -f ci/requirements/environment.yml
+    conda activate xcalc-tests
+    pip install -e . --no-deps
 
 This will install the package but you can still edit it and you don't need the package in your :code:`PYTHONPATH`
 
