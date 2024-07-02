@@ -39,7 +39,7 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    "sphinxcontrib.mockautodoc",
+    #    "sphinxcontrib.mockautodoc",
     "numpydoc",
     "nbsphinx",
     "nbsphinx_link",
