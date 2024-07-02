@@ -113,8 +113,8 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
         :target: https://github.com/astral-sh/ruff
         :alt: Ruff
 
-.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/ludwiglierhammer/index_calculator/master.svg
-        :target: https://results.pre-commit.ci/latest/github/ludwiglierhammer/index_calculator/master
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/climate-service-center/index_calculator/main.svg
+        :target: https://results.pre-commit.ci/latest/github/climate-service-center/index_calculator/main
         :alt: pre-commit.ci status
 
 .. |fossa| image:: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fludwiglierhammer%2Findex_calculator.svg?type=shield

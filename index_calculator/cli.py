@@ -1,4 +1,5 @@
 """Console script for index_calculator."""
+
 import argparse
 import sys
 
