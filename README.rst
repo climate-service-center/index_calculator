@@ -113,7 +113,7 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
         :target: https://github.com/astral-sh/ruff
         :alt: Ruff
 
-.. |pre-commit |image:: https://results.pre-commit.ci/badge/github/climate-service-center/index_calculator/main.svg
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/climate-service-center/index_calculator/main.svg
         :target: https://results.pre-commit.ci/latest/github/climate-service-center/index_calculator/main
         :alt: pre-commit.ci status
 
