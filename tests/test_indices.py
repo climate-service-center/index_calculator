@@ -671,6 +671,7 @@ def test_SCD():
         snd=snd_xarray(),
         thresh=2,
         freq="7D",
+        window=1,
     )
     np.testing.assert_allclose(result, 5, rtol=1e-03)
 
