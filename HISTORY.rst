@@ -8,6 +8,7 @@ UNRELEASED
 Internal Changes
 ~~~~~~~~~~~~~~~~
 
+* pin ``xclim`` and ``pint`` (:pull:`57`)
 * add ``dependabot.yml`` (:pull:`51`)
 
 0.11.0 (2023-11-20)
