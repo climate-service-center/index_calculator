@@ -1,4 +1,20 @@
 {
+  "contributors": [
+    {
+      "affiliation": "Helmholtz-Zentrum Hereon",
+      "name": "Katharina Buelow",
+      "orcid": "0000-0002-3489-0529"
+    },
+    {
+      "affiliation": "Helmholtz-Zentrum Hereon",
+      "name": "Lars Buntemeyer",
+      "orcid": "0000-0002-0849-2404"
+    },
+    {
+      "affiliation": "Earth Observatory of Singapore",
+      "name": "Sonali Manimaran ",
+    }
+  ]
   "creators": [
     {
       "affiliation": "Helmholtz-Zentrum Hereon",
