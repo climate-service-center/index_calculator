@@ -740,6 +740,7 @@ def test_GSL():
     )
     np.testing.assert_allclose(result, [np.nan], rtol=1e-03)
 
+
 def test_FFS():
     idx_class = indices.FFS()
     result = idx_class.compute(

@@ -9,7 +9,7 @@ You need to fork index_calculator to you own github or do *sync fork* in your re
 Always start with a fresh new environemt and update xclim.
 
 .. code-block:: console
-		
+
     $ pip install --upgrade xclim
 
 
@@ -61,10 +61,10 @@ Please edit test_indices.py and execute
     $ pytest -k GSL (if you only like to test it for GSL)
 
 
-After you performed your test successfully, you install 
+After you performed your test successfully, you install
 
 .. code-block:: console
-		
+
     $pip install -e .
 
 the changed index_calculator in your environment. And make a calculation with index_calculation (gitlab) using this environment.
