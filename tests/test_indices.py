@@ -731,6 +731,15 @@ def test_GSE():
     np.testing.assert_allclose(result, [np.nan], rtol=1e-03)
 
 
+def test_GSL():
+    idx_class = indices.GSL()
+    result = idx_class.compute(
+        tas=tas_xarray(),
+        window=1,
+        freq="7D",
+    )
+    np.testing.assert_allclose(result, [np.nan], rtol=1e-03)
+
 def test_FFS():
     idx_class = indices.FFS()
     result = idx_class.compute(
