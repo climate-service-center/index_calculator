@@ -1,0 +1,37 @@
+{
+  "contributors": [
+    {
+      "affiliation": "Helmholtz-Zentrum Hereon",
+      "name": "Katharina Buelow",
+      "orcid": "0000-0002-3489-0529"
+    },
+    {
+      "affiliation": "Helmholtz-Zentrum Hereon",
+      "name": "Lars Buntemeyer",
+      "orcid": "0000-0002-0849-2404"
+    },
+    {
+      "affiliation": "Helmholtz-Zentrum Hereon",
+      "name": "Susanne Pfeifer"
+    },
+    {
+      "affiliation": "Nanyang Technological University",
+      "name": "Sonali Manimaran "
+    }
+  ],
+  "creators": [
+    {
+      "affiliation": "Helmholtz-Zentrum Hereon",
+      "name": "Ludwig Lierhammer",
+      "orcid": "0000-0002-7207-0003"
+    }
+  ],
+  "keywords": [
+    "xclim",
+    "xarray",
+    "climate indicator"
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open"
+}
