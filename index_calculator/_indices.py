@@ -2675,6 +2675,48 @@ class GSE(ClimateIndicator):
         )
 
 
+class GSL(ClimateIndicator):
+    """Growing season length (tas)."""
+
+    def __init__(self):
+        super().__init__()
+        self.thresh = 5
+        self.window = 5
+        self.mid_date = "07-01"
+        self.freq = "YS"
+        self.units = {"thresh": "degC"}
+        self.func = xc.atmos.growing_season_length
+
+    def compute(self, thresh=None, window=None, mid_date=None, **params):
+        """Calculate growing season length.
+
+        Parameters
+         ----------
+         thresh: Threshold temperature on which to base evaluation.
+             (default: 5 degC). If type of threshold is an integer
+             the unit is set to degC.
+         window: int, optional
+             Minimum number of days with temperature above threshold
+             to mark the beginning and end of growing season (default: 5).
+         mid_date: (date (string, MM-DD)) – Date of the year
+             after which to look for the end of the season.
+             Should have the format ‘%m-%d’. Default : 07-01
+
+         Returns
+         -------
+         xarray.DataArray
+             Growing season length.
+
+         Notes
+         -----
+         For more information on the input parameters see:
+             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.growing_season_length
+        """
+        return self.compute_climate_indicator(
+            params=params, thresh=thresh, window=window
+        )
+
+
 class FFS(ClimateIndicator):
     """Frost free season start (tasmin)."""
 

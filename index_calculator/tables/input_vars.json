@@ -104,6 +104,7 @@
   ],
   "GSS": "tas",
   "GSE": "tas",
+  "GSL": "tas",
   "FFS": "tasmin",
   "FFE": "tasmin",
   "FG": "sfcWind",
