@@ -13,6 +13,11 @@ Internal Changes
 * update tests for ``xclim>=0.49`` (:pull:`57`, pull:`61`)
 * add ``dependabot.yml`` (:pull:`51`)
 
+New Indicators
+~~~~~~~~~~~~~~
+
+* GSL: growing season length (:pull:'67')
+
 0.11.0 (2023-11-20)
 -------------------
 
