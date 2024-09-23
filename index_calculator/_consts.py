@@ -23,6 +23,7 @@ _bounds = {
 
 _split = {
     "fx": False,
+    "3hr": "5A",
     "day": "5A",
     "week": "10A",
     "mon": "10A",
