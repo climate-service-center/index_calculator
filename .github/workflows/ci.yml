@@ -42,7 +42,7 @@ jobs:
           environment-file: ci/requirements/environment.yml
           create-args: >-
             python=${{ matrix.python-version }}
-            
+
       - name: Install index_calculator
         run: |
           python -m pip install --no-deps -e .
