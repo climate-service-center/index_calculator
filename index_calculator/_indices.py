@@ -492,7 +492,7 @@ class WSf(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_frequency
 
@@ -569,7 +569,7 @@ class WSn(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_total_length
 
