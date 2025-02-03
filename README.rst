@@ -53,7 +53,7 @@ If you want to contribute, we recommend cloning the repository, setup a conda en
 
 .. code-block:: console
 
-    git clone https://github.com/ludwiglierhammer/index_calculator
+    git clone https://github.com/climate-service-center/index_calculator
     cd index_calculator
     conda env create -f ci/requirements/environment.yml
     conda activate xcalc-tests
