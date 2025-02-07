@@ -85,7 +85,11 @@ class ClimateIndicator:
             return per["per"]
         elif isinstance(per, xr.DataArray):
             return per
-        tslice = slice(base_period_time_range[0], base_period_time_range[1])
+        #tslice = slice(base_period_time_range[0], base_period_time_range[1])
+        y_s = str(base_period_time_range[0]) 
+        y_e = str(base_period_time_range[1])
+        tslice = slice(y_s, y_e)
+        
         base_period = da.sel(time=tslice)
         with dask.config.set(**{"array.slicing.split_large_chunks": False}):
             per_doy = percentile_doy(base_period, per=per)
@@ -113,6 +117,7 @@ class ClimateIndicator:
                 method=kwargs_dict["method"],
                 **kwargs,
             )
+            print("in es, base_period_time_range: ",kwargs["base_period_time_range"])
             kwargs[name_per] = self._get_percentile(
                 da, kwargs_dict["per"], kwargs["base_period_time_range"]
             )

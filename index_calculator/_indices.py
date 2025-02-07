@@ -376,7 +376,7 @@ class DSf(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_frequency
 
@@ -453,7 +453,7 @@ class DSn(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_total_length
 
