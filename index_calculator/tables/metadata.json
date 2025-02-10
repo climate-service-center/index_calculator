@@ -491,6 +491,12 @@
     "units": "",
     "description": "Calendar day of year, when the temperature is below {thresh} degC for at least {window} consecutive days."
   },
+"HI": {
+    "standard_name": "Heat index",
+    "long_name": "Perceived temperature after relative humidity is taken into account.",
+    "units": "degC",
+    "description": "The heat index is an estimate of the temperature felt by a person in the shade, when relative humidity is taken into account."
+},    
   "HIX": {
     "standard_name": "humidex",
     "long_name": "Temperature felt by a person when relative humidity is taken into account",

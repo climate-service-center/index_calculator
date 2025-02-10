@@ -2939,7 +2939,36 @@ class FXx(ClimateIndicator):
         """
         return self.compute_climate_indicator(params=params)
 
+    
+class HI(ClimateIndicator):
+    """
+    Perceived temperature after relative humidity is taken into account (tas, hurs).
 
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.func = xc.atmos.heat_index
+
+    def compute(self, **params):
+        """
+
+        Returns
+        -------
+        xarray.DataArray
+            temperature felt by a person when relative humidity
+            is taken into account.
+
+        Notes
+        -----
+        For information on the input parameters see:
+            https://xclim.readthedocs.io/en/latest/api_indicators.html#xclim.indicators.atmos.heat_index
+            xclim.indicators.atmos.heat_index(tas='tas', hurs='hurs', *, ds=None)
+
+        """
+        return self.compute_climate_indicator(params=params)
+
+    
 class HIX(ClimateIndicator):
     """temperature felt by a person.
 
@@ -2952,7 +2981,7 @@ class HIX(ClimateIndicator):
         self.func = xc.atmos.humidex
 
     def compute(self, **params):
-        """Calculate maximum number of consecutive heat days.
+        """
 
         Returns
         -------
