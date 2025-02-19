@@ -824,6 +824,19 @@ def test_FXx():
     np.testing.assert_allclose(result, [23], rtol=1e-03)
 
 
+def test_HI():
+    idx_class = indices.HI()
+    result = idx_class.compute(
+        tas=tas_c_xarray(),
+        hurs=hurs_xarray(),
+    )
+    np.testing.assert_allclose(
+        result,
+        [np.nan, np.nan, np.nan, 28.038065740359976, np.nan, np.nan, np.nan],
+        rtol=1e-03,
+    )
+
+
 def test_HIX():
     idx_class = indices.HIX()
     result = idx_class.compute(

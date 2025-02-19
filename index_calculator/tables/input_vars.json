@@ -114,6 +114,10 @@
   "FXx": "sfcWindmax",
   "FXn": "sfcWindmax",
   "CMD": "sfcWind",
+  "HI": [
+    "tas",
+    "hurs"
+  ],
   "HIX": [
     "tas",
     "hurs"
