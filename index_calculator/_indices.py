@@ -1898,7 +1898,7 @@ class WSDI(ClimateIndicator):
         window: int, optional
             Minimum number of days with temperature above `tasmax_per`
             to qualify as a warm spell (default: 6).
-        tasmin_per: xr.DataArray, optional
+        tasmax_per: xr.DataArray, optional
             Maximum temperature 90th percentile reference value.
         base_period_time_range: list, optional
             List with left bound is start year string and right bound

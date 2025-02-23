@@ -253,7 +253,7 @@
   },
   "WSDI": {
     "standard_name": "consecutive_days_with_air_temperature_above_threshold",
-    "long_name": "Warm spell duration index (days within periods >= {window} consecutive days with minimum temperature > 90th percentile)",
+    "long_name": "Warm spell duration index (days within periods >= {window} consecutive days with maximum temperature > 90th percentile)",
     "units": "days",
     "description": "Number of days within periods of at least {window} consecutive days with maximum temperature above the 90th percentile."
   },
