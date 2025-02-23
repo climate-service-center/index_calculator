@@ -2939,7 +2939,7 @@ class FXx(ClimateIndicator):
         """
         return self.compute_climate_indicator(params=params)
 
-    
+
 class HI(ClimateIndicator):
     """
     Perceived temperature after relative humidity is taken into account (tas, hurs).
@@ -2968,7 +2968,7 @@ class HI(ClimateIndicator):
         """
         return self.compute_climate_indicator(params=params)
 
-    
+
 class HIX(ClimateIndicator):
     """temperature felt by a person.
 
