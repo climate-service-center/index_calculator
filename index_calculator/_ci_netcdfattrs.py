@@ -146,8 +146,8 @@ class NetCDFglobalattrs(NetCDFattrs):
 
     def _ci_reference_period(self, obj):
         """Add reference period to dictionary."""
-        start = obj.base_period_time_range[0].replace("-", "")
-        end = obj.base_period_time_range[1].replace("-", "")
+        start = str(obj.base_period_time_range[0]).replace("-", "")
+        end = str(obj.base_period_time_range[1]).replace("-", "")
         return f"{start}-{end}"
 
     def _ci_frequency(self, obj):
