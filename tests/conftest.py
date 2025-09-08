@@ -2,7 +2,7 @@ import pandas as pd
 import pooch
 import xarray as xr
 
-url_base = "https://github.com/ludwiglierhammer/test_data/raw/main/"
+url_base = "https://github.com/climate-service-center/index_calculator_test_data/raw/main/"
 
 
 def _pooch_retrieve(url, known_hash=None):

@@ -5,7 +5,7 @@ channels:
 dependencies:
     - dask
     - xarray
-    - numpy<2
+    - numpy
     - xclim
     - netCDF4
     - pytest
