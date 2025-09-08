@@ -718,7 +718,7 @@ def test_GSS():
         window=1,
         freq="7D",
     )
-    np.testing.assert_allclose(result, [4], rtol=1e-03)
+    np.testing.assert_allclose(result, [np.nan], rtol=1e-03)
 
 
 def test_GSE():

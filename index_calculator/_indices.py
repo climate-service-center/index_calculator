@@ -2365,7 +2365,7 @@ class UTCI(ClimateIndicator):
         super().__init__()
         self.stat = "sunlit"
         self.mask_invalid = True
-        self.func = xc.atmos.universal_thermal_climate_index
+        self.func = xc.indicators.convert.universal_thermal_climate_index
 
     def compute(self, stat=None, mask_invalid=None, **params):
         """Calculate universal thermal climate index.
@@ -2955,7 +2955,7 @@ class HIX(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.func = xc.atmos.humidex
+        self.func = xc.indicators.convert.humidex
 
     def compute(self, **params):
         """Calculate maximum number of consecutive heat days.
