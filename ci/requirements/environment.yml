@@ -6,7 +6,7 @@ dependencies:
     - dask
     - xarray
     - numpy
-    - xclim
+    - xclim>=0.56
     - netCDF4
     - pytest
     - pytest-cov

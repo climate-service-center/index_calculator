@@ -11,7 +11,7 @@ build-backend = "setuptools.build_meta"
 name = "index_calculator"
 description = "Python index-calculator is an xclim wrapper"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = {file = "LICENSE"}
 keywords = ["index_calculator"]
 classifiers = [
@@ -20,14 +20,14 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Natural Language :: English",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11"
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
   "xarray",
   "dask",
-  "xclim",
+  "xclim>=0.56.0",
   "pyhomogenize>=0.5.1",
   "pint>=0.1",
   "pooch"
@@ -44,7 +44,7 @@ repository = "https://github.com/ludwiglierhammer/index_calculator.git"
 changelog = "https://index-calculator.readthedocs.io/en/latest/history.html"
 
 [tool.black]
-target-version = ["py38"]
+target-version = ["py311"]
 
 [tool.coverage.run]
 relative_files = true
@@ -52,7 +52,7 @@ omit = ["tests/*.py"]
 
 [tool.isort]
 profile = "black"
-py_version = 38
+py_version = 311
 append_only = true
 
 [tool.mypy]
@@ -94,7 +94,7 @@ ignore_directives = [
 ]
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py311"
 builtins = ["ellipsis"]
 exclude = [
   ".eggs",
