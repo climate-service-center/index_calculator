@@ -19,7 +19,6 @@ dependencies:
     - sphinx
     - pandoc
     - nbsphinx
-    - nbsphinx-link
     - ipython
     - dask
     - cftime
