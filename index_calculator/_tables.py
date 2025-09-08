@@ -1,22 +1,25 @@
+import importlib.resources as resources
 import json
-
-import pkg_resources
 
 
 def read_from_json(jsfile):
-    """Read json file from disk.
+    """Read json file from package resources.
 
     Parameters
     ----------
     jsfile: str
-        Json file on disk.
+        Json file path relative to the package.
 
     Returns
     -------
     dict
        Python dictionary.
     """
-    with pkg_resources.resource_stream("index_calculator", jsfile) as f:
+    with (
+        resources.files("index_calculator")
+        .joinpath(jsfile)
+        .open("r", encoding="utf-8") as f
+    ):
         return json.load(f)
 
 
