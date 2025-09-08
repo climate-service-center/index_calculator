@@ -15,9 +15,11 @@ def read_from_json(jsfile):
     dict
        Python dictionary.
     """
-    with resources.files("index_calculator").joinpath(jsfile).open(
-        "r", encoding="utf-8"
-    ) as f:
+    with (
+        resources.files("index_calculator")
+        .joinpath(jsfile)
+        .open("r", encoding="utf-8") as f
+    ):
         return json.load(f)
 
 
