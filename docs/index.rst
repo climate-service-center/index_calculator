@@ -9,7 +9,8 @@ Welcome to index_calculator's documentation!
    readme
    installation
    usage
-   notebooks
+   notebooks/introduction
+   notebooks/prudence
    indices
    newproject
    newindex
