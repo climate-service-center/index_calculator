@@ -2954,7 +2954,7 @@ class HI(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.func = xc.atmos.heat_index
+        self.func = xc.convert.heat_index
 
     def compute(self, **params):
         """
