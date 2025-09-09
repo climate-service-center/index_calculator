@@ -2365,7 +2365,7 @@ class UTCI(ClimateIndicator):
         super().__init__()
         self.stat = "sunlit"
         self.mask_invalid = True
-        self.func = xc.atmos.universal_thermal_climate_index
+        self.func = xc.indicators.convert.universal_thermal_climate_index
 
     def compute(self, stat=None, mask_invalid=None, **params):
         """Calculate universal thermal climate index.
@@ -2609,7 +2609,7 @@ class GSS(ClimateIndicator):
         self.units = {"thresh": "degC"}
         self.func = xc.atmos.growing_season_start
 
-    def compute(self, thresh=None, window=None, **params):
+    def compute(self, thresh=None, window=None, mid_date=None, **params):
         """Calculate growing season start.
 
         Parameters
@@ -2633,7 +2633,10 @@ class GSS(ClimateIndicator):
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.growing_season_start
         """
         return self.compute_climate_indicator(
-            params=params, thresh=thresh, window=window
+            params=params,
+            thresh=thresh,
+            window=window,
+            mid_date=mid_date,
         )
 
 
@@ -2647,7 +2650,7 @@ class GSE(ClimateIndicator):
         self.units = {"thresh": "degC"}
         self.func = xc.atmos.growing_season_end
 
-    def compute(self, thresh=None, window=None, **params):
+    def compute(self, thresh=None, window=None, mid_date=None, **params):
         """Calculate growing season end.
 
         Parameters
@@ -2671,7 +2674,10 @@ class GSE(ClimateIndicator):
             https://xclim.readthedocs.io/en/stable/api.html#xclim.indicators.atmos.growing_season_end
         """
         return self.compute_climate_indicator(
-            params=params, thresh=thresh, window=window
+            params=params,
+            thresh=thresh,
+            window=window,
+            mid_date=mid_date,
         )
 
 
@@ -2978,7 +2984,7 @@ class HIX(ClimateIndicator):
 
     def __init__(self):
         super().__init__()
-        self.func = xc.atmos.humidex
+        self.func = xc.indicators.convert.humidex
 
     def compute(self, **params):
         """

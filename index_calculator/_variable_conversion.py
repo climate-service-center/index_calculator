@@ -13,7 +13,7 @@ class ConvertVariables:
         return {k: v for k, v in params.items() if k in fparams.keys()}
 
     def sfcWind(self):
-        return xc.atmos.wind_speed_from_vector(
+        return xc.indicators.convert.wind_speed_from_vector(
             ds=self.ds,
         )[0]
 
