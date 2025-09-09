@@ -376,7 +376,7 @@ class DSf(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_frequency
 
@@ -453,7 +453,7 @@ class DSn(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.dry_spell_total_length
 
@@ -492,7 +492,7 @@ class WSf(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_frequency
 
@@ -569,7 +569,7 @@ class WSn(ClimateIndicator):
     def __init__(self):
         super().__init__()
         self.thresh = 1
-        self.window = 5
+        self.window = 3
         self.units = {"thresh": "mm"}
         self.func = xc.atmos.wet_spell_total_length
 
@@ -1898,7 +1898,7 @@ class WSDI(ClimateIndicator):
         window: int, optional
             Minimum number of days with temperature above `tasmax_per`
             to qualify as a warm spell (default: 6).
-        tasmin_per: xr.DataArray, optional
+        tasmax_per: xr.DataArray, optional
             Maximum temperature 90th percentile reference value.
         base_period_time_range: list, optional
             List with left bound is start year string and right bound
@@ -2946,6 +2946,35 @@ class FXx(ClimateIndicator):
         return self.compute_climate_indicator(params=params)
 
 
+class HI(ClimateIndicator):
+    """
+    Perceived temperature after relative humidity is taken into account (tas, hurs).
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.func = xc.convert.heat_index
+
+    def compute(self, **params):
+        """
+
+        Returns
+        -------
+        xarray.DataArray
+            temperature felt by a person when relative humidity
+            is taken into account.
+
+        Notes
+        -----
+        For information on the input parameters see:
+            https://xclim.readthedocs.io/en/latest/api_indicators.html#xclim.indicators.atmos.heat_index
+            xclim.indicators.atmos.heat_index(tas='tas', hurs='hurs', *, ds=None)
+
+        """
+        return self.compute_climate_indicator(params=params)
+
+
 class HIX(ClimateIndicator):
     """temperature felt by a person.
 
@@ -2958,7 +2987,7 @@ class HIX(ClimateIndicator):
         self.func = xc.indicators.convert.humidex
 
     def compute(self, **params):
-        """Calculate maximum number of consecutive heat days.
+        """
 
         Returns
         -------
