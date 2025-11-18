@@ -114,6 +114,50 @@
     ],
     "drs_format": "cordex/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
   },
+    "CORDEX-CMIP6": {
+    "components": [
+      "ci_name",
+      "CORDEX_domain",
+      "driving_model_id",
+      "driving_experiment_name",
+      "driving_model_ensemble_member",
+      "ci_institute_id",
+      "model_id",
+      "rcm_version_id",
+      "frequency",
+      "ci_institute_id",
+      "ci_frequency",
+      "ci_timerange_index",
+    ],
+    "format": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
+    "icomponents": [
+      "variable_id",
+      "CORDEX_domain",
+      "driving_model_id",
+      "driving_experiment_name",
+      "driving_model_ensemble_member",
+      "institute_id",
+      "model_id",
+      "rcm_version_id",
+      "frequency",
+      "timerange"
+    ],
+    "iformat": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
+    "drs_components": [
+      "CORDEX_domain",
+      "ci_institute_id",
+      "institute_id",
+      "driving_model_id",
+      "driving_experiment_name",
+      "driving_model_ensemble_member",
+      "model_id",
+      "rcm_version_id",	
+      "ci_frequency",
+      "ci_name",
+      "ci_package_reference"
+    ],
+    "drs_format": "CORDEX-CMIP6/DD/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}"
+  },
   "EOBS": {
     "components": [
       "ci_name",
