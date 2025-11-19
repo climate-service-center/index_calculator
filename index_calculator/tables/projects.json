@@ -127,7 +127,7 @@
       "frequency",
       "ci_institute_id",
       "ci_frequency",
-      "ci_timerange_index",
+      "ci_timerange_index"
     ],
     "format": "{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}.nc",
     "icomponents": [
