@@ -151,7 +151,7 @@
       "driving_experiment_name",
       "driving_model_ensemble_member",
       "model_id",
-      "rcm_version_id",	
+      "rcm_version_id",
       "ci_frequency",
       "ci_name",
       "ci_package_reference"
