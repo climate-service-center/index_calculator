@@ -29,6 +29,11 @@
       "ci_product": "rcm_derived"
     }
   },
+  "CORDEX-CMIP6": {
+    "global_att": {
+      "ci_product": "rcm_derived"
+    }
+  },
   "EOBS": {
     "global_att": {
       "ci_product": "observational_derived"
