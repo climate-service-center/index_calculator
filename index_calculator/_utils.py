@@ -73,3 +73,43 @@ def get_numb_name(var_name):
 
 def get_replace_name(var_name):
     return re.sub(r"\d+", "YY", var_name)
+
+
+def normalize_pandas_freq(freq):
+    """Normalize pandas offset aliases across pandas versions.
+
+    Pandas 3.x removed some legacy aliases (ex: "AS"), while xclim/pandas
+    now prefers the newer names (ex: "YS"). This helper keeps the public
+    API stable for callers still using older aliases.
+    """
+
+    if freq is None:
+        return None
+    if not isinstance(freq, str):
+        return freq
+
+    freq = freq.strip()
+    if freq == "AS":
+        return "YS"
+    if freq.startswith("AS-"):
+        return "YS-" + freq[3:]
+
+    # Year-end aliases are kept here for completeness.
+    if freq == "A":
+        return "YE"
+    if freq.startswith("A-"):
+        return "YE-" + freq[2:]
+
+    # Quarter-end aliases were renamed: Q -> QE (and BQ -> BQE).
+    # Handle optional multipliers like "2Q-FEB".
+    match = re.match(r"^(?P<n>\d+)?(?P<kind>BQ|Q)(?P<suffix>-.+)?$", freq)
+    if match is not None:
+        n = match.group("n") or ""
+        kind = match.group("kind")
+        suffix = match.group("suffix") or ""
+        if kind == "Q":
+            return f"{n}QE{suffix}"
+        if kind == "BQ":
+            return f"{n}BQE{suffix}"
+
+    return freq
