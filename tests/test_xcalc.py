@@ -183,3 +183,19 @@ def test_eobs_index_calculator():
         contact="test@test.de",
         write=True,
     )
+
+
+def test_year_frequency_index_calculator():
+    data = tas_day_netcdf()
+    tas_ds = open_xrdataset(data)
+    xcalc.index_calculator(
+        ds=tas_ds,
+        freq="year",
+        index="TG",
+        crop_time_axis=False,
+        project="CORDEX",
+        institution="test institution",
+        institution_id="TEST",
+        contact="test@test.de",
+        write=False,
+    )
