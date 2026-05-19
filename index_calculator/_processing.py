@@ -14,6 +14,7 @@ from ._utils import (
     get_numb_name,
     get_replace_name,
     kwargs_to_self,
+    normalize_pandas_freq,
     object_attrs_to_self,
 )
 from ._variable_conversion import ConvertVariables
@@ -146,7 +147,7 @@ class Processing:
     def _adjust_params_to_ci(self):
         params = {
             "ds": self.preproc,
-            "freq": _freq[self.freq],
+            "freq": normalize_pandas_freq(_freq[self.freq]),
         }
         params.update(self.replacement)
         return params
@@ -197,7 +198,7 @@ class Processing:
             date_range = basics.date_range(
                 start=self.preproc.time.values[0],
                 end=self.preproc.time.values[-1],
-                frequency=_tfreq[self.freq],
+                frequency=normalize_pandas_freq(_tfreq[self.freq]),
             )
             if len(idx_ds["time"]) == len(date_range):
                 idx_ds = idx_ds.assign_coords(
