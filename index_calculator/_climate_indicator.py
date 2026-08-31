@@ -22,7 +22,7 @@ class ClimateIndicator:
         if isinstance(thresh, str):
             return thresh
         else:
-            return f"{str(thresh)} {units}"
+            return f"{thresh!s} {units}"
 
     def _get_da(self, dictionary, var):
         if "ds" in dictionary.keys():
