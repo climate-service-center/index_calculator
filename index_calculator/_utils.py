@@ -18,7 +18,7 @@ def object_attrs_to_self(obj, slf, overwrite=True):
 def kwargs_to_self(kwargs, slf):
     """Write kwargs to new object."""
     if not hasattr(slf, "kwargs"):
-        setattr(slf, "kwargs", kwargs)
+        slf.kwargs = kwargs
     else:
         slf.kwargs.update(kwargs)
     for key, value in kwargs.items():
