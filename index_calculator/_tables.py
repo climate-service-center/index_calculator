@@ -1,5 +1,5 @@
-import importlib.resources as resources
 import json
+from importlib import resources
 
 
 def read_from_json(jsfile):
