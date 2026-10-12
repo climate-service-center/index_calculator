@@ -14,7 +14,7 @@ def _pooch_retrieve(url, known_hash=None):
 def tas_day_netcdf():
     url = (
         url_base
-        + "/tas/day/tas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+        + "/tas/day/tas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"
     )
     return _pooch_retrieve(url)
 
@@ -22,31 +22,31 @@ def tas_day_netcdf():
 def tas_1hr_netcdf():
     url1 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701010000-200701012300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701010000-200701012300.nc"
     )
     url2 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701020000-200701022300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701020000-200701022300.nc"
     )
     url3 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701030000-200701032300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701030000-200701032300.nc"
     )
     url4 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701040000-200701042300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701040000-200701042300.nc"
     )
     url5 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701050000-200701052300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701050000-200701052300.nc"
     )
     url6 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701060000-200701062300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701060000-200701062300.nc"
     )
     url7 = (
         url_base
-        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701070000-200701072300.nc"  # noqa
+        + "/tas/1hr/tas_EUR-11_MPI-M-MPI-ESM-LR_rcp85_r3i1p1_GERICS-REMO2015_v1_1hr_200701070000-200701072300.nc"
     )
     return [
         _pooch_retrieve(url)
@@ -64,7 +64,7 @@ def tas_1hr_netcdf():
 
 def tas_eobs_day_netcdf():
     url = (
-        url_base + "/tas/day/tg_ens_mean_0.1deg_reg_v27.0e_20010101-20010107.nc"  # noqa
+        url_base + "/tas/day/tg_ens_mean_0.1deg_reg_v27.0e_20010101-20010107.nc"
     )
     return _pooch_retrieve(url)
 
@@ -72,7 +72,7 @@ def tas_eobs_day_netcdf():
 def pr_day_netcdf():
     url = (
         url_base
-        + "/pr/day/pr_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+        + "/pr/day/pr_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"
     )
     return _pooch_retrieve(url)
 
@@ -80,7 +80,7 @@ def pr_day_netcdf():
 def snw_day_netcdf():
     url = (
         url_base
-        + "/snw/day/snw_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+        + "/snw/day/snw_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"
     )
     return _pooch_retrieve(url)
 
@@ -88,7 +88,7 @@ def snw_day_netcdf():
 def uas_day_netcdf():
     url = (
         url_base
-        + "/uas/day/uas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+        + "/uas/day/uas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"
     )
     return _pooch_retrieve(url)
 
@@ -96,7 +96,7 @@ def uas_day_netcdf():
 def vas_day_netcdf():
     url = (
         url_base
-        + "/vas/day/vas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"  # noqa
+        + "/vas/day/vas_EUR-11_MPI-M-MPI-ESM-LR_historical_r3i1p1_GERICS-REMO2015_v1_day_20010101-20010107.nc"
     )
     return _pooch_retrieve(url)
 
