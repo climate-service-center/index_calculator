@@ -17,7 +17,7 @@ from subprocess import call
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import index_calculator  # noqa
+import index_calculator
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
