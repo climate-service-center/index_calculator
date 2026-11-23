@@ -129,11 +129,7 @@ class Processing:
             if k in defaults and k in self.kwargs.keys():
                 if "YY" in self.CIname:
                     self.CIname = self.CIname.replace("YY", str(v))
-                elif isinstance(v, list):
-                    continue
-                elif isinstance(v, bool):
-                    continue
-                elif isinstance(v, str):
+                elif isinstance(v, list) or isinstance(v, bool) or isinstance(v, str):
                     continue
                 elif numb_name:
                     self.CIname = self.CIname.replace(
@@ -141,7 +137,7 @@ class Processing:
                         str(v),
                     )
                 elif str(v) not in self.CIname:
-                    self.CIname = f"{self.CIname}{str(v)}"
+                    self.CIname = f"{self.CIname}{v!s}"
                 break
 
     def _adjust_params_to_ci(self):
